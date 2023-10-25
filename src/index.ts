@@ -9,6 +9,10 @@ app.use(express.json());
 AppDataSource.initialize()
     .then(() => {
         console.log('Database connected');
+        // Encendido del servidor
+        app.listen(PORT, () => {
+            console.log(`Server running on ${PORT}`);
+        });
     })
     .catch(error => {
         console.log(error);
