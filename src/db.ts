@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
+import { CreateUsersTable1698295901193 } from "./migration/1698295901193-create-users-table";
 
 const AppDataSource = new DataSource({
     type: "mysql",
@@ -8,7 +9,7 @@ const AppDataSource = new DataSource({
     username: "root",
     password: "password",
     database: "tattoo_studio_db",
-    migrations: [],
+    migrations: [CreateUsersTable1698295901193],
     entities: [],
     synchronize: false,
     logging: false,
