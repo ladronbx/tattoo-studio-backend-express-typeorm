@@ -6,6 +6,7 @@ import { CreatePortfoliosTable1698297252842 } from "./migration/1698297252842-cr
 import { CreateClientsTable1698297600908 } from "./migration/1698297600908-create-clients-table";
 import { CreateArtistsTable1698297698007 } from "./migration/1698297698007-create-artists-table";
 import { CreatePortfolioArtistTable1698298091237 } from "./migration/1698298091237-create-portfolio_artist-table";
+import { CreateAppointmentsTable1698298269709 } from "./migration/1698298269709-create-appointments-table";
 
 const AppDataSource = new DataSource({
     type: "mysql",
@@ -20,7 +21,8 @@ const AppDataSource = new DataSource({
         CreatePortfoliosTable1698297252842,
         CreateClientsTable1698297600908,
         CreateArtistsTable1698297698007,
-        CreatePortfolioArtistTable1698298091237
+        CreatePortfolioArtistTable1698298091237,
+        CreateAppointmentsTable1698298269709
         
 
     ],
