@@ -3,6 +3,7 @@ import { DataSource } from "typeorm";
 import { CreateUsersTable1698295901193 } from "./migration/1698295901193-create-users-table";
 import { CreateRolesTable1698296931960 } from "./migration/1698296931960-create-roles-table";
 import { CreatePortfoliosTable1698297252842 } from "./migration/1698297252842-create-portfolios-table";
+import { CreateClientsTable1698297600908 } from "./migration/1698297600908-create-clients-table";
 
 const AppDataSource = new DataSource({
     type: "mysql",
@@ -14,7 +15,8 @@ const AppDataSource = new DataSource({
     migrations: [
         CreateUsersTable1698295901193,
         CreateRolesTable1698296931960,
-        CreatePortfoliosTable1698297252842
+        CreatePortfoliosTable1698297252842,
+        CreateClientsTable1698297600908
 
     ],
     entities: [],
