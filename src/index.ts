@@ -1,4 +1,5 @@
 import express from "express";
+//Las rutas que no se te olvideeeen ^^
 import { AppDataSource } from "./db";
 
 const app = express();
