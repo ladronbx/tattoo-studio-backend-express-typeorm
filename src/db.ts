@@ -1,13 +1,14 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { User } from "./models/User";
-import { Artist } from "./models/Artist";
-import { Client } from "./models/Client";
-import { Portfolio } from "./models/Portfolio";
-import { Portfolio_artist } from "./models/Portfolio_artist";
-import { Role_user } from "./models/Role_use";
-import { Role } from "./models/Role";
-import { Appointment } from "./models/Appointment";
+import { CreateUsersTable1698438045117 } from "./migration/1698438045117-create-users-table";
+// import { User } from "./models/User";
+// import { Artist } from "./models/Artist";
+// import { Client } from "./models/Client";
+// import { Portfolio } from "./models/Portfolio";
+// import { Portfolio_artist } from "./models/Portfolio_artist";
+// import { Role_user } from "./models/Role_use";
+// import { Role } from "./models/Role";
+// import { Appointment } from "./models/Appointment";
 
 const AppDataSource = new DataSource({
     type: "mysql",
@@ -17,9 +18,10 @@ const AppDataSource = new DataSource({
     password: "password",
     database: "tattoo_studio_db",
     migrations: [
+        CreateUsersTable1698438045117
 
     ],
-    entities: [User, Artist, Client, Portfolio, Portfolio_artist, Role_user, Role, User, Appointment],
+    // entities: [User, Artist, Client, Portfolio, Portfolio_artist, Role_user, Role, User, Appointment],
     synchronize: false,
     logging: false,
 });
