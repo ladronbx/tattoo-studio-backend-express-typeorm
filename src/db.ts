@@ -8,6 +8,14 @@ import { CreateArtistsTable1698297698007 } from "./migration/1698297698007-creat
 import { CreatePortfolioArtistTable1698298091237 } from "./migration/1698298091237-create-portfolio_artist-table";
 import { CreateAppointmentsTable1698298269709 } from "./migration/1698298269709-create-appointments-table";
 import { CreateRoleUserTable1698337740215 } from "./migration/1698337740215-create-role_user-table";
+import { User } from "./models/User";
+import { Artist } from "./models/Artist";
+import { Client } from "./models/Client";
+import { Portfolio } from "./models/Portfolio";
+import { Portfolio_artist } from "./models/Portfolio_artist";
+import { Role_user } from "./models/Role_use";
+import { Role } from "./models/Role";
+import { Appointment } from "./models/Appointment";
 
 const AppDataSource = new DataSource({
     type: "mysql",
@@ -28,7 +36,7 @@ const AppDataSource = new DataSource({
         
 
     ],
-    entities: [],
+    entities: [User, Artist, Client, Portfolio, Portfolio_artist, Role_user, Role, User, Appointment],
     synchronize: false,
     logging: false,
 });
