@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { createUser, deleteUser, getUser, updateUser } from "../controllers/userControllers";
+import { createUser, deleteUser, getUser, updateUser, register } from "../controllers/userControllers";
 
-const routerUser = Router ();
+const routerUsers = Router ();
 
-routerUser.get('/user', getUser);
-routerUser.put('/', updateUser);
-routerUser.post('/', createUser);
-routerUser.delete('/', deleteUser);
+routerUsers.get('/user', getUser);
+routerUsers.put('/', updateUser);
+//agrego registro
+routerUsers.post('/register', register);
+routerUsers.delete('/', deleteUser);
 
-export {routerUser}
+export {routerUsers}
