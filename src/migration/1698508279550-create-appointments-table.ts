@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-class CreateAppointmentsTable1698451686654 implements MigrationInterface {
+class CreateAppointmentsTable1698508279550 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
@@ -76,4 +76,4 @@ class CreateAppointmentsTable1698451686654 implements MigrationInterface {
 
 }
 
-export { CreateAppointmentsTable1698451686654 }
+export { CreateAppointmentsTable1698508279550 }

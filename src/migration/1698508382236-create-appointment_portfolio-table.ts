@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-class CreateRolesTable1698438337443 implements MigrationInterface {
+class CreateAppointmentPortfolioTable1698508382236 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "roles",
+                name: "appointment_portfolio",
                 columns: [
                     {
                         name: "id",
@@ -15,15 +15,14 @@ class CreateRolesTable1698438337443 implements MigrationInterface {
                         generationStrategy: "increment",
                     },
                     {
-                        name: "role",
-                        type: "enum",
-                        enum: ["user", "admin", "super_admin"],
-                        default: `"user"`
+                        name: "appointment_id",
+                        type: "int",
+                        isNullable: false,
                     },
                     {
-                        name: "privilege",
-                        type: "varchar",
-                        length: "255",
+                        name: "portfolio_id",
+                        type: "int",
+                        isNullable: false,
                     },
                     {
                         name: "created_at",
@@ -37,13 +36,29 @@ class CreateRolesTable1698438337443 implements MigrationInterface {
                         onUpdate: "CURRENT_TIMESTAMP"
                     },
                 ],
+                foreignKeys: [
+                    {
+                        columnNames: ["appointment_id"],
+                        referencedTableName: "appointments",
+                        referencedColumnNames: ["id"],
+                        onDelete: "CASCADE",
+                    },
+                    {
+                        columnNames: ["portfolio_id"],
+                        referencedTableName: "portfolios",
+                        referencedColumnNames: ["id"],
+                        onDelete: "CASCADE",
+                    }
+                ]
+
             }),
             true
         );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("roles")
+        await queryRunner.dropTable("appointment_portfolio")
     }
 }
-export { CreateRolesTable1698438337443 }
+
+export { CreateAppointmentPortfolioTable1698508382236 }

@@ -1,4 +1,4 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column,OneToMany } from "typeorm"
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
 import { User } from "./User"
 
 @Entity("roles")
@@ -18,9 +18,8 @@ class Role extends BaseEntity {
     @Column()
     updated_at!: Date
 
-    @OneToMany(() => User, (user) => user.userRoles)
-    users!: User[];
-
+    @OneToMany(() => User, user => user.roles) 
+    user!: User []
 }
 
 export { Role }
