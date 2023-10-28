@@ -35,7 +35,7 @@ class CreateAppointmentsTable1698451686654 implements MigrationInterface {
                         isNullable: false
                     },
                     {
-                        name: "worker_id",
+                        name: "artist_id",
                         type: "int",
                         isNullable: false
                     },
@@ -59,7 +59,7 @@ class CreateAppointmentsTable1698451686654 implements MigrationInterface {
                         onDelete: "CASCADE",
                     },
                     {
-                        columnNames: ["worker_id"],
+                        columnNames: ["artist_id"],
                         referencedTableName: "users",
                         referencedColumnNames: ["id"],
                         onDelete: "CASCADE",
