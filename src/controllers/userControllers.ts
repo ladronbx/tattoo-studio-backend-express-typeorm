@@ -2,6 +2,7 @@ import { Request, Response } from "express-serve-static-core"
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import { Role_user } from "../models/Role_user";
+import jwt from "jsonwebtoken";
 
 const register = async (req: Request, res: Response) => {
 
@@ -113,4 +114,40 @@ const register = async (req: Request, res: Response) => {
     }
 }
 
-export { register } 
+
+const login = async (req: Request, res: Response) => {
+
+    const email = req.body.email;
+    const password = req.body.password;
+
+    const loginByEmail = await User.findOne({
+        where: { email },
+        relations: ["userRoles"]
+    });
+
+    if (!loginByEmail) {
+        return res.json({
+            success: true,
+            message: "user or password incorrect"
+        })
+    }
+
+    if (!bcrypt.compareSync(password, loginByEmail.password)) {
+        return res.json({
+            success: true,
+            message: "user or password incorrect"
+        })
+    }
+
+    const roles = loginByEmail.userRoles.map(role => role.role);
+
+    const token = jwt.sign({
+        id: loginByEmail.id,
+        email: loginByEmail.email,
+        role: roles
+    }, "secreto", {
+        expiresIn: "5h"
+    })
+}
+
+export { register, login } 
