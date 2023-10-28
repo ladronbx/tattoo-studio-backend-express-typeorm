@@ -9,6 +9,7 @@ import { CreateAppointmentsPortfolioTable1698452039638 } from "./migration/16984
 import { User } from "./models/User";
 import { Role } from "./models/Role";
 import { Portfolio } from "./models/Portfolio";
+import { Appointment } from "./models/Appointment";
 
 const AppDataSource = new DataSource({
     type: "mysql",
@@ -26,7 +27,7 @@ const AppDataSource = new DataSource({
         CreateAppointmentsPortfolioTable1698452039638
 
     ],
-    entities: [User, Role, Portfolio],
+    entities: [User, Role, Portfolio, Appointment],
     synchronize: false,
     logging: false,
 });
