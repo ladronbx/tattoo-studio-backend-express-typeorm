@@ -117,37 +117,52 @@ const register = async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
 
-    const email = req.body.email;
-    const password = req.body.password;
+    try {
+        const email = req.body.email;
+        const password = req.body.password;
 
-    const loginByEmail = await User.findOne({
-        where: { email },
-        relations: ["userRoles"]
-    });
+        const loginByEmail = await User.findOne({
+            where: { email },
+            relations: ["userRoles"]
+        });
 
-    if (!loginByEmail) {
+        if (!loginByEmail) {
+            return res.json({
+                success: true,
+                message: "user or password incorrect"
+            })
+        }
+
+        if (!bcrypt.compareSync(password, loginByEmail.password)) {
+            return res.json({
+                success: true,
+                message: "user or password incorrect"
+            })
+        }
+
+        const roles = loginByEmail.userRoles.map(role => role.role);
+
+        const token = jwt.sign({
+            id: loginByEmail.id,
+            email: loginByEmail.email,
+            role: roles
+        }, "secreto", {
+            expiresIn: "5h"
+        })
+
         return res.json({
             success: true,
-            message: "user or password incorrect"
+            message: "user logged succesfully",
+            token: token
         })
-    }
 
-    if (!bcrypt.compareSync(password, loginByEmail.password)) {
+    } catch (error) {
         return res.json({
-            success: true,
-            message: "user or password incorrect"
+            success: false,
+            message: "user can't by logged",
+            error
         })
     }
-
-    const roles = loginByEmail.userRoles.map(role => role.role);
-
-    const token = jwt.sign({
-        id: loginByEmail.id,
-        email: loginByEmail.email,
-        role: roles
-    }, "secreto", {
-        expiresIn: "5h"
-    })
 }
 
 export { register, login } 
