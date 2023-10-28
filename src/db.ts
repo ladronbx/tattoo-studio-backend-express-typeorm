@@ -6,7 +6,7 @@ import { CreatePortfoliosTable1698439006907 } from "./migration/1698439006907-cr
 import { CreateRoleUserTable1698451558679 } from "./migration/1698451558679-create-role_user-table";
 import { CreateAppointmentsTable1698451686654 } from "./migration/1698451686654-create-appointments-table";
 import { CreateAppointmentsPortfolioTable1698452039638 } from "./migration/1698452039638-create-appointments_portfolio-table";
-// import { User } from "./models/User";
+import { User } from "./models/User";
 // import { Artist } from "./models/Artist";
 // import { Client } from "./models/Client";
 // import { Portfolio } from "./models/Portfolio";
@@ -31,7 +31,8 @@ const AppDataSource = new DataSource({
         CreateAppointmentsPortfolioTable1698452039638
 
     ],
-    // entities: [User, Artist, Client, Portfolio, Portfolio_artist, Role_user, Role, User, Appointment],
+    entities: [User],
+    // , Artist, Client, Portfolio, Portfolio_artist, Role_user, Role, User, Appointment
     synchronize: false,
     logging: false,
 });
