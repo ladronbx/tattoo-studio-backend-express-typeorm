@@ -1,4 +1,4 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column} from "typeorm"
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable} from "typeorm"
 
 @Entity("users")
 class User extends BaseEntity {
@@ -25,6 +25,20 @@ class User extends BaseEntity {
 
     @Column()
     updated_at!: Date
+
+    @ManyToMany(() => User)
+    @JoinTable({
+        name: "appointment",
+        joinColumn: {
+            name: "worker_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "client_id",
+            referencedColumnName: "id"
+        }
+    })
+    workerClients!: User[]
 }
 
 export { User }
