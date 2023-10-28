@@ -7,13 +7,7 @@ import { CreateRoleUserTable1698451558679 } from "./migration/1698451558679-crea
 import { CreateAppointmentsTable1698451686654 } from "./migration/1698451686654-create-appointments-table";
 import { CreateAppointmentsPortfolioTable1698452039638 } from "./migration/1698452039638-create-appointments_portfolio-table";
 import { User } from "./models/User";
-// import { Artist } from "./models/Artist";
-// import { Client } from "./models/Client";
-// import { Portfolio } from "./models/Portfolio";
-// import { Portfolio_artist } from "./models/Portfolio_artist";
-// import { Role_user } from "./models/Role_use";
-// import { Role } from "./models/Role";
-// import { Appointment } from "./models/Appointment";
+import { Role } from "./models/Role";
 
 const AppDataSource = new DataSource({
     type: "mysql",
@@ -31,8 +25,7 @@ const AppDataSource = new DataSource({
         CreateAppointmentsPortfolioTable1698452039638
 
     ],
-    entities: [User],
-    // , Artist, Client, Portfolio, Portfolio_artist, Role_user, Role, User, Appointment
+    entities: [User, Role],
     synchronize: false,
     logging: false,
 });
