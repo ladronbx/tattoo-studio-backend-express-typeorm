@@ -30,7 +30,7 @@ class User extends BaseEntity {
     @JoinTable({
         name: "appointment",
         joinColumn: {
-            name: "worker_id",
+            name: "artist_id",
             referencedColumnName: "id"
         },
         inverseJoinColumn: {
@@ -38,7 +38,7 @@ class User extends BaseEntity {
             referencedColumnName: "id"
         }
     })
-    workerClients!: User[]
+    artistClients!: User[]
 }
 
 export { User }

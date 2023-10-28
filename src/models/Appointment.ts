@@ -1,4 +1,5 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm"
+import { Portfolio } from "./Portfolio";
 
 @Entity("appointments")
 class Appointment extends BaseEntity {
@@ -15,13 +16,27 @@ class Appointment extends BaseEntity {
     status!: boolean
 
     @Column()
-    worker_id!: number
+    artist_id!: number
 
     @Column()
     created_at!: Date
 
     @Column()
     updated_at!: Date
+
+    @ManyToMany(() => Portfolio)
+    @JoinTable({
+        name: "appointment_portfolio",
+        joinColumn: {
+            name: "appointment_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "portfolio_id",
+            referencedColumnName: "id"
+        }
+    })
+    appointmentPortfolios!: Portfolio[]
 
 }
 
