@@ -148,9 +148,9 @@ const login = async (req: Request, res: Response) => {
 
         //primer argumento : info a codificar ---- segundo : firma ----- tercero : time expires
         const token = jwt.sign({
-             id: userFoundByEmail.id, 
-             email: userFoundByEmail.email, 
-             role: roleName 
+            id: userFoundByEmail.id,
+            email: userFoundByEmail.email,
+            role: roleName
         }, "secret", {
             expiresIn: "4h"
         })
@@ -210,4 +210,35 @@ const profile = async (req: Request, res: Response) => {
     }
 };
 
-export { register, login, profile };
+
+
+const getAllUsers = async (req: Request, res: Response) => {
+    try {
+        // Obtengo todos los usuarios pero con los campos seleccionados. EXCLUYENDO PASSWORD
+        const users = await User.find({
+            select: ["id", "email", "full_name", "phone_number", "is_active", "role_id", "created_at", "updated_at"]
+        });
+
+        if (users.length === 0) {
+            return res.json({
+                success: true,
+                message: "There are no registered users."
+            });
+        }
+
+        return res.json({
+            success: true,
+            message: "Here you can see all the users.",
+            data: users
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Unable to display the users. An error occurred.",
+            error
+        });
+    }
+};
+
+
+export { register, login, profile, getAllUsers };
