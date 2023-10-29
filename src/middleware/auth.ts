@@ -22,15 +22,13 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
       )
     }
 
-    const tokenDecoded = jwt.verify(token, "secreto") as TokenDecoded
+    const tokenDecoded = jwt.verify(token, "secret") as TokenDecoded
 
     req.token = tokenDecoded
-    
+
     next()
   } catch (error) {
-    return res.json({
-      error: "Not auth"
-    })
+    return res.status(401).json({ message: 'Authentication failed' });
   }
 }
 

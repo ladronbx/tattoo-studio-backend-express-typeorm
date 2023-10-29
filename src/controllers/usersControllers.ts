@@ -146,13 +146,11 @@ const login = async (req: Request, res: Response) => {
         //para extraer la propiedad role_name de la clase Role
         const roleName = userFoundByEmail.role.role_name;
 
-        //Objeto que almacena la info del user que se utilizará para generar el token
-        const userDataForToken = {id: userFoundByEmail.id,email: userFoundByEmail.email,role: roleName}
-
-
         //primer argumento : info a codificar ---- segundo : firma ----- tercero : time expires
         const token = jwt.sign({
-            userDataForToken
+             id: userFoundByEmail.id, 
+             email: userFoundByEmail.email, 
+             role: roleName 
         }, "secret", {
             expiresIn: "4h"
         })
@@ -173,4 +171,43 @@ const login = async (req: Request, res: Response) => {
     }
 }
 
-export { register, login } 
+const profile = async (req: Request, res: Response) => {
+    try {
+        // Extraigo el email del token del usuario logeado.
+        const email = req.token.email;
+
+        console.log("Email:", email);
+
+        // Busco un usuario donde el campo 'email' coincida con el correo electrónico extraído del token. 
+        const userProfile = await User.findOne({
+            where: { email }
+        });
+
+        console.log("UserProfile:", userProfile);
+
+        if (!userProfile) {
+            return res.status(404).json({
+                success: true,
+                message: "User profile not found",
+            });
+        }
+
+        return res.json({
+            success: true,
+            message: "User profile retrieved",
+            data: {
+                full_name: userProfile?.full_name,
+                email: userProfile?.email,
+                phone_number: userProfile?.phone_number,
+            },
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Unable to retrieve user profile",
+            error
+        });
+    }
+};
+
+export { register, login, profile };

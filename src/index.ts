@@ -7,7 +7,6 @@ const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 app.use('/users', routerUsers)
-app.use('/users', routerUsers)
 // app.use('/appointments', )
 
 AppDataSource.initialize()
