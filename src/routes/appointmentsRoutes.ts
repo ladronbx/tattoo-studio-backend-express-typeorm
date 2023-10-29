@@ -1,12 +1,12 @@
 import { Router } from "express";
-// import { auth } from "../middleware/auth";
-// import { isSuperAdmin } from "../middleware/isSuperAdmin"
+import { auth } from "../middleware/auth";
+import { createAppointment, deleteAppointment, getAppointment, updateAppointment } from "../controllers/appointmentsControllers";
 
-const appointmentsRouter = Router ();
-appointmentsRouter.get('/',)
-appointmentsRouter.post('/',)
-appointmentsRouter.put('/',)
-appointmentsRouter.delete('/',)
+const router = Router();
 
+router.get('/',auth, getAppointment)
+router.post('/create',auth, createAppointment)
+router.put('/update',auth, updateAppointment)
+router.delete('/delete',auth, deleteAppointment)
 
-export {appointmentsRouter}
+export {router}
