@@ -190,13 +190,6 @@ const profile = async (req: Request, res: Response) => {
             where: { email }
         });
 
-        if(userProfile?.is_active === false){
-            return res.json({
-                success: true,
-                message: "This user account is currently inactive"
-            })
-        }
-
         console.log("UserProfile:", userProfile);
 
         if (!userProfile) {
