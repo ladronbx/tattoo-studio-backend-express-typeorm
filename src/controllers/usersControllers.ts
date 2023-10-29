@@ -121,12 +121,18 @@ const login = async (req: Request, res: Response) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
-
         // Encuentra al usuario mediante el correo electrónico y carga la relación del usuario con su rol asociado.
         const userFoundByEmail = await User.findOne({
             where: { email },
             relations: ["role"]
         });
+
+        if(userFoundByEmail?.is_active === false){
+            return res.json({
+                success: true,
+                message: "This user account is currently inactive"
+            })
+        }
 
         //evalua si es falsa, nula, indefinida o un valor que se evalúa como "falso".
         if (!userFoundByEmail) {
@@ -240,8 +246,5 @@ const getAllUsers = async (req: Request, res: Response) => {
         });
     }
 };
-
-
-
 
 export { register, login, profile, getAllUsers };
