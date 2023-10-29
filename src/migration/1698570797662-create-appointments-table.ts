@@ -5,7 +5,7 @@ class CreateAppointmentsTable1698570797662 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "appointments",
+                name: "appointment",
                 columns: [
                     {
                         name: "id",
@@ -71,7 +71,7 @@ class CreateAppointmentsTable1698570797662 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("appointments")
+        await queryRunner.dropTable("appointment")
     }
 }
 
