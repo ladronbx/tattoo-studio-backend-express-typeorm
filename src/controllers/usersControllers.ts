@@ -147,6 +147,7 @@ const login = async (req: Request, res: Response) => {
         const roleName = userFoundByEmail.role.role_name;
 
         //primer argumento : info a codificar ---- segundo : firma ----- tercero : time expires
+        //El primer argumento no funcionaba porque estaba en una constante. Así es la manera correcta de generar el token
         const token = jwt.sign({
             id: userFoundByEmail.id,
             email: userFoundByEmail.email,
@@ -239,6 +240,8 @@ const getAllUsers = async (req: Request, res: Response) => {
         });
     }
 };
+
+
 
 
 export { register, login, profile, getAllUsers };
