@@ -141,8 +141,6 @@ const createAppointment = async (req: Request, res: Response) => {
     }
 }
 
-
-
 const getAllArtist = async (req: Request, res: Response) => {
 
     try {
@@ -184,5 +182,4 @@ const getAllArtist = async (req: Request, res: Response) => {
     }
 }
 
-
-export { createAppointment, getAllArtist}
+export { createAppointment}

@@ -329,5 +329,35 @@ const updateUser = async (req: Request, res: Response) => {
     }
 }
 
+const getArtists = async (req: Request, res: Response) => {
+    try {
+        const artists = await User.find({
+            where: {
+                role_id: 2
+            },
+            select: ["email", "full_name", "phone_number"]
+        });
 
-export { register, login, profile, getAllUsers, updateUser };
+        if (artists.length === 0) {
+            return res.json({
+                success: true,
+                message: "There are no registered artist."
+            });
+        }
+
+        return res.json({
+            success: true,
+            message: "Here you can see all the users.",
+            data: artists
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Unable to display the users. An error occurred.",
+            error
+        });
+    }
+};
+
+
+export { register, login, profile, getAllUsers, updateUser, getArtists };
