@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-class CreateAppointmentPortfolioTable1698508382236 implements MigrationInterface {
+class CreatePortfoliosTable1698570992940 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "appointment_portfolio",
+                name: "portfolio",
                 columns: [
                     {
                         name: "id",
@@ -15,14 +15,26 @@ class CreateAppointmentPortfolioTable1698508382236 implements MigrationInterface
                         generationStrategy: "increment",
                     },
                     {
-                        name: "appointment_id",
-                        type: "int",
+                        name: "name",
+                        type: "varchar",
                         isNullable: false,
+                        isUnique: true
                     },
                     {
-                        name: "portfolio_id",
-                        type: "int",
-                        isNullable: false,
+                        name: "type",
+                        type: "enum",
+                        enum: ["tattoo", "piercing"],
+                        isNullable: false
+                    },
+                    {
+                        name: "image",
+                        type: "varchar",
+                        isNullable: false
+                    },
+                    {
+                        name: "price",
+                        type: "float",
+                        isNullable: false
                     },
                     {
                         name: "created_at",
@@ -36,29 +48,16 @@ class CreateAppointmentPortfolioTable1698508382236 implements MigrationInterface
                         onUpdate: "CURRENT_TIMESTAMP"
                     },
                 ],
-                foreignKeys: [
-                    {
-                        columnNames: ["appointment_id"],
-                        referencedTableName: "appointments",
-                        referencedColumnNames: ["id"],
-                        onDelete: "CASCADE",
-                    },
-                    {
-                        columnNames: ["portfolio_id"],
-                        referencedTableName: "portfolios",
-                        referencedColumnNames: ["id"],
-                        onDelete: "CASCADE",
-                    }
-                ]
-
             }),
             true
         );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("appointment_portfolio")
+        await queryRunner.dropTable("portfolio")
     }
+
 }
 
-export { CreateAppointmentPortfolioTable1698508382236 }
+
+export { CreatePortfoliosTable1698570992940 }

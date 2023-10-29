@@ -21,7 +21,7 @@ class CreateRolesTable1698507821394 implements MigrationInterface {
                         default: `"user"`
                     },
                     {
-                        name: "privilege",
+                        name: "description_privilege",
                         type: "varchar",
                         length: "255",
                     },
@@ -37,7 +37,6 @@ class CreateRolesTable1698507821394 implements MigrationInterface {
                         onUpdate: "CURRENT_TIMESTAMP"
                     },
                 ],
-                
             }),
             true
         );
@@ -47,4 +46,5 @@ class CreateRolesTable1698507821394 implements MigrationInterface {
         await queryRunner.dropTable("roles")
     }
 }
+
 export { CreateRolesTable1698507821394 }
