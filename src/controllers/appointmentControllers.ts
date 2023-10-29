@@ -141,4 +141,48 @@ const createAppointment = async (req: Request, res: Response) => {
     }
 }
 
-export { createAppointment}
+
+
+const getAllArtist = async (req: Request, res: Response) => {
+
+    try {
+        const id = req.token.id
+
+        const appointmentsWorker = await Appointment.findBy({
+            artist_id: id
+        })
+
+        const appointmentsUserForShows = await Promise.all(appointmentsWorker.map(async (obj) => {
+            const { status, artist_id, client_id, ...rest } = obj;
+            
+            const artist = await User.findOneBy({ 
+                id: artist_id 
+            });
+
+            if (artist) {
+                const email = artist.email;
+                const is_active = artist.is_active;
+                return { ...rest, email, is_active };
+            }
+            else {
+                return null
+            }
+        }));
+
+        return res.json({
+            success: true,
+            message: "Here are all your appointments",
+            data: appointmentsUserForShows
+        });
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "appointments can't be getted, try again",
+            error
+        })
+    }
+}
+
+
+export { createAppointment, getAllArtist}
