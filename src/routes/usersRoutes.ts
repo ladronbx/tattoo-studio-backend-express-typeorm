@@ -1,8 +1,13 @@
 import { Router } from "express";
-import { register } from "../controllers/usersControllers";
+import { register, login } from "../controllers/usersControllers";
+// import { auth, profile } from "../middleware/auth";
 
-const router = Router();
+const routerUsers = Router();
 
-router.post('/register', register)
+routerUsers.post('/register', register)
+routerUsers.post('/login', login)
+// routerUsers.get('/profile', auth, profile)
+// routerUsers.put('/update', auth, updateUser)
+// routerUsers.get('/all',auth ,isSuperAdmin ,getAllUsers)
 
-export {router}
+export {routerUsers}

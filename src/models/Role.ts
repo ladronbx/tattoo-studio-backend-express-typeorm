@@ -10,7 +10,7 @@ export class Role extends BaseEntity {
     role_name!: string
 
     @Column()
-    privilege!: string
+    description_privilege!: string
 
     @Column()
     created_at!: Date
