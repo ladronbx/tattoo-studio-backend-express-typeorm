@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-class CreateArtistsTable1698297698007 implements MigrationInterface {
+class CreateAppointmentsTable1698570797662 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "artists",
+                name: "appointments",
                 columns: [
                     {
                         name: "id",
@@ -15,12 +15,27 @@ class CreateArtistsTable1698297698007 implements MigrationInterface {
                         generationStrategy: "increment",
                     },
                     {
-                        name: "hours_worked",
-                        type: "int",
-                        default: 0
+                        name: "date",
+                        type: "date",
+                        isNullable: false
                     },
                     {
-                        name: "user_id",
+                        name: "time",
+                        type: "time",
+                        isNullable: false
+                    },
+                    {
+                        name: "status",
+                        type: "boolean",
+                        default: false
+                    },
+                    {
+                        name: "client_id",
+                        type: "int",
+                        isNullable: false
+                    },
+                    {
+                        name: "artist_id",
                         type: "int",
                         isNullable: false
                     },
@@ -38,7 +53,13 @@ class CreateArtistsTable1698297698007 implements MigrationInterface {
                 ],
                 foreignKeys: [
                     {
-                        columnNames: ["user_id"],
+                        columnNames: ["client_id"],
+                        referencedTableName: "users",
+                        referencedColumnNames: ["id"],
+                        onDelete: "CASCADE",
+                    },
+                    {
+                        columnNames: ["artist_id"],
                         referencedTableName: "users",
                         referencedColumnNames: ["id"],
                         onDelete: "CASCADE",
@@ -50,9 +71,8 @@ class CreateArtistsTable1698297698007 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("artists")
+        await queryRunner.dropTable("appointments")
     }
-
 }
 
-export {CreateArtistsTable1698297698007}
+export { CreateAppointmentsTable1698570797662  }

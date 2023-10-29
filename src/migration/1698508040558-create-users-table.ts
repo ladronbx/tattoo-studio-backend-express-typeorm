@@ -1,11 +1,12 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-class CreateClientsTable1698297600908 implements MigrationInterface {
+class CreateUsersTable1698508040558 implements MigrationInterface {
+
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "clients",
+                name: "users",
                 columns: [
                     {
                         name: "id",
@@ -15,9 +16,39 @@ class CreateClientsTable1698297600908 implements MigrationInterface {
                         generationStrategy: "increment",
                     },
                     {
-                        name: "user_id",
-                        type: "int",
+                        name: "full_name",
+                        type: "varchar",
+                        length: "50",
                         isNullable: false
+                    },
+                    {
+                        name: "email",
+                        type: "varchar",
+                        length: "100",
+                        isUnique: true,
+                        isNullable: false
+                    },
+                    {
+                        name: "password",
+                        type: "varchar",
+                        length: "100",
+                        isNullable: false
+                    },
+                    {
+                        name: "phone_number",
+                        type: "int",
+                        length: "20",
+                        isNullable: false
+                    },
+                    {
+                        name: "is_active",
+                        type: "boolean",
+                        default: true
+                    },
+                    {
+                        name: "role_id",
+                        type: "int",
+                        default: 1
                     },
                     {
                         name: "created_at",
@@ -33,8 +64,8 @@ class CreateClientsTable1698297600908 implements MigrationInterface {
                 ],
                 foreignKeys: [
                     {
-                        columnNames: ["user_id"],
-                        referencedTableName: "users",
+                        columnNames: ["role_id"],
+                        referencedTableName: "roles",
                         referencedColumnNames: ["id"],
                         onDelete: "CASCADE",
                     }
@@ -45,9 +76,8 @@ class CreateClientsTable1698297600908 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("clients")
+        await queryRunner.dropTable("users")
     }
-
 }
 
-export {CreateClientsTable1698297600908}
+export { CreateUsersTable1698508040558 }

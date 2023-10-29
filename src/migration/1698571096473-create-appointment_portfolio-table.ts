@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-class CreateUsersTable1698295901193 implements MigrationInterface {
+class CreateAppointmentPortfolioTable1698571096473 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "users",
+                name: "appointment_portfolio",
                 columns: [
                     {
                         name: "id",
@@ -15,34 +15,14 @@ class CreateUsersTable1698295901193 implements MigrationInterface {
                         generationStrategy: "increment",
                     },
                     {
-                        name: "full_name",
-                        type: "varchar",
-                        length: "50",
-                        isNullable: false
-                    },
-                    {
-                        name: "email",
-                        type: "varchar",
-                        length: "100",
-                        isUnique: true,
-                        isNullable: false
-                    },
-                    {
-                        name: "password",
-                        type: "varchar",
-                        length: "100",
-                        isNullable: false
-                    },
-                    {
-                        name: "phone_number",
+                        name: "appointment_id",
                         type: "int",
-                        length: "20",
-                        isNullable: false
+                        isNullable: false,
                     },
                     {
-                        name: "is_active",
-                        type: "boolean",
-                        default: true
+                        name: "portfolio_id",
+                        type: "int",
+                        isNullable: false,
                     },
                     {
                         name: "created_at",
@@ -56,15 +36,28 @@ class CreateUsersTable1698295901193 implements MigrationInterface {
                         onUpdate: "CURRENT_TIMESTAMP"
                     },
                 ],
+                foreignKeys: [
+                    {
+                        columnNames: ["appointment_id"],
+                        referencedTableName: "appointments",
+                        referencedColumnNames: ["id"],
+                        onDelete: "CASCADE",
+                    },
+                    {
+                        columnNames: ["portfolio_id"],
+                        referencedTableName: "portfolio",
+                        referencedColumnNames: ["id"],
+                        onDelete: "CASCADE",
+                    }
+                ]
             }),
             true
         );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("users")
+        await queryRunner.dropTable("appointment_portfolio")
     }
-
 }
 
-export { CreateUsersTable1698295901193 }
+export { CreateAppointmentPortfolioTable1698571096473 }

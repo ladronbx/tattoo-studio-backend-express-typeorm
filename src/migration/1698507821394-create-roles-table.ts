@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-class CreatePortfoliosTable1698297252842 implements MigrationInterface {
+class CreateRolesTable1698507821394 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "portfolio",
+                name: "roles",
                 columns: [
                     {
                         name: "id",
@@ -15,26 +15,15 @@ class CreatePortfoliosTable1698297252842 implements MigrationInterface {
                         generationStrategy: "increment",
                     },
                     {
-                        name: "name",
-                        type: "varchar",
-                        isNullable: false,
-                        isUnique: true
-                    },
-                    {
-                        name: "category",
+                        name: "role_name",
                         type: "enum",
-                        enum: ["tattoo", "piercing"],
-                        isNullable: false
+                        enum: ["user", "admin", "super_admin"],
+                        default: `"user"`
                     },
                     {
-                        name: "image",
+                        name: "description_privilege",
                         type: "varchar",
-                        isNullable: false
-                    },
-                    {
-                        name: "price",
-                        type: "float",
-                        isNullable: false
+                        length: "255",
                     },
                     {
                         name: "created_at",
@@ -54,10 +43,8 @@ class CreatePortfoliosTable1698297252842 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("portfolio")
+        await queryRunner.dropTable("roles")
     }
-
 }
 
-
-export { CreatePortfoliosTable1698297252842 }
+export { CreateRolesTable1698507821394 }
