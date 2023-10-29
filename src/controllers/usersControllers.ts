@@ -24,10 +24,10 @@ const register = async (req: Request, res: Response) => {
             });
         }
 
-        if (body.full_name.length > 50) {
+        if (body.full_name.length > 30) {
             return res.json({
                 success: true,
-                message: 'Name is too long. Please use a name with a maximum of 50 characters.'
+                message: 'Name is too long. Please use a name with a maximum of 30 characters.'
             });
         }
 
@@ -127,7 +127,7 @@ const login = async (req: Request, res: Response) => {
             relations: ["role"]
         });
 
-        if(userFoundByEmail?.is_active === false){
+        if (userFoundByEmail?.is_active === false) {
             return res.json({
                 success: true,
                 message: "This user account is currently inactive"
@@ -161,7 +161,6 @@ const login = async (req: Request, res: Response) => {
         }, "secret", {
             expiresIn: "4h"
         })
-
 
         return res.json({
             success: true,
@@ -217,8 +216,6 @@ const profile = async (req: Request, res: Response) => {
     }
 };
 
-
-
 const getAllUsers = async (req: Request, res: Response) => {
     try {
         // Obtengo todos los usuarios pero con los campos seleccionados. EXCLUYENDO PASSWORD
@@ -247,4 +244,90 @@ const getAllUsers = async (req: Request, res: Response) => {
     }
 };
 
-export { register, login, profile, getAllUsers };
+const updateUser = async (req: Request, res: Response) => {
+
+    try {
+        const bodyUser = req.body
+        const id = req.token.id
+
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
+
+        if (typeof (bodyUser.full_name) !== "string") {
+            return res.json({
+                success: true,
+                mensaje: 'Name is incorrect; only strings are allowed. Please try again.'
+            });
+        }
+
+        if (bodyUser.full_name.length > 30) {
+            return res.json({
+                success: true,
+                mensaje: 'Name is too long. Please insert a shorter name, max. 30 characters.'
+            });
+        }
+
+        if (typeof (bodyUser.password) !== "string") {
+            return res.json({
+                success: true,
+                mensaje: 'Password is incorrect; only strings are allowed. Please try again'
+            });
+        }
+
+        if (bodyUser.password.length > 100) {
+            return res.json({
+                success: true,
+                mensaje: 'Password is too long. Please insert a shorter password (maximum 100 characters).'
+            });
+        }
+
+        if (!passwordRegex.test(req.body.password)) {
+            return res.json({
+                success: true,
+                mensaje: 'Password is incorrect. Please try again'
+            });
+        }
+
+        if (typeof (bodyUser.phone_number) !== "number") {
+            return res.json({
+                success: true,
+                mensaje: 'Phone number is incorrect; only numbers are allowed. Please try again'
+            });
+        }
+
+        if (bodyUser.phone_number.length > 20) {
+            return res.json({
+                success: true,
+                mensaje: 'Phone number is too long. Please insert a shorter number (maximum 20 characters).'
+            });
+        }
+
+        const encrytedPassword = await bcrypt.hash(bodyUser.password, 10)
+
+        const updateOneUser = await User.update({
+            id
+        }, {
+            full_name: bodyUser.full_name,
+            password: encrytedPassword,
+            phone_number: bodyUser.phone_number
+        })
+
+        return res.json({
+            success: true,
+            message: "User updated successfully.",
+            data: {
+                full_name: bodyUser.full_name,
+                phone_number: bodyUser.phone_number
+            }
+        })
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "User can't be registered, please try again.",
+            error
+        })
+    }
+}
+
+
+export { register, login, profile, getAllUsers, updateUser };
