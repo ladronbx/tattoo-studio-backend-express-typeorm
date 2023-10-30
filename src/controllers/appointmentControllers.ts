@@ -276,4 +276,171 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
 
 
 
-export { createAppointment, getAllArtist, deleteAppointment, getAllMyAppointments}
+const updateAppointment = async (req: Request, res: Response) => {
+    try {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        const timeRegex = /^\d{2}:\d{2}:\d{2}$/;
+        const client_id = req.token.id
+        const body = req.body
+        const appointmentId = body.id
+        const date = body.date
+        const time = body.time
+        const email = body.email
+
+        if (!email) {
+            return res.json({
+                success: true,
+                message: "you must insert an email",
+            })
+        }
+
+        if (typeof (email) !== "string") {
+            return res.json({
+                success: true,
+                mensaje: 'Email incorrect, you can only enter strings. Please try again.'
+            });
+        }
+
+        if (email.length > 100) {
+            return res.json({
+                success: true,
+                mensaje: 'Email too long, please insert a shorter name, maximum 100 characters.'
+            });
+        }
+
+        if (!emailRegex.test(email)) {
+            return res.json({
+                success: true,
+                mensaje: 'Email format incorrect, try again'
+            });
+        }
+
+        const findArtistByEmail = await User.findOneBy({
+            email
+        })
+
+        if(findArtistByEmail?.is_active !== true){
+            return res.json({
+                success: true,
+                message: "Artist doesn't exist" 
+            })
+        } 
+
+        const WorkerID = findArtistByEmail?.id
+
+        if (!appointmentId) {
+            return res.json({
+                success: true,
+                message: "You must enter an ID.",
+            })
+        }
+
+        if (typeof (appointmentId) !== "number") {
+            return res.json({
+                success: true,
+                mensaje: "ID incorrect, you can only use numbers, please try again."
+            });
+        }
+
+        if (!date) {
+            return res.json({
+                success: true,
+                message: "Date not provided",
+            })
+        }
+
+        if (typeof (date) !== "string") {
+            return res.json({
+                success: true,
+                mensaje: "Incorrect date format. Date must be a string"
+            });
+        }
+
+        if (!dateRegex.test(date)) {
+            return res.json({
+                success: true,
+                mensaje: "Incorrect date, the format should be YYYY-MM-DD."
+            });
+        }
+
+        if (!time) {
+            return res.json({
+                success: true,
+                message: "Time not provided",
+            })
+        }
+
+        if (typeof (time) !== "string") {
+            return res.json({
+                success: true,
+                mensaje: "Time must be a string."
+            });
+        }
+
+        if (!timeRegex.test(time)) {
+            return res.json({
+                success: true,
+                mensaje: "Incorrect Time, the format should be HH:MM:SS."
+            });
+        }
+
+        const appointmentsClient = await Appointment.findBy({
+            client_id,
+        })
+
+        const appointmentsId = await appointmentsClient.map((object) =>
+            object.id
+        )
+
+        if (!appointmentsId.includes(appointmentId)) {
+            return res.json(
+                {
+                    success: true,
+                    message: "Appointment not updated successfully, incorrect ID."
+                }
+            )
+        }
+
+        await Appointment.update(
+            {
+                id: appointmentId
+            },
+            {
+               date: date,
+               time: time,
+               artist_id: WorkerID
+            }
+        )
+
+        const dataAppointmentUpdated = await Appointment.findOneBy({
+            id: appointmentId
+        })
+
+        return res.json({
+            success: true,
+            message: "The appointment was successfully created.",
+            data: {
+                date,
+                time,
+                email,
+                id: appointmentId,
+                created_at: dataAppointmentUpdated?.created_at,
+                updated_at: dataAppointmentUpdated?.updated_at
+            }
+        })
+
+    } catch (error) {
+        return res.json(
+            {
+                success: false,
+                message: "Updating the appointment is currently not possible. Please try again.",
+                error
+            }
+        )
+    }
+}
+
+
+
+export { createAppointment, getAllArtist, deleteAppointment, getAllMyAppointments, updateAppointment}
