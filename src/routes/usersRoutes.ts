@@ -3,6 +3,7 @@ import { register, login, profile, getAllUsers, updateUser, getArtists } from ".
 import { auth } from "../middleware/auth";
 import { isSuperAdmin } from "../middleware/isSuperAdmin";
 
+
 const routerUsers = Router();
 
 routerUsers.post('/register', register)
