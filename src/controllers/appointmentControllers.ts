@@ -183,4 +183,55 @@ const getAllArtist = async (req: Request, res: Response) => {
     }
 }
 
-export { createAppointment, getAllArtist }
+const deleteAppointment = async (req: Request, res: Response) => {
+    try {
+        const appointmentId = req.body.id;
+        const clientTokenId = req.token.id;
+
+
+        if (!appointmentId) {
+            return res.json({
+                success: true,
+                message: "Please provide the ID of the appointment to be deleted.",
+            });
+        }
+
+        if (typeof appointmentId !== "number") {
+            return res.json({
+                success: true,
+                message: "The provided ID is not in the correct format. Please enter a numerical value for the appointment ID."
+            });
+        }
+
+        const userAppointments = await Appointment.findBy({
+            client_id: clientTokenId,
+        });
+
+        const userAppointmentsIds = userAppointments.map((appointment) =>
+            appointment.id
+        );
+
+        if (!userAppointmentsIds.includes(appointmentId)) {
+            return res.json("The appointment with the provided ID does not exist or cannot be deleted.");
+        }
+
+        const deletedAppointment = await Appointment.delete({
+            id: appointmentId
+        });
+
+        return res.json({
+            success: true,
+            message: "The appointment has been successfully deleted.",
+        });
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "An error occurred while trying to delete the appointment. Please try again later.",
+            error
+        });
+    }
+}
+
+
+export { createAppointment, getAllArtist, deleteAppointment }
