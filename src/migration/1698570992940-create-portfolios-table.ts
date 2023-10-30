@@ -5,7 +5,7 @@ class CreatePortfoliosTable1698570992940 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "portfolio",
+                name: "portfolios",
                 columns: [
                     {
                         name: "id",
@@ -54,7 +54,7 @@ class CreatePortfoliosTable1698570992940 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("portfolio")
+        await queryRunner.dropTable("portfolios")
     }
 
 }
