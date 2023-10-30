@@ -25,21 +25,21 @@ const createAppointment = async (req: Request, res: Response) => {
         if (typeof (email) !== "string") {
             return res.json({
                 success: true,
-                mensaje: 'Email must be a string.'
+                message: 'Email must be a string.'
             });
         }
 
         if (email.length > 100) {
             return res.json({
                 success: true,
-                mensaje: 'Email is too long.'
+                message: 'Email is too long.'
             });
         }
 
         if (!emailRegex.test(email)) {
             return res.json({
                 success: true,
-                mensaje: 'Incorrect email format. Please try again'
+                message: 'Incorrect email format. Please try again'
             });
         }
 
@@ -80,14 +80,14 @@ const createAppointment = async (req: Request, res: Response) => {
         if (typeof (date) !== "string") {
             return res.json({
                 success: true,
-                mensaje: "Incorrect date format. Date must be a string"
+                message: "Incorrect date format. Date must be a string"
             });
         }
 
         if (!dateRegex.test(date)) {
             return res.json({
                 success: true,
-                mensaje: "Incorrect date, the format should be YYYY-MM-DD."
+                message: "Incorrect date, the format should be YYYY-MM-DD."
             });
         }
 
@@ -101,14 +101,14 @@ const createAppointment = async (req: Request, res: Response) => {
         if (typeof (time) !== "string") {
             return res.json({
                 success: true,
-                mensaje: "Time must be a string."
+                message: "Time must be a string."
             });
         }
 
         if (!timeRegex.test(time)) {
             return res.json({
                 success: true,
-                mensaje: "Incorrect Time, the format should be HH:MM:SS."
+                message: "Incorrect Time, the format should be HH:MM:SS."
             });
         }
 
@@ -298,21 +298,21 @@ const updateAppointment = async (req: Request, res: Response) => {
         if (typeof (email) !== "string") {
             return res.json({
                 success: true,
-                mensaje: 'Email incorrect, you can only enter strings. Please try again.'
+                message: 'Email incorrect, you can only enter strings. Please try again.'
             });
         }
 
         if (email.length > 100) {
             return res.json({
                 success: true,
-                mensaje: 'Email too long, please insert a shorter name, maximum 100 characters.'
+                message: 'Email too long, please insert a shorter name, maximum 100 characters.'
             });
         }
 
         if (!emailRegex.test(email)) {
             return res.json({
                 success: true,
-                mensaje: 'Email format incorrect, try again'
+                message: 'Email format incorrect, try again'
             });
         }
 
@@ -339,7 +339,7 @@ const updateAppointment = async (req: Request, res: Response) => {
         if (typeof (appointmentId) !== "number") {
             return res.json({
                 success: true,
-                mensaje: "ID incorrect, you can only use numbers, please try again."
+                message: "ID incorrect, you can only use numbers, please try again."
             });
         }
 
@@ -353,14 +353,14 @@ const updateAppointment = async (req: Request, res: Response) => {
         if (typeof (date) !== "string") {
             return res.json({
                 success: true,
-                mensaje: "Incorrect date format. Date must be a string"
+                message: "Incorrect date format. Date must be a string"
             });
         }
 
         if (!dateRegex.test(date)) {
             return res.json({
                 success: true,
-                mensaje: "Incorrect date, the format should be YYYY-MM-DD."
+                message: "Incorrect date, the format should be YYYY-MM-DD."
             });
         }
 
@@ -374,14 +374,14 @@ const updateAppointment = async (req: Request, res: Response) => {
         if (typeof (time) !== "string") {
             return res.json({
                 success: true,
-                mensaje: "Time must be a string."
+                message: "Time must be a string."
             });
         }
 
         if (!timeRegex.test(time)) {
             return res.json({
                 success: true,
-                mensaje: "Incorrect Time, the format should be HH:MM:SS."
+                message: "Incorrect Time, the format should be HH:MM:SS."
             });
         }
 

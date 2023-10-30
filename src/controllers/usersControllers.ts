@@ -256,49 +256,49 @@ const updateUser = async (req: Request, res: Response) => {
         if (typeof (bodyUser.full_name) !== "string") {
             return res.json({
                 success: true,
-                mensaje: 'Name is incorrect; only strings are allowed. Please try again.'
+                message: 'Name is incorrect; only strings are allowed. Please try again.'
             });
         }
 
         if (bodyUser.full_name.length > 30) {
             return res.json({
                 success: true,
-                mensaje: 'Name is too long. Please insert a shorter name, max. 30 characters.'
+                message: 'Name is too long. Please insert a shorter name, max. 30 characters.'
             });
         }
 
         if (typeof (bodyUser.password) !== "string") {
             return res.json({
                 success: true,
-                mensaje: 'Password is incorrect; only strings are allowed. Please try again'
+                message: 'Password is incorrect; only strings are allowed. Please try again'
             });
         }
 
         if (bodyUser.password.length > 100) {
             return res.json({
                 success: true,
-                mensaje: 'Password is too long. Please insert a shorter password (maximum 100 characters).'
+                message: 'Password is too long. Please insert a shorter password (maximum 100 characters).'
             });
         }
 
         if (!passwordRegex.test(req.body.password)) {
             return res.json({
                 success: true,
-                mensaje: 'Password is incorrect. Please try again'
+                message: 'Password is incorrect. Please try again'
             });
         }
 
         if (typeof (bodyUser.phone_number) !== "number") {
             return res.json({
                 success: true,
-                mensaje: 'Phone number is incorrect; only numbers are allowed. Please try again'
+                message: 'Phone number is incorrect; only numbers are allowed. Please try again'
             });
         }
 
         if (bodyUser.phone_number.length > 20) {
             return res.json({
                 success: true,
-                mensaje: 'Phone number is too long. Please insert a shorter number (maximum 20 characters).'
+                message: 'Phone number is too long. Please insert a shorter number (maximum 20 characters).'
             });
         }
 
@@ -330,7 +330,7 @@ const updateUser = async (req: Request, res: Response) => {
     }
 }
 
-//recuperar artistas registrados
+//obtener artistas registrados
 const getArtists = async (req: Request, res: Response) => {
     try {
         const artists = await User.find({
@@ -362,47 +362,119 @@ const getArtists = async (req: Request, res: Response) => {
 };
 
 
-const createArtists = async (req: Request, res: Response) => {
-
+const createArtist = async (req: Request, res: Response) => {
     try {
-        const id = req.token.id
 
-        const appointmentsWorker = await Appointment.findBy({
-            artist_id: id
-        })
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
+        const body = req.body;
 
-        const appointmentsUserForShows = await Promise.all(appointmentsWorker.map(async (obj) => {
-            const { status, artist_id, client_id, ...rest } = obj;
-            
-            const artist = await User.findOneBy({ 
-                id: artist_id 
+        if (typeof (body.full_name) !== "string") {
+            return res.json({
+                success: true,
+                message: 'name incorrect, you can put only strings, try again'
             });
+        }
 
-            if (artist) {
-                const email = artist.email;
-                const is_active = artist.is_active;
-                return { ...rest, email, is_active };
-            }
-            else {
-                return null
-            }
-        }));
+        if (body.full_name.length < 1) {
+            return res.json({
+                success: true,
+                message: 'name too long, try to insert a shorter name, max 50 characters'
+            });
+        }
+        if (body.full_name.length > 50) {
+            return res.json({
+                success: true,
+                message: 'name too long, try to insert a shorter name, max 50 characters'
+            });
+        }
+
+        if (typeof (body.email) !== "string") {
+            return res.json({
+                success: true,
+                message: 'email incorrect, you can put only strings, try again'
+            });
+        }
+
+        if (body.email.length > 100) {
+            return res.json({
+                success: true,
+                message: 'name too long, try to insert a shorter name, max 100 characters'
+            });
+        }
+
+        if (!emailRegex.test(req.body.email)) {
+            return res.json({
+                success: true,
+                message: 'email incorrect, try again'
+            });
+        }
+
+        if (typeof (body.password) !== "string") {
+            return res.json({
+                success: true,
+                message: 'password incorrect, you can put only strings, try again'
+            });
+        }
+
+        if (body.password.length > 100) {
+            return res.json({
+                success: true,
+                message: 'password too long, try to insert a shorter name, max 100 characters'
+            });
+        }
+
+        if (!passwordRegex.test(req.body.password)) {
+            return res.json({
+                success: true,
+                message: 'password incorrect, try again'
+            });
+        }
+
+        if (typeof (body.phone_number) !== "number") {
+            return res.json({
+                success: true,
+                message: 'phone_number incorrect, you can put only numbers, try again'
+            });
+        }
+
+        if (body.phone_number.length > 20) {
+            return res.json({
+                success: true,
+                message: 'phone_number too long, try to insert a shorter name, max 20 characters'
+            });
+        }
+
+        const encrytedPass = await bcrypt.hash(body.password, 10)
+
+        const newUser = await User.create({
+            full_name: body.full_name,
+            email: body.email,
+            password: encrytedPass,
+            phone_number: body.phone_number,
+            role_id: body.role_id
+
+        }).save()
 
         return res.json({
             success: true,
-            message: "Here are all your appointments",
-            data: appointmentsUserForShows
-        });
+            message: "User registered succesfully",
+            data: {
+                full_name: newUser.full_name,
+                email: newUser.email,
+                phone_number: newUser.phone_number
+            }
+        })
 
     } catch (error) {
         return res.json({
             success: false,
-            message: "appointments can't be getted, try again",
+            message: "user can't be registered, try again",
             error
         })
-    }
+    } 
+
 }
 
 
-
-export { register, login, profile, getAllUsers, updateUser, getArtists, createArtists };
+export { register, login, profile, getAllUsers, updateUser, getArtists, createArtist };
