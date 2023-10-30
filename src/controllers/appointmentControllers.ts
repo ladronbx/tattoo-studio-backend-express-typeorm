@@ -14,6 +14,7 @@ const createAppointment = async (req: Request, res: Response) => {
         const email = req.body.email
         const idToken = req.token.id
 
+        //Falta validar que la fecha sea anterior.
         if (!email) {
             return res.json({
                 success: true,
@@ -233,5 +234,46 @@ const deleteAppointment = async (req: Request, res: Response) => {
     }
 }
 
+const getAllMyAppointments = async (req: Request, res: Response) => {
 
-export { createAppointment, getAllArtist, deleteAppointment }
+    try {
+        const clientTokenId = req.token.id;
+
+        const userAppointments = await Appointment.findBy({
+            client_id: clientTokenId
+        });
+
+        const formattedAppointments = await Promise.all(userAppointments.map(async (appointment) => {
+            const { status, artist_id, client_id, ...appointmentDetails } = appointment;
+            
+            const artistDetails = await User.findOneBy({ 
+                id: artist_id 
+            });
+
+            if (artistDetails) {
+                const artistEmail = artistDetails.email;
+                const artistIsActive = artistDetails.is_active;
+                return { ...appointmentDetails, artistEmail, artistIsActive };
+            } else {
+                return null;
+            }
+        }));
+
+        return res.json({
+            success: true,
+            message: "Here is a list of all your appointments",
+            data: formattedAppointments
+        });
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "There was an issue retrieving your appointments, please try again",
+            error
+        });
+    }
+}
+
+
+
+export { createAppointment, getAllArtist, deleteAppointment, getAllMyAppointments}
