@@ -12,6 +12,8 @@ const createAppointment = async (req: Request, res: Response) => {
         const date = req.body.date
         const time = req.body.time
         const email = req.body.email
+        // o purchase
+        // const bodyModificationName = req.body.name
         const idToken = req.token.id
 
         //Falta validar que la fecha sea anterior.
@@ -234,6 +236,8 @@ const deleteAppointment = async (req: Request, res: Response) => {
     }
 }
 
+
+
 const getAllMyAppointments = async (req: Request, res: Response) => {
 
     try {
@@ -251,9 +255,10 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
             });
 
             if (artistDetails) {
+                const full_name = artistDetails.full_name
                 const artistEmail = artistDetails.email;
                 const artistIsActive = artistDetails.is_active;
-                return { ...appointmentDetails, artistEmail, artistIsActive };
+                return { full_name, artistEmail, artistIsActive};
             } else {
                 return null;
             }

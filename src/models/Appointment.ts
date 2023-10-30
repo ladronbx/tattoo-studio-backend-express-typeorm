@@ -1,7 +1,7 @@
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm"
 import { Portfolio } from "./Portfolio";
 
-@Entity("appointments")
+@Entity("appointment")
 export class Appointment extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number
@@ -9,8 +9,8 @@ export class Appointment extends BaseEntity {
     @Column({ type: "date" })
     date!: string;
 
-    @Column({ type: "time" })
-    time!: string;
+    @Column()
+    shift!: string;
 
     @Column()
     status!: boolean

@@ -21,8 +21,9 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
         }
       )
     }
+    const secret = process.env.JWT_SECRET
 
-    const tokenDecoded = jwt.verify(token, "secret") as TokenDecoded
+    const tokenDecoded = jwt.verify(token, secret as string) as TokenDecoded
 
     req.token = tokenDecoded
 

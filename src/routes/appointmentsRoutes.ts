@@ -8,11 +8,11 @@ import { isSuperAdmin } from "../middleware/isSuperAdmin";
 const routerAppointments = Router();
 
 
-routerAppointments.get('/getAllArtist',auth, isAdmin, getAllAppointmentArtist) //
-routerAppointments.get('/getAllMyAppointments',auth, getAllMyAppointments) //
-routerAppointments.get('/getallAppointmentsAllUsers', auth, isSuperAdmin, getallAppointmentsAllUsers) //
-routerAppointments.post('/createAppointment',auth, createAppointment) //
-routerAppointments.delete('/deleteAppointment',auth, deleteAppointment) //
-routerAppointments.put('/updateAppointment',auth, updateAppointment) //
+routerAppointments.get('/getAllArtist',auth, isAdmin, getAllAppointmentArtist) 
+routerAppointments.get('/getAllMyAppointments',auth, getAllMyAppointments)
+routerAppointments.get('/getallAppointmentsAllUsers', auth, isSuperAdmin, getallAppointmentsAllUsers)
+routerAppointments.post('/createAppointment',auth, createAppointment)
+routerAppointments.delete('/deleteAppointment',auth, deleteAppointment)
+routerAppointments.put('/updateAppointment',auth, updateAppointment)
 
 export {routerAppointments}

@@ -45,7 +45,7 @@ class CreateAppointmentPortfolioTable1698571096473 implements MigrationInterface
                     },
                     {
                         columnNames: ["portfolio_id"],
-                        referencedTableName: "portfolio",
+                        referencedTableName: "portfolios",
                         referencedColumnNames: ["id"],
                         onDelete: "CASCADE",
                     }

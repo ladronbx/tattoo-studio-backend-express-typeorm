@@ -159,7 +159,7 @@ const login = async (req: Request, res: Response) => {
             id: userFoundByEmail.id,
             email: userFoundByEmail.email,
             role: roleName
-        }, "secret", {
+        }, "process.env.JWT_SECRET", {
             expiresIn: "4h"
         })
 
@@ -219,6 +219,20 @@ const profile = async (req: Request, res: Response) => {
 
 const getAllUsers = async (req: Request, res: Response) => {
     try {
+        const pageSize = parseInt(req.query.skip as string) || 1
+        const page = parseInt(req.query.page as string) || 5
+        // const pageSize: any = req.query.skip || 1
+        // const page: any = req.query.page || 5
+        //si no me pasan el pageSize o page los pongo todos?
+        // le metemos un default con || 1
+        const skip = (page - 1) * pageSize
+
+        //Recupera los usuarios de con paginación
+        // const user = await userRepository.find({
+        //     skip: skip,
+        //     take: pageSize,
+        // });
+
         // Obtengo todos los usuarios pero con los campos seleccionados. EXCLUYENDO PASSWORD
         const users = await User.find({
             select: ["id", "email", "full_name", "phone_number", "is_active", "role_id", "created_at", "updated_at"]
@@ -472,15 +486,15 @@ const createArtist = async (req: Request, res: Response) => {
             message: "user can't be registered, try again",
             error
         })
-    } 
+    }
 
 }
 
 
 const deleteUsersByAdmin = async (req: Request, res: Response) => {
-    
+
     try {
-        const deleteById = req.body.id 
+        const deleteById = req.body.id
 
         if (!deleteById) {
             return res.json({
@@ -494,7 +508,7 @@ const deleteUsersByAdmin = async (req: Request, res: Response) => {
                 success: true,
                 mensaje: "Id incorrect, you can put only numbers, try again"
             });
-        } 
+        }
 
         const deleteAppointmentById = await User.delete({
             id: deleteById
