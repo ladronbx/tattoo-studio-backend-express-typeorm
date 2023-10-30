@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-const admin = (req: Request, res: Response, next: NextFunction) => {
+const isAdmin = (req: Request, res: Response, next: NextFunction) => {
     
     if (req.token.role !== "admin") {
         return res.json({
@@ -9,4 +9,4 @@ const admin = (req: Request, res: Response, next: NextFunction) => {
     }
     next();
 }
-export { admin }
+export { isAdmin }

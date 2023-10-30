@@ -477,4 +477,44 @@ const createArtist = async (req: Request, res: Response) => {
 }
 
 
-export { register, login, profile, getAllUsers, updateUser, getArtists, createArtist };
+const deleteUsersByAdmin = async (req: Request, res: Response) => {
+    
+    try {
+        const deleteById = req.body.id 
+
+        if (!deleteById) {
+            return res.json({
+                success: true,
+                message: "You must insert an id",
+            })
+        }
+
+        if (typeof (deleteById) !== "number") {
+            return res.json({
+                success: true,
+                mensaje: "Id incorrect, you can put only numbers, try again"
+            });
+        } 
+
+        const deleteAppointmentById = await User.delete({
+            id: deleteById
+        })
+
+        return res.json({
+            success: true,
+            message: "The user was successfully deleted.",
+        })
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "Unable to delete the user, please try again.",
+            error
+        })
+    }
+
+}
+
+
+
+export { register, login, profile, getAllUsers, updateUser, getArtists, createArtist, deleteUsersByAdmin };

@@ -143,7 +143,7 @@ const createAppointment = async (req: Request, res: Response) => {
     }
 }
 
-const getAllArtist = async (req: Request, res: Response) => {
+const getAllAppointmentArtist = async (req: Request, res: Response) => {
 
     try {
         const id = req.token.id
@@ -485,4 +485,4 @@ const getallAppointmentsAllUsers = async (req: Request, res: Response) => {
 
 
 
-export { createAppointment, getAllArtist, deleteAppointment, getAllMyAppointments, updateAppointment, getallAppointmentsAllUsers}
+export { createAppointment, getAllAppointmentArtist, deleteAppointment, getAllMyAppointments, updateAppointment, getallAppointmentsAllUsers}
