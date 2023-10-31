@@ -5,14 +5,20 @@ import { isAdmin } from "../middleware/isAdmin";
 import { isSuperAdmin } from "../middleware/isSuperAdmin";
 
 
-const routerAppointments = Router();
+const appointmentsRouter = Router();
+
+appointmentsRouter.post('/create',auth, createAppointment)// X
+appointmentsRouter.put('/update',auth, updateAppointment) // X
+appointmentsRouter.get('/getAllMyAppointments',auth, getAllMyAppointments)
 
 
-routerAppointments.get('/getAllArtist',auth, isAdmin, getAllAppointmentArtist) 
-routerAppointments.get('/getAllMyAppointments',auth, getAllMyAppointments)
-routerAppointments.get('/getallAppointmentsAllUsers', auth, isSuperAdmin, getallAppointmentsAllUsers)
-routerAppointments.post('/createAppointment',auth, createAppointment)
-routerAppointments.delete('/deleteAppointment',auth, deleteAppointment)
-routerAppointments.put('/updateAppointment',auth, updateAppointment)
 
-export {routerAppointments}
+
+
+
+// appointmentsRouter.get('appointment/getAllArtist',auth, isAdmin, getAllAppointmentArtist) 
+// appointmentsRouter.get('appointment/getallAppointmentsAllUsers', auth, isSuperAdmin, getallAppointmentsAllUsers)
+
+// appointmentsRouter.delete('appointment/deleteAppointment',auth, deleteAppointment)
+
+export {appointmentsRouter}

@@ -116,7 +116,6 @@ const register = async (req: Request, res: Response) => {
     }
 }
 
-
 const login = async (req: Request, res: Response) => {
 
     try {
@@ -159,8 +158,8 @@ const login = async (req: Request, res: Response) => {
             id: userFoundByEmail.id,
             email: userFoundByEmail.email,
             role: roleName
-        }, "process.env.JWT_SECRET", {
-            expiresIn: "4h"
+        }, "secret", {
+            expiresIn: "48h"
         })
 
         return res.json({
@@ -183,14 +182,10 @@ const profile = async (req: Request, res: Response) => {
         // Extraigo el email del token del usuario logeado.
         const email = req.token.email;
 
-        console.log("Email:", email);
-
         // Busco un usuario donde el campo 'email' coincida con el correo electrónico extraído del token. 
         const userProfile = await User.findOne({
             where: { email }
         });
-
-        console.log("UserProfile:", userProfile);
 
         if (!userProfile) {
             return res.status(404).json({
@@ -490,7 +485,6 @@ const createArtist = async (req: Request, res: Response) => {
 
 }
 
-
 const deleteUsersByAdmin = async (req: Request, res: Response) => {
 
     try {
@@ -528,7 +522,5 @@ const deleteUsersByAdmin = async (req: Request, res: Response) => {
     }
 
 }
-
-
 
 export { register, login, profile, getAllUsers, updateUser, getArtists, createArtist, deleteUsersByAdmin };

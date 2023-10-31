@@ -1,15 +1,17 @@
-import express from "express";
-import 'dotenv/config'
+import express, { Router } from "express";
 import { AppDataSource } from "./db";
-import { routerUsers } from "./routes/usersRoutes";
-import { routerAppointments } from "./routes/appointmentsRoutes";
+import { userRouter } from "./routes/usersRoutes";
+import { appointmentsRouter } from "./routes/appointmentsRoutes";
+
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
-app.use('/users', routerUsers)
-app.use('/appointments', routerAppointments)
+app.use('/user', userRouter)
+app.use('/user/appointments', appointmentsRouter)
+
+
 
 AppDataSource.initialize()
     .then(() => {

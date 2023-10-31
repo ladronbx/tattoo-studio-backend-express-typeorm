@@ -36,7 +36,7 @@ export class User extends BaseEntity {
     
     @ManyToMany(() => User)
     @JoinTable({
-        name: "appointments",
+        name: "appointment",
         joinColumn: {
             name: "client_id",
             referencedColumnName: "id"
@@ -50,7 +50,7 @@ export class User extends BaseEntity {
 
     @ManyToMany(() => User)
     @JoinTable({
-        name: "appointments",
+        name: "appointment",
         joinColumn: {
             name: "artist_id",
             referencedColumnName: "id"
@@ -62,6 +62,3 @@ export class User extends BaseEntity {
     })
     artistClients!: User[]
 }
-
-
-

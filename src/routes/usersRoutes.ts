@@ -1,19 +1,23 @@
 import { Router } from "express";
-import { register, login, profile, getAllUsers, updateUser, getArtists, createArtist, deleteUsersByAdmin } from "../controllers/usersControllers";
+import { register, login, profile, updateUser, getArtists, createArtist, getAllUsers, deleteUsersByAdmin } from "../controllers/usersControllers";
 import { auth } from "../middleware/auth";
 import { isSuperAdmin } from "../middleware/isSuperAdmin";
 import { isAdmin } from "../middleware/isAdmin";
 
-const routerUsers = Router();
+const userRouter = Router();
 
-routerUsers.get('/profile', auth, profile)
-routerUsers.get('/artists', auth, getArtists)  //obtener artistas registrados
-routerUsers.get('/all/users',auth ,isSuperAdmin ,getAllUsers) // Obtengo todos los usuarios pero con los campos seleccionados. EXCLUYENDO PASSWORD
-routerUsers.post('/register', register)
-routerUsers.post('/login', login)
-routerUsers.post('/createArtist', createArtist)
-routerUsers.put('/update/user', auth, updateUser)
-routerUsers.delete('/delete/admin', auth, isAdmin, deleteUsersByAdmin)
+userRouter.post('/register', register)//
+userRouter.post('/login', login) //
+userRouter.get('/profile', auth, profile)//
+userRouter.put('/profile/update', auth, updateUser)// X
+userRouter.get('super/get/all/users',auth ,isSuperAdmin ,getAllUsers)
+userRouter.delete('super/delete/user', auth, isSuperAdmin, deleteUsersByAdmin)
+
+userRouter.get('/artists', auth, getArtists)  //obtiene artistas registrados
+
+userRouter.post('/createArtist', createArtist)
 
 
-export {routerUsers}
+
+
+export {userRouter}

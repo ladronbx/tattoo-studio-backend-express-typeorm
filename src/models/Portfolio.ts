@@ -38,5 +38,3 @@ export class Portfolio extends BaseEntity {
     })
     portfolioAppointments!: Appointment[]
 }
-
-

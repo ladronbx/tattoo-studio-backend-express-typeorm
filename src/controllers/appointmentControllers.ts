@@ -1,22 +1,20 @@
 import { Request, Response } from "express";
 import { Appointment } from "../models/Appointment";
 import { User } from "../models/User";
-
+import { Portfolio } from "../models/Portfolio";
 
 const createAppointment = async (req: Request, res: Response) => {
 
     try {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-        const timeRegex = /^\d{2}:\d{2}:\d{2}$/;
         const date = req.body.date
-        const time = req.body.time
+        const shift = req.body.shift
         const email = req.body.email
-        // o purchase
-        // const bodyModificationName = req.body.name
+        const purchase_Name = req.body.name
         const idToken = req.token.id
 
-        //Falta validar que la fecha sea anterior.
+        //Falta validar que la fecha sea anterior y que no coincida con el turno del worker
         if (!email) {
             return res.json({
                 success: true,
@@ -35,6 +33,12 @@ const createAppointment = async (req: Request, res: Response) => {
             return res.json({
                 success: true,
                 message: 'Email is too long.'
+            });
+        }
+        if (email.length == 0) {
+            return res.json({
+                success: true,
+                mensaje: 'Email too short'
             });
         }
 
@@ -93,37 +97,30 @@ const createAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        if (!time) {
+        if (!shift) {
             return res.json({
                 success: true,
                 message: "Time not provided",
             })
         }
 
-        if (typeof (time) !== "string") {
+        if (typeof (shift) !== "string") {
             return res.json({
                 success: true,
                 message: "Time must be a string."
             });
         }
 
-        if (!timeRegex.test(time)) {
-            return res.json({
-                success: true,
-                message: "Incorrect Time, the format should be HH:MM:SS."
-            });
-        }
-
         const createAppointment = await Appointment.create({
             date,
-            time,
+            shift,
             artist_id: findArtistByEmail.id,
             client_id: idToken
         }).save()
 
         const appointmentCreated = {
             date: createAppointment.date,
-            time: createAppointment.time,
+            shift: createAppointment.shift,
             email: email,
             id: createAppointment.id,
             created_at: createAppointment.created_at,
@@ -236,8 +233,6 @@ const deleteAppointment = async (req: Request, res: Response) => {
     }
 }
 
-
-
 const getAllMyAppointments = async (req: Request, res: Response) => {
 
     try {
@@ -279,18 +274,15 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
     }
 }
 
-
-
 const updateAppointment = async (req: Request, res: Response) => {
     try {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-        const timeRegex = /^\d{2}:\d{2}:\d{2}$/;
         const client_id = req.token.id
         const body = req.body
         const appointmentId = body.id
         const date = body.date
-        const time = body.time
+        const shift = body.shift
         const email = body.email
 
         if (!email) {
@@ -369,24 +361,17 @@ const updateAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        if (!time) {
+        if (!shift) {
             return res.json({
                 success: true,
                 message: "Time not provided",
             })
         }
 
-        if (typeof (time) !== "string") {
+        if (typeof (shift) !== "string") {
             return res.json({
                 success: true,
                 message: "Time must be a string."
-            });
-        }
-
-        if (!timeRegex.test(time)) {
-            return res.json({
-                success: true,
-                message: "Incorrect Time, the format should be HH:MM:SS."
             });
         }
 
@@ -413,7 +398,7 @@ const updateAppointment = async (req: Request, res: Response) => {
             },
             {
                date: date,
-               time: time,
+               shift: shift,
                artist_id: WorkerID
             }
         )
@@ -427,7 +412,7 @@ const updateAppointment = async (req: Request, res: Response) => {
             message: "The appointment was successfully created.",
             data: {
                 date,
-                time,
+                shift,
                 email,
                 id: appointmentId,
                 created_at: dataAppointmentUpdated?.created_at,
@@ -445,7 +430,6 @@ const updateAppointment = async (req: Request, res: Response) => {
         )
     }
 }
-
 
 // obtener todas las citas unicamente con el rol super admin 
 const getallAppointmentsAllUsers = async (req: Request, res: Response) => {
