@@ -132,6 +132,7 @@ const login = async (req: Request, res: Response) => {
     }
 }
 
+//Muestra los datos del usuario logeado.
 const profile = async (req: Request, res: Response) => {
     try {
         const email = req.token.email;
@@ -166,6 +167,7 @@ const profile = async (req: Request, res: Response) => {
     }
 };
 
+//Muestra el total de usuarios con su name, email, phone number. También incluye paginación. Error 500.
 const getAllUsersBySuper = async (req: Request, res: Response) => {
     try {
         const pageSize = parseInt(req.query.pageSize as string) || 5;
@@ -203,7 +205,7 @@ const getAllUsersBySuper = async (req: Request, res: Response) => {
     }
 };
 
-
+// Modificar cualquier dato individual de tu perfil, verificando que se cumplan las validaciones correspondientes en cada caso. 
 const updateUser = async (req: Request, res: Response) => {
 
     try {
@@ -295,7 +297,7 @@ const updateUser = async (req: Request, res: Response) => {
     }
 }
 
-//Muestra el total de artistas con su name, email y password. También incluye paginación. Error 500.
+//Muestra el total de artistas con su name, email, phone number. También incluye paginación. Error 500.
 const getArtists = async (req: Request, res: Response) => {
     try {
         const pageSize = parseInt(req.query.pageSize as string) || 5;
@@ -335,121 +337,70 @@ const getArtists = async (req: Request, res: Response) => {
     }
 };
 
-
-
+//SuperUser puede crear artistas. Obligatorio rellenar todos los campos. Y el role_id se asigna automáticamente.
 const createArtist = async (req: Request, res: Response) => {
     try {
-
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
-        const body = req.body;
+        const { body: { full_name, email, password, phone_number } } = req;
 
-        if (typeof (body.full_name) !== "string") {
+        if (!full_name || typeof full_name !== "string" || full_name.length === 0 || full_name.length > 30) {
             return res.json({
-                success: true,
-                message: 'name incorrect, you can put only strings, try again'
+                success: false,
+                message: 'Invalid or too long name'
             });
         }
 
-        if (body.full_name.length < 1) {
+        if (!email || typeof email !== "string" || email.length > 100 || !emailRegex.test(email)) {
             return res.json({
-                success: true,
-                message: 'name too long, try to insert a shorter name, max 50 characters'
-            });
-        }
-        if (body.full_name.length > 50) {
-            return res.json({
-                success: true,
-                message: 'name too long, try to insert a shorter name, max 50 characters'
+                success: false,
+                message: 'Invalid or too long email'
             });
         }
 
-        if (typeof (body.email) !== "string") {
+        if (!password || typeof password !== "string" || password.length > 100 || !passwordRegex.test(password)) {
             return res.json({
-                success: true,
-                message: 'email incorrect, you can put only strings, try again'
+                success: false,
+                message: 'Please use a password with a maximum of 100 characters. And remember use a password between 4 to 12 characters, including at least one uppercase letter, one digit, and one special character (!@#$%^&*). '
             });
         }
 
-        if (body.email.length > 100) {
+        if (!phone_number || typeof phone_number !== "number" || phone_number.toString().length > 20) {
             return res.json({
-                success: true,
-                message: 'name too long, try to insert a shorter name, max 100 characters'
+                success: false,
+                message: 'Invalid phone number data type or too long. Please provide a valid numeric phone number.'
             });
         }
 
-        if (!emailRegex.test(req.body.email)) {
-            return res.json({
-                success: true,
-                message: 'email incorrect, try again'
-            });
-        }
+        const hashedPassword = await bcrypt.hash(password, 8);
 
-        if (typeof (body.password) !== "string") {
-            return res.json({
-                success: true,
-                message: 'password incorrect, you can put only strings, try again'
-            });
-        }
-
-        if (body.password.length > 100) {
-            return res.json({
-                success: true,
-                message: 'password too long, try to insert a shorter name, max 100 characters'
-            });
-        }
-
-        if (!passwordRegex.test(req.body.password)) {
-            return res.json({
-                success: true,
-                message: 'password incorrect, try again'
-            });
-        }
-
-        if (typeof (body.phone_number) !== "number") {
-            return res.json({
-                success: true,
-                message: 'phone_number incorrect, you can put only numbers, try again'
-            });
-        }
-
-        if (body.phone_number.length > 20) {
-            return res.json({
-                success: true,
-                message: 'phone_number too long, try to insert a shorter name, max 20 characters'
-            });
-        }
-
-        const hashedPassword = await bcrypt.hash(body.password, 10)
-
-        const newUser = await User.create({
-            full_name: body.full_name,
-            email: body.email,
+        const newArtist = await User.create({
+            full_name,
+            email,
             password: hashedPassword,
-            phone_number: body.phone_number,
-            role_id: body.role_id
-
-        }).save()
+            phone_number,
+            role_id: 2
+        }).save();
 
         return res.json({
             success: true,
-            message: "User registered succesfully",
+            message: "Artist registered successfully",
             data: {
-                full_name: newUser.full_name,
-                email: newUser.email,
-                phone_number: newUser.phone_number
+                full_name: newArtist.full_name,
+                email: newArtist.email,
+                phone_number: newArtist.phone_number,
+                role_id: newArtist.role_id
             }
-        })
-
+        });
     } catch (error) {
-        return res.json({
+        return res.status(500).json({
             success: false,
-            message: "user can't be registered, try again",
-            error
-        })
+            message: "Artist registration failed. Please try again.",
+            error: error
+        });
     }
+};
 
-}
 
 const deleteUsersBySuper = async (req: Request, res: Response) => {
 
