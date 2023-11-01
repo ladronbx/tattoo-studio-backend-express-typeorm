@@ -12,10 +12,11 @@ import { CreatePortfoliosTable1698570992940 } from "./migration/1698570992940-cr
 import { CreateAppointmentPortfolioTable1698571096473 } from "./migration/1698571096473-create-appointment_portfolio-table";
 
 // const database = "mysql" | "mariadb";
+
 const AppDataSource = new DataSource({
     type: "mysql",
     host: process.env.DB_HOST,
-    port: 3306,
+    port: parseInt(process.env.DB_PORT as string),
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME, 
