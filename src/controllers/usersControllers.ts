@@ -86,7 +86,7 @@ const login = async (req: Request, res: Response) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
-        // Encuentra al usuario mediante el correo electrónico y carga la relación del usuario con su rol asociado.
+        
         const userFoundByEmail = await User.findOne({
             where: { email },
             relations: ["role"]
@@ -95,36 +95,32 @@ const login = async (req: Request, res: Response) => {
         if (userFoundByEmail?.is_active === false) {
             return res.json({
                 success: true,
-                message: "This user account is currently inactive"
+                message: "Password or email incorrect. Please try again"
             })
         }
 
-        //evalua si es falsa, nula, indefinida o un valor que se evalúa como "falso".
         if (!userFoundByEmail) {
             return res.json({
                 success: true,
-                message: "Please log in using your email."
+                message: "Password or email incorrect. Please try again"
             })
         }
 
         if (!bcrypt.compareSync(password, userFoundByEmail.password)) {
             return res.json({
                 success: true,
-                message: "Invalid password. Please try again."
+                message: "Password or email incorrect. Please try again"
             })
         }
 
-        //para extraer la propiedad role_name de la clase Role
         const roleName = userFoundByEmail.role.role_name;
-
-        //primer argumento : info a codificar ---- segundo : firma ----- tercero : time expires
-        //El primer argumento no funcionaba porque estaba en una constante. Así es la manera correcta de generar el token
+        
         const token = jwt.sign({
             id: userFoundByEmail.id,
             email: userFoundByEmail.email,
             role: roleName
-        }, "secret", {
-            expiresIn: "48h"
+        }, process.env.JWT_SECRET, {
+            expiresIn: "150h"
         })
 
         return res.json({

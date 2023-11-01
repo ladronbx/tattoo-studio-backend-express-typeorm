@@ -7,6 +7,14 @@ export interface TokenDecoded {
 }
 
 declare global {
+    namespace NodeJS {
+        interface ProcessEnv {
+            NODE_ENV: 'development' | 'production';
+            JWT_SECRET: string;
+
+        }
+    }
+
     namespace Express {
         export interface Request {
             // decoded token

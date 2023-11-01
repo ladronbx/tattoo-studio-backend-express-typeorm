@@ -2,6 +2,7 @@ import express, { Router } from "express";
 import { AppDataSource } from "./db";
 import { userRouter } from "./routes/usersRoutes";
 import { appointmentsRouter } from "./routes/appointmentsRoutes";
+require('dotenv').config();
 
 
 const app = express();
