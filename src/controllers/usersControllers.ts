@@ -295,36 +295,46 @@ const updateUser = async (req: Request, res: Response) => {
     }
 }
 
-//obtener artistas registrados
+//Muestra el total de artistas con su name, email y password. También incluye paginación. Error 500.
 const getArtists = async (req: Request, res: Response) => {
     try {
+        const pageSize = parseInt(req.query.pageSize as string) || 5;
+        const page = parseInt(req.query.page as string) || 1;
+        const skip = (page - 1) * pageSize;
+
+        const totalArtists = await User.count({ where: { role_id: 2 } });
         const artists = await User.find({
             where: {
                 role_id: 2
             },
-            select: ["email", "full_name", "phone_number"]
+            select: ["full_name", "email", "phone_number"],
+            skip: skip,
+            take: pageSize
         });
 
         if (artists.length === 0) {
             return res.json({
                 success: true,
-                message: "There are no registered artist."
+                message: "There are no registered artists."
             });
         }
 
         return res.json({
             success: true,
-            message: "Here you can see all the users.",
+            message: "Here you can see all the artists.",
+            totalArtists,
+            currentPage: page,
             data: artists
         });
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: "Unable to display the users. An error occurred.",
+            message: "Unable to display the artists. An error occurred.",
             error
         });
     }
 };
+
 
 
 const createArtist = async (req: Request, res: Response) => {
