@@ -3,6 +3,7 @@ import { Role } from "./Role"
 
 @Entity("users")
 export class User extends BaseEntity {
+
     @PrimaryGeneratedColumn()
     id!: number
 
@@ -20,7 +21,7 @@ export class User extends BaseEntity {
 
     @Column()
     is_active!: boolean
-    
+
     @Column()
     role_id!: number
 
@@ -28,12 +29,13 @@ export class User extends BaseEntity {
     created_at!: Date
 
     @Column()
-    updated_at!: Date
+    updated_at!: Date 
 
     @ManyToOne(() => Role, (role) => role.users)
     @JoinColumn ({name: "role_id"})
     role!: Role;
-    
+ 
+
     @ManyToMany(() => User)
     @JoinTable({
         name: "appointment",
@@ -61,4 +63,5 @@ export class User extends BaseEntity {
         }
     })
     artistClients!: User[]
+
 }

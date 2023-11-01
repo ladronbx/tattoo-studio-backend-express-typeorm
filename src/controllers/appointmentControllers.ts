@@ -2,145 +2,102 @@ import { Request, Response } from "express";
 import { Appointment } from "../models/Appointment";
 import { User } from "../models/User";
 import { Portfolio } from "../models/Portfolio";
+import { Appointment_portfolio } from "../models/Appointment_portfolio";
 
 const createAppointment = async (req: Request, res: Response) => {
-
     try {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-        const date = req.body.date
-        const shift = req.body.shift
-        const email = req.body.email
-        const purchase_Name = req.body.name
-        const idToken = req.token.id
+        const date = req.body.date;
+        const shift = req.body.shift;
+        const email = req.body.email;
+        const purchase = req.body.name;
+        const idToken = req.token.id;
 
-        //Falta validar que la fecha sea anterior y que no coincida con el turno del worker
-        if (!email) {
+        // Validar si el email está proporcionado y su formato es correcto
+        if (!email || typeof email !== "string" || email.length > 100 || email.length === 0 || !emailRegex.test(email)) {
             return res.json({
                 success: true,
-                message: "Email not provided.",
-            })
-        }
-
-        if (typeof (email) !== "string") {
-            return res.json({
-                success: true,
-                message: 'Email must be a string.'
-            });
-        }
-
-        if (email.length > 100) {
-            return res.json({
-                success: true,
-                message: 'Email is too long.'
-            });
-        }
-        if (email.length == 0) {
-            return res.json({
-                success: true,
-                mensaje: 'Email too short'
-            });
-        }
-
-        if (!emailRegex.test(email)) {
-            return res.json({
-                success: true,
-                message: 'Incorrect email format. Please try again'
+                message: "Email format incorrect. Please provide a valid email.",
             });
         }
 
         const findArtistByEmail = await User.findOne({
             where: { email },
-            relations: ["role"]
+            relations: ["role"],
         });
 
-
-        if (findArtistByEmail?.is_active !== true) {
+        // Validar la existencia del artista y sus permisos
+        if (!findArtistByEmail || !findArtistByEmail.is_active || findArtistByEmail.role.role_name !== "admin") {
             return res.json({
                 success: true,
-                message: "The artist is not exist."
-            })
-        }
-
-        if (findArtistByEmail?.role.role_name != "admin") {
-            return res.json({
-                success: true,
-                message: "User does not have admin permissions."
-            })
-        }
-
-        if (idToken == findArtistByEmail.id) {
-            return res.json({
-                success: true,
-                message: "I'm sorry, you can't create an appointment with yourself."
-            })
-        }
-
-        if (!date) {
-            return res.json({
-                success: true,
-                message: "Date not provided",
-            })
-        }
-
-        if (typeof (date) !== "string") {
-            return res.json({
-                success: true,
-                message: "Incorrect date format. Date must be a string"
+                message: "The artist does not exist or lacks admin permissions.",
             });
         }
 
-        if (!dateRegex.test(date)) {
+        // Evitar que un usuario cree una cita consigo mismo
+        if (idToken === findArtistByEmail.id) {
             return res.json({
                 success: true,
-                message: "Incorrect date, the format should be YYYY-MM-DD."
+                message: "Sorry, you can't create an appointment with yourself.",
             });
         }
 
-        if (!shift) {
+        // Validar la fecha y su formato
+        if (!date || typeof date !== "string" || !dateRegex.test(date)) {
             return res.json({
                 success: true,
-                message: "Time not provided",
-            })
-        }
-
-        if (typeof (shift) !== "string") {
-            return res.json({
-                success: true,
-                message: "Time must be a string."
+                message: "Incorrect date format. Date must be in YYYY-MM-DD format.",
             });
         }
 
+
+        // Crear la cita
         const createAppointment = await Appointment.create({
             date,
             shift,
             artist_id: findArtistByEmail.id,
-            client_id: idToken
-        }).save()
+            client_id: idToken,
+        }).save();
+
+        // Encuentra el elemento de compra por su nombre
+        const portfolio = await Portfolio.findOne({
+            where: { name: purchase }
+        });
+
+        // Crea una nueva entrada en la tabla de unión 'Appointment_portfolio' asociando la cita con el elemento de compra
+        await Appointment_portfolio.create({
+            appointment_id: createAppointment.id,
+            portfolio_id: portfolio?.id
+        }).save();
 
         const appointmentCreated = {
             date: createAppointment.date,
             shift: createAppointment.shift,
-            email: email,
+            email,
             id: createAppointment.id,
+            purchase: portfolio?.name,
+            price: portfolio?.price,
             created_at: createAppointment.created_at,
-            updated_at: createAppointment.updated_at
-        }
+            updated_at: createAppointment.updated_at,
+        };
 
         return res.json({
             success: true,
             message: "Appointment created successfully",
-            data: { appointmentCreated }
-        })
-
+            data: { appointmentCreated },
+        });
     } catch (error) {
         return res.json({
             success: false,
             message: "Appointment can't be created, try again",
-            error
-        })
+            error,
+        });
     }
-}
+};
+
+// const createAppointment = async (req: Request, res: Response) => {
+
 
 const getAllAppointmentArtist = async (req: Request, res: Response) => {
 
@@ -244,16 +201,16 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
 
         const formattedAppointments = await Promise.all(userAppointments.map(async (appointment) => {
             const { status, artist_id, client_id, ...appointmentDetails } = appointment;
-            
-            const artistDetails = await User.findOneBy({ 
-                id: artist_id 
+
+            const artistDetails = await User.findOneBy({
+                id: artist_id
             });
 
             if (artistDetails) {
                 const full_name = artistDetails.full_name
                 const artistEmail = artistDetails.email;
                 const artistIsActive = artistDetails.is_active;
-                return { full_name, artistEmail, artistIsActive};
+                return { full_name, artistEmail, artistIsActive };
             } else {
                 return null;
             }
@@ -317,12 +274,12 @@ const updateAppointment = async (req: Request, res: Response) => {
             email
         })
 
-        if(findArtistByEmail?.is_active !== true){
+        if (findArtistByEmail?.is_active !== true) {
             return res.json({
                 success: true,
-                message: "Artist doesn't exist" 
+                message: "Artist doesn't exist"
             })
-        } 
+        }
 
         const WorkerID = findArtistByEmail?.id
 
@@ -397,9 +354,9 @@ const updateAppointment = async (req: Request, res: Response) => {
                 id: appointmentId
             },
             {
-               date: date,
-               shift: shift,
-               artist_id: WorkerID
+                date: date,
+                shift: shift,
+                artist_id: WorkerID
             }
         )
 
@@ -441,8 +398,8 @@ const getallAppointmentsAllUsers = async (req: Request, res: Response) => {
 
         const appointmentsUserForShows = await Promise.all(appointmentsUser.map(async (obj) => {
             const { status, artist_id, client_id, ...rest } = obj;
-            
-            const user = await User.findOneBy({ 
+
+            const user = await User.findOneBy({
                 id: client_id
             });
 
@@ -450,7 +407,7 @@ const getallAppointmentsAllUsers = async (req: Request, res: Response) => {
                 const email = user.email;
                 const is_active = user.is_active;
                 const full_name = user.full_name;
-                return { email, is_active,full_name,...rest,  };
+                return { email, is_active, full_name, ...rest, };
             }
             else {
                 return null
@@ -474,4 +431,4 @@ const getallAppointmentsAllUsers = async (req: Request, res: Response) => {
 
 
 
-export { createAppointment, getAllAppointmentArtist, deleteAppointment, getAllMyAppointments, updateAppointment, getallAppointmentsAllUsers}
+export { createAppointment, getAllAppointmentArtist, deleteAppointment, getAllMyAppointments, updateAppointment, getallAppointmentsAllUsers }

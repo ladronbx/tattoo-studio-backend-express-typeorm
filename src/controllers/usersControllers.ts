@@ -11,45 +11,17 @@ const register = async (req: Request, res: Response) => {
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
         const body = req.body;
 
-        if (typeof body.full_name !== "string") {
+        if ( (typeof body.full_name !== "string") || (body.full_name.length === 0) || (body.full_name.length > 30)) {
             return res.json({
                 success: true,
-                message: 'Invalid name data type. Please provide a valid string for the name.'
+                message: 'Invalid or too long name'
             });
         }
 
-        if (body.full_name.length === 0) {
+        if ((typeof body.email !== "string") || (body.email.length > 100) || (!emailRegex.test(body.email)) ){
             return res.json({
                 success: true,
-                message: 'Name cannot be empty. Please provide a name.'
-            });
-        }
-
-        if (body.full_name.length > 30) {
-            return res.json({
-                success: true,
-                message: 'Name is too long. Please use a name with a maximum of 30 characters.'
-            });
-        }
-
-        if (typeof body.email !== "string") {
-            return res.json({
-                success: true,
-                message: 'Invalid email data type. Please provide a valid string for the email.'
-            });
-        }
-
-        if (body.email.length > 100) {
-            return res.json({
-                success: true,
-                message: 'Email is too long. Please use an email with a maximum of 100 characters.'
-            });
-        }
-
-        if (!emailRegex.test(body.email)) {
-            return res.json({
-                success: true,
-                message: 'Invalid email format. Please provide a valid email address.'
+                message: 'Invalid or too long email'
             });
         }
 
@@ -74,26 +46,19 @@ const register = async (req: Request, res: Response) => {
             });
         }
 
-        if (typeof body.phone_number !== "number") {
+        if ((typeof body.phone_number !== "number")|| (body.phone_number.length > 20)) {
             return res.json({
                 success: true,
-                message: 'Invalid phone number data type. Please provide a valid numeric phone number.'
+                message: 'Invalid phone number data type or too long. Please provide a valid numeric phone number.'
             });
         }
 
-        if (body.phone_number.length > 20) {
-            return res.json({
-                success: true,
-                message: 'Phone number is too long. Please use a phone number with a maximum of 20 digits.'
-            });
-        }
-
-        const encrytedPass = await bcrypt.hash(body.password, 10)
+        const hashedPassword = await bcrypt.hash(body.password, 10)
 
         const newUser = await User.create({
             full_name: body.full_name,
             email: body.email,
-            password: encrytedPass,
+            password: hashedPassword,
             phone_number: body.phone_number
         }).save()
 
@@ -212,7 +177,7 @@ const profile = async (req: Request, res: Response) => {
     }
 };
 
-const getAllUsers = async (req: Request, res: Response) => {
+const getAllUsersBySuper = async (req: Request, res: Response) => {
     try {
         const pageSize = parseInt(req.query.skip as string) || 1
         const page = parseInt(req.query.page as string) || 5
@@ -311,13 +276,13 @@ const updateUser = async (req: Request, res: Response) => {
             });
         }
 
-        const encrytedPassword = await bcrypt.hash(bodyUser.password, 10)
+        const hashedPasswordword = await bcrypt.hash(bodyUser.password, 10)
 
         const updateOneUser = await User.update({
             id
         }, {
             full_name: bodyUser.full_name,
-            password: encrytedPassword,
+            password: hashedPasswordword,
             phone_number: bodyUser.phone_number
         })
 
@@ -454,12 +419,12 @@ const createArtist = async (req: Request, res: Response) => {
             });
         }
 
-        const encrytedPass = await bcrypt.hash(body.password, 10)
+        const hashedPassword = await bcrypt.hash(body.password, 10)
 
         const newUser = await User.create({
             full_name: body.full_name,
             email: body.email,
-            password: encrytedPass,
+            password: hashedPassword,
             phone_number: body.phone_number,
             role_id: body.role_id
 
@@ -485,7 +450,7 @@ const createArtist = async (req: Request, res: Response) => {
 
 }
 
-const deleteUsersByAdmin = async (req: Request, res: Response) => {
+const deleteUsersBySuper = async (req: Request, res: Response) => {
 
     try {
         const deleteById = req.body.id
@@ -523,4 +488,4 @@ const deleteUsersByAdmin = async (req: Request, res: Response) => {
 
 }
 
-export { register, login, profile, getAllUsers, updateUser, getArtists, createArtist, deleteUsersByAdmin };
+export { register, login, profile, getAllUsersBySuper, updateUser, getArtists, createArtist, deleteUsersBySuper };
