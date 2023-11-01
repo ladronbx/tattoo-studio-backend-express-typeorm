@@ -6,7 +6,7 @@ import { isAdmin } from "../middleware/isAdmin";
 
 const userRouter = Router();
 
-userRouter.post('/register', register)//
+userRouter.post('/register', register)
 userRouter.post('/login', login) //
 userRouter.get('/profile', auth, profile)//
 userRouter.put('/profile/update', auth, updateUser)// X

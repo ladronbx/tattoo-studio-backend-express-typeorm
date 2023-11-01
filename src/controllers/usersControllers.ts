@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Appointment } from "../models/Appointment";
 
+
 const register = async (req: Request, res: Response) => {
 
     try {
@@ -53,7 +54,7 @@ const register = async (req: Request, res: Response) => {
             });
         }
 
-        const hashedPassword = await bcrypt.hash(body.password, 10)
+        const hashedPassword = await bcrypt.hash(body.password, 8)
 
         const newUser = await User.create({
             full_name: body.full_name,
@@ -92,14 +93,7 @@ const login = async (req: Request, res: Response) => {
             relations: ["role"]
         });
 
-        if (userFoundByEmail?.is_active === false) {
-            return res.json({
-                success: true,
-                message: "Password or email incorrect. Please try again"
-            })
-        }
-
-        if (!userFoundByEmail) {
+        if ((userFoundByEmail?.is_active === false) || (!userFoundByEmail) ){
             return res.json({
                 success: true,
                 message: "Password or email incorrect. Please try again"
@@ -140,7 +134,6 @@ const login = async (req: Request, res: Response) => {
 
 const profile = async (req: Request, res: Response) => {
     try {
-        // Extraigo el email del token del usuario logeado.
         const email = req.token.email;
 
         // Busco un usuario donde el campo 'email' coincida con el correo electrónico extraído del token. 
@@ -175,35 +168,29 @@ const profile = async (req: Request, res: Response) => {
 
 const getAllUsersBySuper = async (req: Request, res: Response) => {
     try {
-        const pageSize = parseInt(req.query.skip as string) || 1
-        const page = parseInt(req.query.page as string) || 5
-        // const pageSize: any = req.query.skip || 1
-        // const page: any = req.query.page || 5
-        //si no me pasan el pageSize o page los pongo todos?
-        // le metemos un default con || 1
-        const skip = (page - 1) * pageSize
+        const pageSize = parseInt(req.query.pageSize as string) || 5;
+        const page = parseInt(req.query.page as string) || 1;
+        const skip = (page - 1) * pageSize;
 
-        //Recupera los usuarios de con paginación
-        // const user = await userRepository.find({
-        //     skip: skip,
-        //     take: pageSize,
-        // });
+        const totalUsers = await User.count(); // Obtiene el total de usuarios
 
-        // Obtengo todos los usuarios pero con los campos seleccionados. EXCLUYENDO PASSWORD
         const users = await User.find({
-            select: ["id", "email", "full_name", "phone_number", "is_active", "role_id", "created_at", "updated_at"]
+            select: ["id", "email", "full_name", "phone_number", "is_active", "role_id", "created_at", "updated_at"],
+            skip: skip,
+            take: pageSize,
         });
 
         if (users.length === 0) {
             return res.json({
                 success: true,
-                message: "There are no registered users."
+                message: "No users found for this page."
             });
         }
 
         return res.json({
             success: true,
-            message: "Here you can see all the users.",
+            message: "Users retrieved successfully.",
+            currentPage: page,
             data: users
         });
     } catch (error) {
@@ -214,6 +201,7 @@ const getAllUsersBySuper = async (req: Request, res: Response) => {
         });
     }
 };
+
 
 const updateUser = async (req: Request, res: Response) => {
 

@@ -15,11 +15,11 @@ import { CreateAppointmentPortfolioTable1698571096473 } from "./migration/169857
 
 const AppDataSource = new DataSource({
     type: "mysql",
-    host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT as string),
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME, 
+    host: "localhost",
+    port: 3306,
+    username: "root",
+    password: "password",
+    database: "tattoo_studio_db", 
     migrations: [
         CreateRolesTable1698507821394,
         CreateUsersTable1698508040558,
