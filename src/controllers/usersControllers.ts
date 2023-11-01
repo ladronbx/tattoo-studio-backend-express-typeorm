@@ -12,14 +12,14 @@ const register = async (req: Request, res: Response) => {
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
         const body = req.body;
 
-        if ( (typeof body.full_name !== "string") || (body.full_name.length === 0) || (body.full_name.length > 30)) {
+        if ((typeof body.full_name !== "string") || (body.full_name.length === 0) || (body.full_name.length > 30)) {
             return res.json({
                 success: true,
                 message: 'Invalid or too long name'
             });
         }
 
-        if ((typeof body.email !== "string") || (body.email.length > 100) || (!emailRegex.test(body.email)) ){
+        if ((typeof body.email !== "string") || (body.email.length > 100) || (!emailRegex.test(body.email))) {
             return res.json({
                 success: true,
                 message: 'Invalid or too long email'
@@ -47,7 +47,7 @@ const register = async (req: Request, res: Response) => {
             });
         }
 
-        if ((typeof body.phone_number !== "number")|| (body.phone_number.length > 20)) {
+        if ((typeof body.phone_number !== "number") || (body.phone_number.length > 20)) {
             return res.json({
                 success: true,
                 message: 'Invalid phone number data type or too long. Please provide a valid numeric phone number.'
@@ -87,13 +87,13 @@ const login = async (req: Request, res: Response) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
-        
+
         const userFoundByEmail = await User.findOne({
             where: { email },
             relations: ["role"]
         });
 
-        if ((userFoundByEmail?.is_active === false) || (!userFoundByEmail) ){
+        if ((userFoundByEmail?.is_active === false) || (!userFoundByEmail)) {
             return res.json({
                 success: true,
                 message: "Password or email incorrect. Please try again"
@@ -108,7 +108,7 @@ const login = async (req: Request, res: Response) => {
         }
 
         const roleName = userFoundByEmail.role.role_name;
-        
+
         const token = jwt.sign({
             id: userFoundByEmail.id,
             email: userFoundByEmail.email,
@@ -175,9 +175,9 @@ const getAllUsersBySuper = async (req: Request, res: Response) => {
         const totalUsers = await User.count(); // Obtiene el total de usuarios
 
         const users = await User.find({
-            select: ["id", "email", "full_name", "phone_number", "is_active", "role_id", "created_at", "updated_at"],
+            select: ["id", "email", "full_name", "phone_number", "is_active", "role_id"],
             skip: skip,
-            take: pageSize,
+            take: pageSize
         });
 
         if (users.length === 0) {
@@ -191,6 +191,7 @@ const getAllUsersBySuper = async (req: Request, res: Response) => {
             success: true,
             message: "Users retrieved successfully.",
             currentPage: page,
+            totalUsers: totalUsers,
             data: users
         });
     } catch (error) {
@@ -206,78 +207,84 @@ const getAllUsersBySuper = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
 
     try {
-        const bodyUser = req.body
+        const body = req.body
         const id = req.token.id
+        const name = req.body.full_name
+        const email = req.body.email
+        const password = req.body.password
+        const phone = req.body.phone_number
 
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
 
-        if (typeof (bodyUser.full_name) !== "string") {
-            return res.json({
-                success: true,
-                message: 'Name is incorrect; only strings are allowed. Please try again.'
-            });
-        }
-
-        if (bodyUser.full_name.length > 30) {
-            return res.json({
-                success: true,
-                message: 'Name is too long. Please insert a shorter name, max. 30 characters.'
-            });
-        }
-
-        if (typeof (bodyUser.password) !== "string") {
-            return res.json({
-                success: true,
-                message: 'Password is incorrect; only strings are allowed. Please try again'
-            });
-        }
-
-        if (bodyUser.password.length > 100) {
-            return res.json({
-                success: true,
-                message: 'Password is too long. Please insert a shorter password (maximum 100 characters).'
-            });
-        }
-
-        if (!passwordRegex.test(req.body.password)) {
-            return res.json({
-                success: true,
-                message: 'Password is incorrect. Please try again'
-            });
-        }
-
-        if (typeof (bodyUser.phone_number) !== "number") {
-            return res.json({
-                success: true,
-                message: 'Phone number is incorrect; only numbers are allowed. Please try again'
-            });
-        }
-
-        if (bodyUser.phone_number.length > 20) {
-            return res.json({
-                success: true,
-                message: 'Phone number is too long. Please insert a shorter number (maximum 20 characters).'
-            });
-        }
-
-        const hashedPasswordword = await bcrypt.hash(bodyUser.password, 10)
-
-        const updateOneUser = await User.update({
-            id
-        }, {
-            full_name: bodyUser.full_name,
-            password: hashedPasswordword,
-            phone_number: bodyUser.phone_number
-        })
-
-        return res.json({
-            success: true,
-            message: "User updated successfully.",
-            data: {
-                full_name: bodyUser.full_name,
-                phone_number: bodyUser.phone_number
+        if (name !== undefined) {
+            if ((typeof name !== "string") || (name.length === 0) || (name.length > 30)) {
+                return res.json({
+                    success: true,
+                    message: 'Invalid or too long name'
+                });
             }
-        })
+        }
+
+        if (email !== undefined) {
+            if ((typeof email !== "string") || (email.length > 100) || (!emailRegex.test(email))) {
+                return res.json({
+                    success: true,
+                    message: 'Invalid or too long email'
+                });
+            }
+        }
+        if (password !== undefined) {
+            if ((typeof password !== "string") || (password.length > 100) || (!passwordRegex.test(password))) {
+                return res.json({
+                    success: true,
+                    message: 'Please use a password with a maximum of 100 characters. And remember use a password between 4 to 12 characters, including at least one uppercase letter, one digit, and one special character (!@#$%^&*). '
+                });
+            }
+        }
+        if (phone !== undefined) {
+            if ((typeof phone !== "number") || (phone.toString().length > 20)) {
+                return res.json({
+                    success: true,
+                    message: 'Invalid phone number data type or too long. Please provide a valid numeric phone number.'
+                });
+            }
+        }
+
+        // AQUÍ ME CHILLA SI NO PONGO ANY
+        const userToUpdate: any = {};
+
+        if (name) {
+            userToUpdate.full_name = name;
+        }
+        if (email) {
+            userToUpdate.email = email;
+        }
+        if (password) {
+            const hashedPassword = await bcrypt.hash(body.password, 8)
+            userToUpdate.password = hashedPassword;
+        }
+        if (phone) {
+            userToUpdate.phone_number = phone;
+        }
+        const updatedUser = await User.update(id, userToUpdate);
+
+        if (updatedUser) {
+            return res.json({
+                success: true,
+                message: "User updated successfully.",
+                data: {
+                    name,
+                    email,
+                    phone
+                }
+            });
+        } else {
+            return res.json({
+                success: false,
+                message: "Unable to update user information."
+            });
+        }
 
     } catch (error) {
         return res.json({
