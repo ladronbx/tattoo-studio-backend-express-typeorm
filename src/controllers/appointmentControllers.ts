@@ -5,99 +5,90 @@ import { Portfolio } from "../models/Portfolio";
 import { Appointment_portfolio } from "../models/Appointment_portfolio";
 
 const createAppointment = async (req: Request, res: Response) => {
-    try {
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-        const date = req.body.date;
-        const shift = req.body.shift;
-        const email = req.body.email;
-        const purchase = req.body.name;
-        const idToken = req.token.id;
 
-        // Validar si el email está proporcionado y su formato es correcto
-        if (!email || typeof email !== "string" || email.length > 100 || email.length === 0 || !emailRegex.test(email)) {
+    try {
+        const id = req.token.id
+        const { date, shift, email, name } = req.body
+
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+        if ((!date) || (typeof (date) !== "string") || (!dateRegex.test(date)))  {
+            return "Remember you must insert a date, and the date format should be YYYY-MM-DD, try again"
+        }
+
+        if ((!shift) || (typeof (shift) !== "string") || (shift !== "morning" && shift !== "afternoon")) {
+            return "Remember you must insert a shift, and you only can put morning or afternoon, try again"
+        }
+
+        if ((typeof email !== "string") || (email.length > 100) || (!emailRegex.test(email))) {
             return res.json({
                 success: true,
-                message: "Email format incorrect. Please provide a valid email.",
+                message: 'Invalid or too long email'
             });
         }
 
-        const findArtistByEmail = await User.findOne({
+        const foundArtistByEmail = await User.findOne({
             where: { email },
-            relations: ["role"],
+            relations: ["role"]
         });
 
-        // Validar la existencia del artista y sus permisos
-        if (!findArtistByEmail || !findArtistByEmail.is_active || findArtistByEmail.role.role_name !== "admin") {
+
+        if ((foundArtistByEmail?.is_active !== true) || (foundArtistByEmail?.role.role_name != "admin") || (id == foundArtistByEmail.id)){
             return res.json({
                 success: true,
-                message: "The artist does not exist or lacks admin permissions.",
-            });
+                message: "Sorry, this user isn't a artist, or not exist. And remember you can't create a appointment with yourself"
+            })
         }
 
-        // Evitar que un usuario cree una cita consigo mismo
-        if (idToken === findArtistByEmail.id) {
+        const getPurchase = await Portfolio.findOneBy({
+            name
+        })
+
+        if (!getPurchase) {
             return res.json({
                 success: true,
-                message: "Sorry, you can't create an appointment with yourself.",
-            });
+                message: "the name of the item purchase doesn't exist",
+            })
         }
 
-        // Validar la fecha y su formato
-        if (!date || typeof date !== "string" || !dateRegex.test(date)) {
-            return res.json({
-                success: true,
-                message: "Incorrect date format. Date must be in YYYY-MM-DD format.",
-            });
-        }
-
-
-        // Crear la cita
-        const createAppointment = await Appointment.create({
+        const createNewAppointment = await Appointment.create({
             date,
             shift,
-            artist_id: findArtistByEmail.id,
-            client_id: idToken,
-        }).save();
+            artist_id: foundArtistByEmail?.id,
+            client_id: id
+        }).save()
 
-        // Encuentra el elemento de compra por su nombre
-        const portfolio = await Portfolio.findOne({
-            where: { name: purchase }
-        });
-
-        // Crea una nueva entrada en la tabla de unión 'Appointment_portfolio' asociando la cita con el elemento de compra
         await Appointment_portfolio.create({
-            appointment_id: createAppointment.id,
-            portfolio_id: portfolio?.id
-        }).save();
-
-        const appointmentCreated = {
-            date: createAppointment.date,
-            shift: createAppointment.shift,
-            email,
-            id: createAppointment.id,
-            purchase: portfolio?.name,
-            price: portfolio?.price,
-            created_at: createAppointment.created_at,
-            updated_at: createAppointment.updated_at,
-        };
+            appointment_id: createNewAppointment.id,
+            portfolio_id: getPurchase?.id
+        }).save()
 
         return res.json({
             success: true,
             message: "Appointment created successfully",
-            data: { appointmentCreated },
-        });
+            data: {
+                date: createNewAppointment.date,
+                shift: createNewAppointment.shift,
+                email: email,
+                artist: foundArtistByEmail?.full_name,
+                id: createNewAppointment.id,
+                name: getPurchase?.name,
+                price: getPurchase?.price,
+                category: getPurchase?.category,
+                created_at: createNewAppointment.created_at,
+                updated_at: createNewAppointment.updated_at
+            }
+        })
+
     } catch (error) {
         return res.json({
             success: false,
             message: "Appointment can't be created, try again",
-            error,
-        });
+            error
+        })
     }
-};
-
-// const createAppointment = async (req: Request, res: Response) => {
-
+}
 
 const getAllAppointmentArtist = async (req: Request, res: Response) => {
 
@@ -428,7 +419,5 @@ const getallAppointmentsAllUsers = async (req: Request, res: Response) => {
         })
     }
 }
-
-
 
 export { createAppointment, getAllAppointmentArtist, deleteAppointment, getAllMyAppointments, updateAppointment, getallAppointmentsAllUsers }

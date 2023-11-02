@@ -24,24 +24,10 @@ const register = async (req: Request, res: Response) => {
             });
         }
 
-        if (typeof body.password !== "string") {
+        if ((typeof body.password !== "string") || (body.password.length > 100) || (!passwordRegex.test(body.password))) {
             return res.json({
                 success: true,
-                message: 'Invalid password data type. Please provide a valid string for the password.'
-            });
-        }
-
-        if (body.password.length > 100) {
-            return res.json({
-                success: true,
-                message: 'Password is too long. Please use a password with a maximum of 100 characters.'
-            });
-        }
-
-        if (!passwordRegex.test(body.password)) {
-            return res.json({
-                success: true,
-                message: 'Invalid password format. Please use a password between 4 to 12 characters, including at least one uppercase letter, one digit, and one special character (!@#$%^&*).'
+                message: 'Invalid password. Please provide a valid string for the password. Remember use a password with a maximum of 100 characters and use a password between 4 to 12 characters, including at least one uppercase letter, one digit, and one special character (!@#$%^&*). '
             });
         }
 
