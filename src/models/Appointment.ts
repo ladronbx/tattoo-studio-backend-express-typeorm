@@ -1,5 +1,7 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm"
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne, OneToMany, JoinColumn } from "typeorm"
 import { Portfolio } from "./Portfolio";
+import { Appointment_portfolio } from "./Appointment_portfolio";
+import { User } from "./User";
 
 @Entity("appointments")
 export class Appointment extends BaseEntity {
@@ -7,7 +9,7 @@ export class Appointment extends BaseEntity {
     id!: number
 
     @Column({ type: "date" })
-    date!: string;
+    date!: string; 
 
     @Column()
     shift!: string;
@@ -27,6 +29,7 @@ export class Appointment extends BaseEntity {
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
     updated_at!: Date;
 
+
     @ManyToMany(() => Portfolio)
     @JoinTable({
         name: "appointment_portfolio",
@@ -39,6 +42,19 @@ export class Appointment extends BaseEntity {
             referencedColumnName: "id"
         }
     })
-    appointmentPortfolios!: Portfolio[]
+    appointmentPortfolios!: Portfolio[];
+
+
+    @OneToMany(() => Appointment_portfolio, (Appointment_portfolio) => Appointment_portfolio.appointment)
+    appointment_portfolios!: Appointment_portfolio[];
+
+    @ManyToOne(() => User, (user) => user.clientAppointments)
+    @JoinColumn ({name: "client_id"})
+    client!: User; 
+
+    @ManyToOne(() => User, (user) => user.artistAppointments)
+    @JoinColumn ({name: "artist_id"})
+    artist!: User; 
+  
 
 }

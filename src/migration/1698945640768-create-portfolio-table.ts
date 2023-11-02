@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-class CreatePortfoliosTable1698570992940 implements MigrationInterface {
+class CreatePortfolioTable1698945640768 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "portfolios",
+                name: "portfolio",
                 columns: [
                     {
                         name: "id",
@@ -17,11 +17,12 @@ class CreatePortfoliosTable1698570992940 implements MigrationInterface {
                     {
                         name: "name",
                         type: "varchar",
+                        length: "100",
                         isNullable: false,
                         isUnique: true
                     },
                     {
-                        name: "type",
+                        name: "category",
                         type: "enum",
                         enum: ["tattoo", "piercing"],
                         isNullable: false
@@ -29,11 +30,13 @@ class CreatePortfoliosTable1698570992940 implements MigrationInterface {
                     {
                         name: "image",
                         type: "varchar",
+                        length: "255",
                         isNullable: false
                     },
                     {
                         name: "price",
                         type: "float",
+                        length: "15",
                         isNullable: false
                     },
                     {
@@ -54,10 +57,9 @@ class CreatePortfoliosTable1698570992940 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("portfolios")
+        await queryRunner.dropTable("portfolio")
     }
 
 }
 
-
-export { CreatePortfoliosTable1698570992940 }
+export { CreatePortfolioTable1698945640768 }

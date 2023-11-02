@@ -1,7 +1,6 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-class CreateAppointmentPortfolioTable1698571096473 implements MigrationInterface {
-
+class CreateAppointmentPortfolioTable1698945645357 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
@@ -45,7 +44,7 @@ class CreateAppointmentPortfolioTable1698571096473 implements MigrationInterface
                     },
                     {
                         columnNames: ["portfolio_id"],
-                        referencedTableName: "portfolios",
+                        referencedTableName: "portfolio",
                         referencedColumnNames: ["id"],
                         onDelete: "CASCADE",
                     }
@@ -58,6 +57,7 @@ class CreateAppointmentPortfolioTable1698571096473 implements MigrationInterface
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable("appointment_portfolio")
     }
+
 }
 
-export { CreateAppointmentPortfolioTable1698571096473 }
+export { CreateAppointmentPortfolioTable1698945645357 }
