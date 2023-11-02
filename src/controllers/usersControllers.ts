@@ -2,8 +2,6 @@ import { Request, Response } from "express-serve-static-core"
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Appointment } from "../models/Appointment";
-
 
 const register = async (req: Request, res: Response) => {
 
@@ -401,7 +399,7 @@ const createArtist = async (req: Request, res: Response) => {
     }
 };
 
-
+//Únicamente el superuser puede deletear un user por id
 const deleteUsersBySuper = async (req: Request, res: Response) => {
 
     try {
