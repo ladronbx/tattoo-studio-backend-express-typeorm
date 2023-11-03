@@ -7,13 +7,12 @@ import { isSuperAdmin } from "../middleware/isSuperAdmin";
 
 const appointmentsRouter = Router();
 
-appointmentsRouter.post('/create',auth, createAppointment)// X
-appointmentsRouter.put('/update',auth, updateAppointment) // X
+appointmentsRouter.post('/create',auth, createAppointment)
+appointmentsRouter.put('/update',auth, updateAppointment)
 appointmentsRouter.get('/get-all-my-appointments',auth, getAllMyAppointments)
-
 appointmentsRouter.get('/my-calendar-as-artist',auth, isAdmin, myCalendarAsArtist) 
+appointmentsRouter.delete('/delete-my-appointment',auth, deleteAppointment)
 // appointmentsRouter.get('appointment/getallAppointmentsAllUsers', auth, isSuperAdmin, getallAppointmentsAllUsers)
 
-// appointmentsRouter.delete('appointment/deleteAppointment',auth, deleteAppointment)
 
 export {appointmentsRouter}
