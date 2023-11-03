@@ -4,6 +4,7 @@ import { User } from "../models/User";
 import { Portfolio } from "../models/Portfolio";
 import { Appointment_portfolio } from "../models/Appointment_portfolio";
 
+//Crea una cita validando que la fecha no sea anterior a la de hoy, y que el artista esté disponible. 
 const createAppointment = async (req: Request, res: Response) => {
     try {
         const id = req.token.id;
@@ -124,36 +125,20 @@ const createAppointment = async (req: Request, res: Response) => {
     }
 };
 
-const getAllAppointmentArtist = async (req: Request, res: Response) => {
+//Me trae todas las citas logeandome como artista
+const myCalendarAsArtist = async (req: Request, res: Response) => {
 
     try {
-        const id = req.token.id
+        const id = req.token.id;
 
-        const appointmentsWorker = await Appointment.findBy({
-            artist_id: id
-        })
-
-        const appointmentsUserForShows = await Promise.all(appointmentsWorker.map(async (obj) => {
-            const { status, artist_id, id, ...rest } = obj;
-
-            const artist = await User.findOneBy({
-                id: artist_id
-            });
-
-            if (artist) {
-                const email = artist.email;
-                const is_active = artist.is_active;
-                return { ...rest, email, is_active };
-            }
-            else {
-                return null
-            }
-        }));
+        const appointmentsForShows = await Appointment.find({ where: {artist_id: id},
+            select: ["id", "date", "shift", "client_id", "status"],
+        });
 
         return res.json({
             success: true,
             message: "Here are all your appointments",
-            data: appointmentsUserForShows
+            data: appointmentsForShows
         });
 
     } catch (error) {
@@ -454,4 +439,4 @@ const getallAppointmentsAllUsers = async (req: Request, res: Response) => {
     }
 }
 
-export { createAppointment, getAllAppointmentArtist, deleteAppointment, getAllMyAppointments, updateAppointment, getallAppointmentsAllUsers }
+export { createAppointment, myCalendarAsArtist, deleteAppointment, getAllMyAppointments, updateAppointment, getallAppointmentsAllUsers }
