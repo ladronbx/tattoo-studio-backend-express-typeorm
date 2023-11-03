@@ -5,90 +5,124 @@ import { Portfolio } from "../models/Portfolio";
 import { Appointment_portfolio } from "../models/Appointment_portfolio";
 
 const createAppointment = async (req: Request, res: Response) => {
-
     try {
-        const id = req.token.id
-        const { date, shift, email, name } = req.body
-
+        const id = req.token.id;
+        const { date, shift, email, name } = req.body;
+        // dateRegex y emailRegex definen patrones para validar la fecha y el correo electrónico
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        // Obtiene el día actual.
+        const today = new Date();
+        // Obtiene el año actual de la fecha actual, utilizando el método getFullYear() del objeto Date.
+        const year = today.getFullYear();
+        // Obtiene el mes actual de la fecha actual. Es importante notar que el método getMonth() devuelve los meses del 0 al 11, por lo que se le suma 1 para obtener el número del mes en el rango de 1 a 12
+        const month = today.getMonth() + 1;
+        const day = today.getDate() + 1;
+        const todayFormatDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
-        if ((!date) || (typeof (date) !== "string") || (!dateRegex.test(date)))  {
-            return "Remember you must insert a date, and the date format should be YYYY-MM-DD, try again"
+        //Valida si la fecha para la cita es anterior a la actual
+        if (todayFormatDate > date) {
+            return {
+                isValid: false,
+                message: "This day is prior to the current day, try again."
+            };
         }
 
-        if ((!shift) || (typeof (shift) !== "string") || (shift !== "morning" && shift !== "afternoon")) {
-            return "Remember you must insert a shift, and you only can put morning or afternoon, try again"
+        // Verifica si la fecha proporcionada es válida según el formato
+        if (!date || typeof date !== "string" || !dateRegex.test(date)) {
+            return "Remember you must insert a date, and the date format should be YYYY-MM-DD, try again";
+        }
+        // Verifica si se ha proporcionado un turno válido ('morning' o 'afternoon').
+        if (!shift || typeof shift !== "string" || (shift !== "morning" && shift !== "afternoon")) {
+            return "Remember you must insert a shift, and you only can put morning or afternoon, try again";
         }
 
-        if ((typeof email !== "string") || (email.length > 100) || (!emailRegex.test(email))) {
+        // Verifica si el correo electrónico proporcionado es válido según un patrón predefinido
+        if (typeof email !== "string" || email.length > 100 || !emailRegex.test(email)) {
             return res.json({
                 success: true,
                 message: 'Invalid or too long email'
             });
         }
 
+        //Buscar al artista para ver si existe, si está activo, si tiene el role que corresponde y si no está cogiendo hora con él mismo. 
         const foundArtistByEmail = await User.findOne({
             where: { email },
             relations: ["role"]
         });
 
-
-        if ((foundArtistByEmail?.is_active !== true) || (foundArtistByEmail?.role.role_name != "admin") || (id == foundArtistByEmail.id)){
+        if (!foundArtistByEmail || !foundArtistByEmail.is_active || foundArtistByEmail.role.role_name !== "admin" || id === foundArtistByEmail.id) {
             return res.json({
                 success: true,
-                message: "Sorry, this user isn't a artist, or not exist. And remember you can't create a appointment with yourself"
-            })
+                message: "Sorry, this user isn't an artist, or does not exist. And remember you can't create an appointment with yourself"
+            });
         }
 
-        const getPurchase = await Portfolio.findOneBy({
-            name
-        })
+        //Buscamos el nombre del servio tattoo/piercing para ver si coincide. Porque si no coincide no existe. 
+        const getService = await Portfolio.findOneBy({ name });
 
-        if (!getPurchase) {
+        if (!getService) {
             return res.json({
                 success: true,
-                message: "the name of the item purchase doesn't exist",
-            })
+                message: "The name of the item purchase doesn't exist",
+            });
+        }
+
+        //Verificar que no exista una cita en la tabla Appointment con esa fecha y ese turno para ese artista.
+        const existingAppointment = await Appointment.findOne({
+            where: {
+                date,
+                shift,
+                artist_id: foundArtistByEmail.id,
+            },
+        });
+
+        if (existingAppointment) {
+            return res.json({
+                success: true,
+                message: "This appointment is not available, try again",
+            });
         }
 
         const createNewAppointment = await Appointment.create({
             date,
             shift,
-            artist_id: foundArtistByEmail?.id,
+            artist_id: foundArtistByEmail.id,
             client_id: id
-        }).save()
+        }).save();
 
         await Appointment_portfolio.create({
             appointment_id: createNewAppointment.id,
-            portfolio_id: getPurchase?.id
-        }).save()
+            portfolio_id: getService.id
+        }).save();
+
+        const dataAppointment = {
+            date: createNewAppointment.date,
+            shift: createNewAppointment.shift,
+            email,
+            artist: foundArtistByEmail.full_name,
+            id: createNewAppointment.id,
+            name: getService.name,
+            price: getService.price,
+            category: getService.category,
+            created_at: createNewAppointment.created_at,
+            updated_at: createNewAppointment.updated_at
+        };
 
         return res.json({
             success: true,
             message: "Appointment created successfully",
-            data: {
-                date: createNewAppointment.date,
-                shift: createNewAppointment.shift,
-                email: email,
-                artist: foundArtistByEmail?.full_name,
-                id: createNewAppointment.id,
-                name: getPurchase?.name,
-                price: getPurchase?.price,
-                category: getPurchase?.category,
-                created_at: createNewAppointment.created_at,
-                updated_at: createNewAppointment.updated_at
-            }
-        })
+            data: { dataAppointment }
+        });
 
     } catch (error) {
         return res.json({
             success: false,
             message: "Appointment can't be created, try again",
             error
-        })
+        });
     }
-}
+};
 
 const getAllAppointmentArtist = async (req: Request, res: Response) => {
 
