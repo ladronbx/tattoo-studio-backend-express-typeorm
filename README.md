@@ -1,9 +1,7 @@
-![Diagrama](img-readme/reverse-engineer.png)
-
 ## API Endpoints for User Management
 
 <details>
-<summary><h3>1. `/register`</h3></summary>
+<summary><h3>1. /user/register</h3></summary>
 
 - **Description**: Registers a new user (client) in the database.
 - **Access**: Public.
@@ -11,104 +9,220 @@
 
     - REGISTER
 
-            POST http://localhost:4000/user/register
-        body:
-        ``` js
-            {
-                "user": "newuser",
-                "email": "newuser@NewUser.com",
-                "password": "Password1!"
-            }
+        ```http
+        POST http://localhost:4000/user/register
+        ```
+        Body:
+        ```json
+        {
+            "user": "newuser",
+            "email": "newuser@NewUser.com",
+            "password": "Password1!",
+            "phone_number": 123456789
+        }
         ```
 
 </details>
 
 <details>
-<summary>2. `/login`</summary>
+<summary><h3>1. /user/login</h3></summary>
 
 - **Description**: Logs in for an existing user.
 - **Access**: Public.
 - **Validations**: Verifies the user's credentials and issues a JWT token if the credentials are correct.
+    - LOGIN
+
+        ```http
+        POST http://localhost:4000/user/login
+        ```
+        Body:
+        ```json
+        {
+            "email": "newuser@NewUser.com",
+            "password": "Password1!"
+        }
+        ```
+
 </details>
 
 <details>
-<summary>3. `/profile`</summary>
+<summary><h3>3. /user/profile</h3></summary>
 
 - **Description**: Retrieves data of the logged-in user.
 - **Access**: Only for authenticated users.
 - **Validations**: Verifies the JWT token to obtain the current user's profile.
+
+    - PROFILE
+
+        ```http
+        GET http://localhost:4000/user/profile
+        ```
+    - Auth: `Enter the token to access the profile`
+
 </details>
 
 <details>
-<summary>4. `/users`</summary>
+<summary><h3>4. /user/super/get/all/users</h3></summary>
 
 - **Description**: Retrieves all users (clients) with pagination.
 - **Access**: Only for superusers.
 - **Validations**: Requires superuser permissions to access.
+ - GET ALL USERS
+
+    ```http
+    GET http://localhost:4000/user/profile
+    ```
+    - Auth: `Enter the token to access the profile`
+
 </details>
 
 <details>
-<summary>5. `/updateUser`</summary>
+<summary><h3>5. /user/profile/update</h3></summary>
 
 - **Description**: Updates the data of an existing user.
 - **Access**: Only for authenticated users.
 - **Validations**: Verifies the updates and validates the data to be modified.
+
+- UPDATE
+
+    ```http
+    POST http://localhost:4000/user/profile/update
+    ```
+    Body:
+    ```json
+    {
+        "email": "newuser@NewUser.com",
+        "password": "Password1!"
+    }
+    ```
+
 </details>
+
+---
 
 ## API Endpoints for Appointment Management
 
 <details>
-<summary>1. `/createAppointment`</summary>
+<summary><h3>1. /user/appointments/create</h3></summary>
 
 - **Description**: Creates a new appointment if the date is in the future and the artist is available.
 - **Access**: Only for authenticated users.
 - **Validations**: Verifies the validity of the date, time slot, artist's email, and service name to create the appointment.
-</details>
+    
+    - Create Appointment
 
+        ```http
+        POST http://localhost:4000/user/appointments/create
+        ```
+        Body:
+        ```json
+        {
+            "date": "2023-12-01",
+            "shift": "morning",
+            "email": "artist@example.com",
+            "name": "Dragon's Eye"
+        }
+        ```
+</details>
 <details>
-<summary>2. `/myCalendarAsArtist`</summary>
+<summary><h3>2. /user/appointments/my-calendar-as-artist</h3></summary>
 
 - **Description**: Displays all appointments for a specific artist (logged in as an artist).
 - **Access**: Only for authenticated users with the artist role.
 - **Validations**: Access to appointments related to the ID of the authenticated artist.
+
+    - My Calendar as Artist
+
+        ```http
+        GET http://localhost:4000/user/appointments/my-calendar-as-artist
+        ```
+        Body: (none)
 </details>
 
 <details>
-<summary>3. `/deleteAppointment`</summary>
+<summary><h3>3. /user/appointments/delete-my-appointment</h3></summary>
 
 - **Description**: Deletes an appointment by its ID.
 - **Access**: Only for authenticated users.
 - **Validations**: Verifies the ID of the appointment and its ownership by the authenticated user.
+
+    - Delete Appointment
+
+        ```http
+        DELETE http://localhost:4000/user/appointments/delete-my-appointment
+        ```
+        Body:
+        ```json
+        {
+            "id": 12
+        }
+        ```
 </details>
 
 <details>
-<summary>4. `/getAllAppointmentsCalendar`</summary>
+<summary><h3>4. /user/appointments/all-appointments-calendar</h3></summary>
 
 - **Description**: Retrieves all appointments for agenda display (with pagination).
 - **Access**: Only for superusers.
 - **Validations**: Requires superuser permissions to access.
+
+    - Get All Appointments for Agenda Display
+
+        ```http
+        GET http://localhost:4000/user/appointments/all-appointments-calendar?skip=5&page=1
+        ```
+        Body: (none)
 </details>
 
 <details>
-<summary>5. `/getAllAppointmentsCalendarDetails`</summary>
+<summary><h3>5. /user/appointments/all-appointments-calendar-detail</h3></summary>
 
 - **Description**: Retrieves all appointments in detail for agenda display (including details) with pagination.
 - **Access**: Only for superusers.
 - **Validations**: Requires superuser permissions to access.
+
+    - Get All Appointments in Detail for Agenda Display
+
+        ```http
+        GET http://localhost:4000/user/appointments/all-appointments-calendar-detail?skip=5&page=1
+        ```
+        Body: (none)
 </details>
 
 <details>
-<summary>6. `/getAllMyAppointments`</summary>
+<summary><h3>6. /user/appointments/get-all-my-appointments</h3></summary>
 
 - **Description**: Retrieves all appointments for a specific user (logged in as a client).
 - **Access**: Only for authenticated users.
 - **Validations**: Verifies the ownership of the authenticated user to the appointments.
+
+    - Get All My Appointments
+
+        ```http
+        GET http://localhost:4000/user/appointments/get-all-my-appointments?skip=5&page=1
+        ```
+        Body: (none)
 </details>
 
 <details>
-<summary>7. `/updateAppointment`</summary>
+<summary><h3>7. /user/appointments/update</h3></summary>
 
 - **Description**: Updates an existing appointment if the date is in the future and the artist is available.
 - **Access**: Only for authenticated users.
 - **Validations**: Verifies the validity of the date, time slot, artist's email, and service name to update the appointment.
+
+    - Update Appointment
+
+        ```http
+        PUT http://localhost:4000/user/appointments/update
+        ```
+        Body:
+        ```json
+        {
+            "date": "2023-12-01",
+            "shift": "morning",
+            "email": "artist@example.com",
+            "name": "Dragon's Eye"
+        }
+        ```
 </details>
