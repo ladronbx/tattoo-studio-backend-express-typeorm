@@ -1,0 +1,183 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "appointments",
+    "dateExported": "2023-11-04T15:17:05.964Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "039e51c1-4332-433a-afa8-c61155a3e944",
+            "colId": "dfdf5577-6db9-4521-8bcb-bbdbf3ff0088",
+            "containerId": "",
+            "name": "user : Create appointment",
+            "url": "localhost:4000/user/appointments/create",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-10-30T20:34:33.383Z",
+            "modified": "2023-11-04T12:15:55.189Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"date\": \"2024-03-15\",\n  \"shift\": \"morning\",\n  \"email\": \"InkAlchemy@example.com\",\n  \"name\": \"Orchid Bloom\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDIsImVtYWlsIjoibGlhbUBleGFtcGxlNy5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTY5OTA5NzEzMywiZXhwIjoxNjk5NjM3MTMzfQ.ly2UvXBsboWUCC8m114bYFewdb97JvvVrVoz6whDEE4"
+            },
+            "tests": []
+        },
+        {
+            "_id": "00c5f0b0-4456-490a-a456-f4cce394cbbd",
+            "colId": "dfdf5577-6db9-4521-8bcb-bbdbf3ff0088",
+            "containerId": "",
+            "name": "user : Update appointment",
+            "url": "localhost:4000/user/appointments/update",
+            "method": "PUT",
+            "sortNum": 10000,
+            "created": "2023-10-31T11:19:42.079Z",
+            "modified": "2023-11-04T09:47:05.115Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\": 33,\n  \"date\": \"2032-12-30\",\n  \"shift\": \"afternoon\",\n  \"email\": \"artists1@gmail.com\",\n  \"name\": \"dragon\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJiaWVudmVAZ21haWwuY29tIiwicm9sZSI6InN1cGVyX2FkbWluIiwiaWF0IjoxNjk5MDMyMzk4LCJleHAiOjE2OTk1NzIzOTh9.XWIxRqbR1341uabcFekfcpheP_0vxuWOodhA5d2fvoc"
+            },
+            "tests": []
+        },
+        {
+            "_id": "7921c0a2-d84f-4c22-ab8f-ed825ed5095d",
+            "colId": "dfdf5577-6db9-4521-8bcb-bbdbf3ff0088",
+            "containerId": "",
+            "name": "superAdmin : /all-appointments-calendar",
+            "url": "localhost:4000/user/appointments/all-appointments-calendar?page=1&skip=10",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-11-03T19:20:52.061Z",
+            "modified": "2023-11-03T19:20:52.061Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "page",
+                    "value": "1",
+                    "isPath": false
+                },
+                {
+                    "name": "skip",
+                    "value": "10",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJiaWVudmVAZ21haWwuY29tIiwicm9sZSI6InN1cGVyX2FkbWluIiwiaWF0IjoxNjk5MDM4MDYxLCJleHAiOjE2OTk1NzgwNjF9.nLhowwFhUtR4OcPz7zPihUg_kbJICdc8SrGLoIdjfRQ"
+            },
+            "tests": []
+        },
+        {
+            "_id": "8bfd543f-fd10-4cad-a7b2-86e0ea58362e",
+            "colId": "dfdf5577-6db9-4521-8bcb-bbdbf3ff0088",
+            "containerId": "",
+            "name": "Artist : /my-calendar-as-artist",
+            "url": "localhost:4000/user/appointments/my-calendar-as-artist",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-11-03T18:16:37.296Z",
+            "modified": "2023-11-03T19:00:26.207Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJhcnRpc3RzMUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2OTkwMzc5OTksImV4cCI6MTY5OTU3Nzk5OX0.riCOilVOuUgr69PoOg-Yo8b8nYgfsQT9sE1RfYgDAJc"
+            },
+            "tests": []
+        },
+        {
+            "_id": "7228e04c-966a-49b8-8f53-a7a36de34a0f",
+            "colId": "dfdf5577-6db9-4521-8bcb-bbdbf3ff0088",
+            "containerId": "",
+            "name": "everybody : /delete-my-appointment",
+            "url": "localhost:4000/user/appointments/delete-my-appointment",
+            "method": "DELETE",
+            "sortNum": 30000,
+            "created": "2023-11-03T18:21:24.979Z",
+            "modified": "2023-11-03T18:21:24.979Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\": 17\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NywiZW1haWwiOiJ1c2VyM0BnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTY5OTAzNTU0OCwiZXhwIjoxNjk5NTc1NTQ4fQ.qWjwoY-f2zxnUepn-gP7Sdu1w-_tdrnPO_lDTRXiL2s"
+            },
+            "tests": []
+        },
+        {
+            "_id": "ebb7b54d-bb13-4278-8d9e-b472d54df025",
+            "colId": "dfdf5577-6db9-4521-8bcb-bbdbf3ff0088",
+            "containerId": "",
+            "name": "superAdmin : /all-appointments-calendar-detail",
+            "url": "localhost:4000/user/appointments/all-appointments-calendar-detail?page=1&skip=10",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-11-03T19:23:07.860Z",
+            "modified": "2023-11-03T19:23:07.860Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "page",
+                    "value": "1",
+                    "isPath": false
+                },
+                {
+                    "name": "skip",
+                    "value": "10",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJiaWVudmVAZ21haWwuY29tIiwicm9sZSI6InN1cGVyX2FkbWluIiwiaWF0IjoxNjk5MDM4MDYxLCJleHAiOjE2OTk1NzgwNjF9.nLhowwFhUtR4OcPz7zPihUg_kbJICdc8SrGLoIdjfRQ"
+            },
+            "tests": []
+        },
+        {
+            "_id": "06929c82-6bae-4c81-b249-40012af66a25",
+            "colId": "dfdf5577-6db9-4521-8bcb-bbdbf3ff0088",
+            "containerId": "",
+            "name": "For everybody : /get-all-my-appointments",
+            "url": "localhost:4000/user/appointments/get-all-my-appointments?page=1&skip=10",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-11-03T19:27:27.183Z",
+            "modified": "2023-11-04T08:32:00.720Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "page",
+                    "value": "1",
+                    "isPath": false
+                },
+                {
+                    "name": "skip",
+                    "value": "10",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJiaWVudmVAZ21haWwuY29tIiwicm9sZSI6InN1cGVyX2FkbWluIiwiaWF0IjoxNjk5MDg2Njk5LCJleHAiOjE2OTk2MjY2OTl9.ueFPQvdtEIEu_6oK2Kr70HbhuLwin_lKsGeXD6w0iMI"
+            },
+            "tests": []
+        }
+    ]
+}

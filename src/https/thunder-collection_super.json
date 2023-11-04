@@ -1,0 +1,61 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "super",
+    "dateExported": "2023-11-04T15:17:22.082Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "064aa24c-9b2c-441e-b973-2ab26e3a2b16",
+            "colId": "95da9774-66ea-4fd2-8c34-03f213d62451",
+            "containerId": "",
+            "name": "Gett all Users",
+            "url": "localhost:4000/user/super/get/all/users?page=1&skip=10",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-10-30T20:01:34.197Z",
+            "modified": "2023-11-04T12:03:27.604Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "page",
+                    "value": "1",
+                    "isPath": false
+                },
+                {
+                    "name": "skip",
+                    "value": "10",
+                    "isPath": false
+                }
+            ],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTYsImVtYWlsIjoiYmllbnZlQGdtYWlsLmNvbSIsInJvbGUiOiJzdXBlcl9hZG1pbiIsImlhdCI6MTY5OTA5OTMyMywiZXhwIjoxNjk5NjM5MzIzfQ.nc0uHg-BO6UZ1McBfzoCcTx3UycY6IrbBisR6s7j54c"
+            },
+            "tests": []
+        },
+        {
+            "_id": "f946470a-dfa3-407c-8662-a874eeac3917",
+            "colId": "95da9774-66ea-4fd2-8c34-03f213d62451",
+            "containerId": "",
+            "name": "Delete users by SuperAdmin",
+            "url": "localhost:4000/user/super/delete/user",
+            "method": "DELETE",
+            "sortNum": 20000,
+            "created": "2023-10-30T20:09:07.660Z",
+            "modified": "2023-11-02T08:12:12.896Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\": 5\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJiaWVudmVAZ21haWwuY29tIiwicm9sZSI6InN1cGVyX2FkbWluIiwiaWF0IjoxNjk4NzYxNTA1LCJleHAiOjE2OTg5MzQzMDV9.6Xj0XV1-TVJr1eDw584BTH1kV6mTxLxcl8mjH4MiEKY"
+            },
+            "tests": []
+        }
+    ]
+}
