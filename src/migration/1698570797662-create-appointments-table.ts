@@ -20,8 +20,9 @@ class CreateAppointmentsTable1698570797662 implements MigrationInterface {
                         isNullable: false
                     },
                     {
-                        name: "time",
-                        type: "time",
+                        name: "shift",
+                        type: "enum",
+                        enum: ["morning", "afternoon"],
                         isNullable: false
                     },
                     {

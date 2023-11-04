@@ -1,0 +1,110 @@
+------------------------------------------------------------------------------
+********************* ROLES USERS DESCRIPTION PRIVILEGE *********************
+------------------------------------------------------------------------------
+INSERT INTO roles (role_name, description_privilege, created_at, updated_at)
+VALUES 
+('user', 'Registration, login, view and update profile, appointment management (create, view, update, and delete personal appointments).', NOW(), NOW()),
+('admin', 'Common user functionalities, view the calendar as an artist, artist management, self-appointment deletion.', NOW(), NOW()),
+('super_admin', 'Includes all administrator capabilities, user management (view details and delete users), complete appointment management (view, create, update, and delete any appointment in the system, regardless of the owner).', NOW(), NOW());
+
+
+
+------------------------------------------------------------------------------
+*********************************** USERS ***********************************
+------------------------------------------------------------------------------
+INSERT INTO `users` (`full_name`, `email`, `password`, `phone_number`, `is_active`, `role_id`, `created_at`, `updated_at`)
+VALUES
+('John Smith', 'john@example.com', 'Password1!', '123456789', 1, 1, NOW(), NOW()),
+('Jane Doe', 'jane@example.com', 'Password1!', '987654321', 1, 1, NOW(), NOW()),
+('Alice Johnson', 'alice@example.com', 'Password1!', '555123456', 1, 1, NOW(), NOW()),
+('Bob Brown', 'bob@example.com', 'Password1!', '999888777', 1, 1, NOW(), NOW()),
+('Emily Davis', 'emily@example.com', 'Password1!', '444333222', 1, 1, NOW(), NOW()),
+('Michael Wilson', 'michael@example.com', 'Password1!', '777888999', 1, 1, NOW(), NOW()),
+('Olivia Martinez', 'olivia@example.com', 'Password1!', '111222333', 1, 1, NOW(), NOW()),
+('William Anderson', 'william@example.com', 'Password1!', '666777888', 1, 1, NOW(), NOW()),
+('Sophia Thomas', 'sophia@example.com', 'Password1!', '222333444', 1, 1, NOW(), NOW()),
+('Daniel Garcia', 'daniel@example.com', 'Password1!', '999000111', 1, 1, NOW(), NOW()),
+('Liam Rodriguez', 'liam@example.com', 'Password1!', '123456789', 1, 1, NOW(), NOW()),
+('Emma Martinez', 'emma@example.com', 'Password1!', '987654321', 1, 1, NOW(), NOW()),
+('Ava Hernandez', 'ava@example.com', 'Password1!', '555123456', 1, 1, NOW(), NOW()),
+('Noah Nguyen', 'noah@example.com', 'Password1!', '999888777', 1, 1, NOW(), NOW()),
+('Isabella Perez', 'isabella@example.com', 'Password1!', '444333222', 1, 1, NOW(), NOW()),
+('James Lee', 'james@example.com', 'Password1!', '777888999', 1, 1, NOW(), NOW()),
+('Sophie Kim', 'sophie@example.com', 'Password1!', '111222333', 1, 1, NOW(), NOW()),
+('Alexander Taylor', 'alexander@example.com', 'Password1!', '666777888', 1, 1, NOW(), NOW()),
+('Mia Brown', 'mia@example.com', 'Password1!', '222333444', 1, 1, NOW(), NOW()),
+('Ethan Clark', 'ethan@example.com', 'Password1!', '999000111', 1, 1, NOW(), NOW());
+
+------------------------------------------------------------------------------
+********************************** ARTISTS **********************************
+------------------------------------------------------------------------------
+INSERT INTO `users` (`full_name`, `email`, `password`, `phone_number`, `is_active`, `role_id`, `created_at`, `updated_at`)
+VALUES
+('InkMasterX', 'inkmasterx@example.com', 'Password1!', '111111111', 1, 2, NOW(), NOW()),
+('PiercePro', 'piercepro@example.com', 'Password1!', '222222222', 1, 2, NOW(), NOW()),
+('ArtfulInk', 'artfulink@example.com', 'Password1!', '333333333', 1, 2, NOW(), NOW()),
+('NeedleWiz', 'needlewiz@example.com', 'Password1!', '444444444', 1, 2, NOW(), NOW()),
+('InkAlchemy', 'inkalchemy@example.com', 'Password1!', '555555555', 1, 2, NOW(), NOW()),
+('PiercingPassion', 'piercingpassion@example.com', 'Password1!', '666666666', 1, 2, NOW(), NOW()),
+('VividTattoos', 'vividtattoos@example.com', 'Password1!', '777777777', 1, 2, NOW(), NOW()),
+('PiercingDreams', 'piercingdreams@example.com', 'Password1!', '888888888', 1, 2, NOW(), NOW()),
+('InkSymphony', 'inksymphony@example.com', 'Password1!', '999999999', 1, 2, NOW(), NOW()),
+('PiercePerfection', 'pierceperfection@example.com', 'Password1!', '1010101010', 1, 2, NOW(), NOW());
+
+
+
+------------------------------------------------------------------------------
+******************************* PORTFOLIO ******************************
+------------------------------------------------------------------------------
+INSERT INTO `portfolio` (`name`, `category`, `image`, `price`, `created_at`, `updated_at`)
+VALUES
+("Dragon's Eye", 'tattoo', 'https://as2.ftcdn.net/v2/jpg/05/17/84/19/1000_F_517841947_En3D1KaqK7TGfJmwRU5NYdf2ahJnYPNb.jpg', 100.00, NOW(), NOW()),
+("Phoenix Feather", 'tattoo', 'https://as2.ftcdn.net/v2/jpg/04/81/99/67/1000_F_481996787_7KZbbX0m4dZCp3P2wSgiTrWZKSATulFx.jpg', 150.00, NOW(), NOW()),
+("Serpent's Scale", 'tattoo', 'https://as1.ftcdn.net/v2/jpg/06/52/73/90/1000_F_652739026_GV64EVA0WZ4MLNAgcRJ3RV7CiEPXJfSF.jpg', 200.00, NOW(), NOW()),
+("Rose Thorns", 'tattoo', 'https://as1.ftcdn.net/v2/jpg/06/09/81/58/1000_F_609815840_2Sm1Y2gf4YGq6uwsA4mtOLd7JCgAr9lT.webp', 120.00, NOW(), NOW()),
+("Wolf Pack", 'tattoo', 'https://as2.ftcdn.net/v2/jpg/03/68/63/83/1000_F_368638371_N6LEth4z2eJ68LL9FzhcVkMtiPsgkrTy.jpg', 180.00, NOW(), NOW()),
+("Earlobe", 'piercing', 'https://pin.it/21yvcgc', 50.00, NOW(), NOW()),
+("Navel", 'piercing', 'https://pin.it/42VhHmo', 70.00, NOW(), NOW()),
+("Nose Bridge", 'piercing', 'https://pin.it/2H4dUSI', 60.00, NOW(), NOW()),
+("Lip", 'piercing', 'https://pin.it/6dTwjZe', 55.00, NOW(), NOW()),
+("Tongue", 'piercing', 'https://pin.it/6dTwjZe', 65.00, NOW(), NOW()),
+("Skull Crest", 'tattoo', 'https://as2.ftcdn.net/v2/jpg/06/24/42/55/1000_F_624425510_FJaB82niV7GsKeJpqMClnckknfeL1q8Z.jpg', 90.00, NOW(), NOW()),
+("Anchor's Embrace", 'tattoo', 'https://as1.ftcdn.net/v2/jpg/06/13/24/86/1000_F_613248613_TlYwTR32WJ7EgytV7WrBIVwx3pCBsxUE.jpg', 110.00, NOW(), NOW()),
+("Moonlit Night", 'tattoo', 'https://as1.ftcdn.net/v2/jpg/06/61/91/96/1000_F_661919689_A7jJuAoDDOEmqQCSbrr1mH2E9G8O2wXA.jpg', 130.00, NOW(), NOW()),
+("Sword in Stone", 'tattoo', 'https://as2.ftcdn.net/v2/jpg/06/24/42/55/1000_F_624425510_FJaB82niV7GsKeJpqMClnckknfeL1q8Z.jpg', 140.00, NOW(), NOW()),
+("Orchid Bloom", 'tattoo', 'https://as2.ftcdn.net/v2/jpg/06/55/99/73/1000_F_655997384_KoR1qexQVQGixs262G0FN61E52anX1cv.jpg', 160.00, NOW(), NOW()),
+("Eyebrow", 'piercing', 'https://pin.it/6dTwjZe', 40.00, NOW(), NOW()),
+("Septum", 'piercing', 'https://pin.it/T1CslZA', 45.00, NOW(), NOW()),
+("Cheek", 'piercing', 'https://pin.it/2FANsj0', 75.00, NOW(), NOW()),
+("Industrial", 'piercing', 'https://pin.it/6jR9VyT', 55.00, NOW(), NOW()),
+("Helix", 'piercing', 'https://pin.it/2XfmWdy', 60.00, NOW(), NOW());
+
+
+
+
+------------------------------------------------------------------------------
+*********************************** USERS ***********************************
+------------------------------------------------------------------------------
+INSERT INTO `users` (`full_name`, `email`, `password`, `phone_number`, `is_active`, `role_id`, `created_at`, `updated_at`)
+VALUES
+'31', 'Emily White', 'emily@example1.com', '$2b$08$9UGO9WBWN7cqvh4UeOvbpOgojfmVxp6e5IR7U5webRMfJs9JqYL9S', '1234567890', '1', '1', '2023-11-04 11:54:03', '2023-11-04 11:54:03'
+'32', 'Lucas Adams', 'lucas@example1.com', '$2b$08$pM3n2d9y7dgGRHHSsetjzOqSvxPSdTrMsDF/nKkgVxVulqCBkB4fq', '123456789', '1', '1', '2023-11-04 11:55:01', '2023-11-04 11:55:01'
+'34', 'Sophie Johnson', 'sophie@example2.com', '$2b$08$EIsZA88aG6rK1VpxamWfhucJ95vpvLEhVuUdKOg53InFM.dhzKkvC', '234567890', '1', '1', '2023-11-04 11:55:14', '2023-11-04 11:55:14'
+'35', 'Henry Smith', 'henry@example3.com', '$2b$08$aUgjDO8j5WoGDVQWTgHLJe2dapt7xuS0tkxWYHiaZC1TDZATM4Q2a', '345678901', '1', '1', '2023-11-04 11:55:19', '2023-11-04 11:55:19'
+'36', 'Emma Brown', 'emma@example4.com', '$2b$08$fGjClC03p0Si7b.uiIOtf.f7vTyMda0Q16PzI3hWV2lr0nyxZI5Pu', '456789012', '1', '1', '2023-11-04 11:55:26', '2023-11-04 11:55:26'
+'38', 'Max Miller', 'max@example5.com', '$2b$08$oPWJLqcl0npHOdgBJQSpVOazFGZR3ZkDW//QCSUdGzmPIwGXzDhXa', '567890123', '1', '1', '2023-11-04 11:55:43', '2023-11-04 11:55:43'
+'39', 'Ava Wilson', 'ava@example6.com', '$2b$08$0ifRzbDaXu2bFOO7i4tZ2uirx1zsHrLTyQ5h90cGMeoVm03.bTCt6', '678901234', '1', '1', '2023-11-04 11:55:51', '2023-11-04 11:55:51'
+'42', 'Liam Davis', 'liam@example7.com', '$2b$08$MmgBw7eJdYW9n6uiqZfy.OeMpubalJSbCJ4P3hV/N3a5PTyQV3HIq', '789012345', '1', '1', '2023-11-04 11:56:17', '2023-11-04 11:56:17'
+'43', 'Charlotte Taylor', 'charlotte@example8.com', '$2b$08$lNvgjS5li0TPXJ08XDi5jOOH3yHPrxQzKqIzacVqlEZtHdVT2WB.y', '890123456', '1', '1', '2023-11-04 11:56:23', '2023-11-04 11:56:23'
+'44', 'Olivia Martinez', 'olivia@example9.com', '$2b$08$4xKjG6FVlcxxPnCwVJIqbO1zz4LDZhX/A4iK6SxIGeWqdrAHRcnXu', '901234567', '1', '1', '2023-11-04 11:56:31', '2023-11-04 11:56:31'
+'45', 'William Anderson', 'william@example10.com', '$2b$08$JdD9CUFYif3wIoRpJpC3Ve82UNMhevS2P6XXyNOM3IhInCLn522JK', '123456789', '1', '1', '2023-11-04 11:56:36', '2023-11-04 11:56:36'
+'46', 'InkMasterX', 'inkmasterx@example.com', '$2b$08$mUcsO9ord.K7VQTH/HckfuNQkbZNWsA/8eZBrmthyGmKTuec/SqQu', '123456789', '1', '2', '2023-11-04 11:58:01', '2023-11-04 12:00:39'
+'47', 'PiercePro', 'PiercePro@example.com', '$2b$08$s1HaweCXlZGqm/Yo6UCQY.s9KQuEkyxYblRTMZX/y3m60x4blgsHG', '123456789', '1', '2', '2023-11-04 11:58:13', '2023-11-04 12:00:39'
+'48', 'ArtfulInk', 'ArtfulInk@example.com', '$2b$08$tsx0vgFim1kPq9lQLW9RtODTApANvL7G3k9vAqjOkSE6XU7KYq0q.', '123456789', '0', '2', '2023-11-04 11:58:27', '2023-11-04 12:01:01'
+'49', 'NeedleWiz', 'NeedleWiz@example.com', '$2b$08$k4uyXHxbeNOokiP0D0IfSeHNA2ZLVtWkGF3sEGBDwRAZyx75WjEAu', '123456789', '1', '2', '2023-11-04 11:58:34', '2023-11-04 12:00:39'
+'50', 'InkAlchemy', 'InkAlchemy@example.com', '$2b$08$agxjkVu7HDWDeEJkoxd6GeEiYMJDjdkTen8XRInPo.YIBT1c1TrQK', '123456789', '1', '2', '2023-11-04 11:58:42', '2023-11-04 12:00:39'
+'51', 'PiercingPassion', 'PiercingPassion@example.com', '$2b$08$masLRWJIj61YquiDdexPc.BYJECvLSzJzbSQjsmGKuef4MjXOhZxe', '123456789', '1', '2', '2023-11-04 11:58:48', '2023-11-04 12:00:39'
+'52', 'VividTattoos', 'VividTattoos@example.com', '$2b$08$DphaWBpisXtncFJ/QqOsOuMgAaXMYH98Z3sqY6RMqjDYLKdhpPBTC', '123456789', '1', '2', '2023-11-04 11:58:55', '2023-11-04 12:00:39'
+'53', 'PiercingDreams', 'PiercingDreams@example.com', '$2b$08$ApCC9I4gHB3BbpSv00a/OOvXujvKcK9Ie.rLu.CjE2AKmc6TM1CWe', '123456789', '0', '2', '2023-11-04 11:59:06', '2023-11-04 12:01:01'
+'54', 'InkSymphony', 'InkSymphony@example.com', '$2b$08$RE5kcbasp7l3oMHoYVmo1eSJXya07M9XRCufKzMXldXYRKRKk4zzO', '123456789', '1', '2', '2023-11-04 11:59:15', '2023-11-04 12:00:39'
+'55', 'PiercePerfection', 'PiercePerfection@example.com', '$2b$08$Hu65sFH.q9YWGocJbl/efOtDQkU9SNoWAf9RRANBc8oZW8InRjI.q', '123456789', '1', '2', '2023-11-04 11:59:30', '2023-11-04 12:00:39'
