@@ -1,12 +1,14 @@
-![Header](img-readme/cabecera-proyecto.png)
-
----
-
-# BACKEND TATTOO & PIERCING STUDIO
-- 🐉 [BACKEND TATTOO & PIERCING STUDIO](https://ladronbx.github.io/tattoo-studio-backend-express-typeorm/) 🖋️
+<div align="center">
+<h1> ## BACKEND TATTOO & PIERCING STUDIO 🖋️ ##</h1>
+</div>
 
 **Fourth project of the Full Stack Developer Bootcamp at GeeksHubs Academy, Valencia**
 
+<div align="center">
+    <a href="https://geekshubs.com/">
+        <img src="doc/img-readme/geekhubs.png" width="50%"/>
+    </a>
+</div>
 
 ---
 
@@ -21,7 +23,7 @@
 - 🌐 [GitHub Pages Link](#github-pages-link)
 
 # Description
-#### Description of the Appointment and User Management Project for Tattoo Studio
+#### Appointment and User Management Project for Tattoo Studio
 
 This project focuses on developing an API that enables clients of a tattoo studio to schedule appointments through a mobile application. It's important to note that while the interface is pending, the backend system is designed to manage appointment creation and user administration. The following outlines the key aspects of the project:
 
@@ -60,7 +62,7 @@ The main objective of the "Backend Tattoo & Piercing Studio" project is to provi
 
 # Database Diagram
 The following diagram represents the structure of the database used in this project for the appointment management system in the tattoo studio:
-![Diagram](img-readme/reverse-engineer.png)
+![Diagram](doc/img-readme/reverse-engineer.png)
 
 This diagram provides an overview of the relationship between the different tables in the database, showing how users, appointments, artists, and other relevant entities are connected.
 
@@ -69,22 +71,22 @@ This diagram provides an overview of the relationship between the different tabl
 # Stack
 <div align="center">
     <a href="https://www.typescriptlang.org/">
-        <img src="img-readme/stack/typeScript.svg" width="9%"/>
+        <img src="doc/img-readme/stack/typescript.svg" width="8%"/>
     </a>
     <a href="https://www.npmjs.com/">
-        <img src="img-readme/stack/npm.svg" width="9%"/>
-    </a>
-    <a href="https://expressjs.com/">
-        <img src="img-readme/stack/express.svg" width="10%"/>
-    </a>
-    <a href="https://www.mysql.com/">
-        <img src="img-readme/stack/mysql.svg" width="10%"/>
-    </a>
-    <a href="https://www.npmjs.com/package/bcrypt">
-        <img src="img-readme/stack/letsencrypt.svg" width="10%"/>
+        <img src="doc/img-readme/stack/npm.svg" width="8%"/>
     </a>
     <a href="https://jwt.io/">
-        <img src="img-readme/stack/jsonwebtokens.svg" width="8%"/>
+        <img src="doc/img-readme/stack/jsonwebtokens.svg" width="7%"/>
+    </a>
+    <a href="https://www.npmjs.com/package/bcrypt">
+        <img src="doc/img-readme/stack/letsencrypt.svg" width="7%"/>
+    </a>
+    <a href="https://expressjs.com/">
+        <img src="doc/img-readme/stack/express.svg" width="8%"/>
+    </a>
+    <a href="https://www.mysql.com/">
+        <img src="doc/img-readme/stack/mysql.svg" width="10%"/>
     </a>
 </div>
 
@@ -369,7 +371,7 @@ npm install express typescript nodemon ts-node @types/express @types/node mysql2
 
 
 <div style="text-align:center">
-    <img src="img-readme/endpoints.png" width="60%"/>
+    <img src="doc/img-readme/endpoints.png" width="30%"/>
 </div>
 
 
@@ -399,4 +401,4 @@ If you have any questions, comments, or suggestions, feel free to contact me at 
 - 🐉 [BACKEND TATTOO & PIERCING STUDIO](https://ladronbx.github.io/tattoo-studio-backend-express-typeorm/) 🖋️
 
 ---
-![GeeksHubs Logo](img-readme/geekhubs.png)
+
