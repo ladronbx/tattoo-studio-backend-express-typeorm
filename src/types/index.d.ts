@@ -22,3 +22,10 @@ declare global {
         }
     }
 }
+
+export interface dataUpdate {
+    name?: string,
+    email?: string,
+    password?: string,
+    phone?: number,
+}

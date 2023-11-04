@@ -1,10 +1,6 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-<<<<<<<< HEAD:src/migration/1698570992940-create-portfolios-table.ts
-class CreatePortfoliosTable1698570992940 implements MigrationInterface {
-========
 class CreatePortfolioTable1698945640768 implements MigrationInterface {
->>>>>>>> dev:src/migration/1698945640768-create-portfolio-table.ts
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
@@ -26,7 +22,7 @@ class CreatePortfolioTable1698945640768 implements MigrationInterface {
                         isUnique: true
                     },
                     {
-                        name: "type",
+                        name: "category",
                         type: "enum",
                         enum: ["tattoo", "piercing"],
                         isNullable: false
@@ -66,9 +62,4 @@ class CreatePortfolioTable1698945640768 implements MigrationInterface {
 
 }
 
-<<<<<<<< HEAD:src/migration/1698570992940-create-portfolios-table.ts
-
-export { CreatePortfoliosTable1698570992940 }
-========
 export { CreatePortfolioTable1698945640768 }
->>>>>>>> dev:src/migration/1698945640768-create-portfolio-table.ts

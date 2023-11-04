@@ -1,11 +1,6 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-<<<<<<<< HEAD:src/migration/1698571096473-create-appointment_portfolio-table.ts
-class CreateAppointmentPortfolioTable1698571096473 implements MigrationInterface {
-
-========
 class CreateAppointmentPortfolioTable1698945645357 implements MigrationInterface {
->>>>>>>> dev:src/migration/1698945645357-create-appointment_portfolio-table.ts
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
@@ -62,10 +57,7 @@ class CreateAppointmentPortfolioTable1698945645357 implements MigrationInterface
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable("appointment_portfolio")
     }
+
 }
 
-<<<<<<<< HEAD:src/migration/1698571096473-create-appointment_portfolio-table.ts
-export { CreateAppointmentPortfolioTable1698571096473 }
-========
 export { CreateAppointmentPortfolioTable1698945645357 }
->>>>>>>> dev:src/migration/1698945645357-create-appointment_portfolio-table.ts

@@ -8,13 +8,8 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
-<<<<<<< HEAD
-// app.use('/users', routerUsers)
-// app.use('/appointments', )
-=======
 app.use('/user', userRouter)
 app.use('/user/appointments', appointmentsRouter)
->>>>>>> dev
 
 AppDataSource.initialize()
     .then(() => {

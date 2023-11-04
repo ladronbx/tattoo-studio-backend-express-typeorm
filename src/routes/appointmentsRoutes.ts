@@ -1,19 +1,8 @@
 import { Router } from "express";
-<<<<<<< HEAD
-// import { auth } from "../middleware/auth";
-// import { isSuperAdmin } from "../middleware/isSuperAdmin"
-
-const appointmentsRouter = Router ();
-appointmentsRouter.get('/',)
-appointmentsRouter.post('/',)
-appointmentsRouter.put('/',)
-appointmentsRouter.delete('/',)
-=======
 import { auth } from "../middleware/auth";
 import { createAppointment, deleteAppointment, myCalendarAsArtist, getAllMyAppointments, getAllAppointmentsCalendar, updateAppointment, getAllAppointmentsCalendarDetails } from "../controllers/appointmentControllers";
 import { isAdmin } from "../middleware/isAdmin";
 import { isSuperAdmin } from "../middleware/isSuperAdmin";
-
 
 const appointmentsRouter = Router();
 
@@ -24,7 +13,5 @@ appointmentsRouter.get('/all-appointments-calendar', auth, isSuperAdmin, getAllA
 appointmentsRouter.get('/all-appointments-calendar-detail', auth, isSuperAdmin, getAllAppointmentsCalendarDetails)
 appointmentsRouter.get('/get-all-my-appointments',auth, getAllMyAppointments)
 appointmentsRouter.put('/update',auth, updateAppointment)
->>>>>>> dev
-
 
 export {appointmentsRouter}

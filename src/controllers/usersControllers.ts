@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const register = async (req: Request, res: Response) => {
-
     try {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
@@ -67,7 +66,6 @@ const register = async (req: Request, res: Response) => {
 }
 
 const login = async (req: Request, res: Response) => {
-
     try {
         const email = req.body.email;
         const password = req.body.password;
@@ -116,12 +114,9 @@ const login = async (req: Request, res: Response) => {
     }
 }
 
-//Muestra los datos del usuario logeado.
 const profile = async (req: Request, res: Response) => {
     try {
         const email = req.token.email;
-
-        // Busco un usuario donde el campo 'email' coincida con el correo electrónico extraído del token. 
         const userProfile = await User.findOne({
             where: { email }
         });
@@ -151,7 +146,6 @@ const profile = async (req: Request, res: Response) => {
     }
 };
 
-//Muestra el total de usuarios con su name, email, phone number. También incluye paginación. Error 500.
 const getAllUsersBySuper = async (req: Request, res: Response) => {
     try {
         const pageSize = parseInt(req.query.pageSize as string) || 5;
@@ -189,9 +183,7 @@ const getAllUsersBySuper = async (req: Request, res: Response) => {
     }
 };
 
-// Modificar cualquier dato individual de tu perfil, verificando que se cumplan las validaciones correspondientes en cada caso. 
 const updateUser = async (req: Request, res: Response) => {
-
     try {
         const body = req.body
         const id = req.token.id
@@ -199,7 +191,6 @@ const updateUser = async (req: Request, res: Response) => {
         const email = req.body.email
         const password = req.body.password
         const phone = req.body.phone_number
-
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
 
@@ -237,7 +228,6 @@ const updateUser = async (req: Request, res: Response) => {
             }
         }
 
-        // AQUÍ ME CHILLA SI NO PONGO ANY
         const userToUpdate: any = {};
 
         if (name) {
@@ -281,7 +271,6 @@ const updateUser = async (req: Request, res: Response) => {
     }
 }
 
-//Muestra el total de artistas con su name, email, phone number. También incluye paginación. Error 500.
 const getArtists = async (req: Request, res: Response) => {
     try {
         const pageSize = parseInt(req.query.pageSize as string) || 5;
@@ -321,7 +310,6 @@ const getArtists = async (req: Request, res: Response) => {
     }
 };
 
-//SuperUser puede crear artistas. Obligatorio rellenar todos los campos. Y el role_id se asigna automáticamente.
 const createArtist = async (req: Request, res: Response) => {
     try {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -385,7 +373,6 @@ const createArtist = async (req: Request, res: Response) => {
     }
 };
 
-//Únicamente el superuser puede deletear un user por id
 const deleteUsersBySuper = async (req: Request, res: Response) => {
 
     try {
@@ -421,7 +408,6 @@ const deleteUsersBySuper = async (req: Request, res: Response) => {
             error
         })
     }
-
 }
 
 export { register, login, profile, getAllUsersBySuper, updateUser, getArtists, createArtist, deleteUsersBySuper };

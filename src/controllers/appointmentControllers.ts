@@ -4,28 +4,19 @@ import { User } from "../models/User";
 import { Portfolio } from "../models/Portfolio";
 import { Appointment_portfolio } from "../models/Appointment_portfolio";
 
-//Crea una cita validando que la fecha no sea anterior a la de hoy, y que el artista esté disponible. 
 const createAppointment = async (req: Request, res: Response) => {
-
     try {
         const id = req.token.id;
         const { date, shift, email, name } = req.body;
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const today = new Date();
-
         const year = today.getFullYear();
         const month = today.getMonth() + 1;
         const day = today.getDate() + 1;
-
-        // Formatear la fecha actual
         const todayFormatDate = new Date(year, month - 1, day);
-
-        // Formatear la fecha de la cita
         const appointmentDate = new Date(date);
 
-
-        // Validar si la fecha de la cita es anterior a la actual
         if (appointmentDate < todayFormatDate) {
             console.log("2");
             return res.json({
@@ -34,7 +25,6 @@ const createAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        // Verifica si la fecha proporcionada es válida según el formato
         if (!date || typeof date !== "string" || !dateRegex.test(date)) {
             return res.json({
                 success: true,
@@ -42,7 +32,6 @@ const createAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        // Verifica si se ha proporcionado un turno válido ('morning' o 'afternoon').
         if (!shift || typeof shift !== "string" || (shift !== "morning" && shift !== "afternoon")) {
             return res.json({
                 success: true,
@@ -50,7 +39,6 @@ const createAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        // Verifica si el correo electrónico proporcionado es válido según un patrón predefinido
         if (typeof email !== "string" || email.length > 100 || !emailRegex.test(email)) {
             return res.json({
                 success: true,
@@ -58,7 +46,6 @@ const createAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        //Buscar al artista para ver si existe, si está activo, si tiene el role que corresponde y si no está cogiendo hora con él mismo. 
         const foundArtistByEmail = await User.findOne({
             where: { email },
             relations: ["role"]
@@ -71,7 +58,6 @@ const createAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        //Buscamos el nombre del servio tattoo/piercing para ver si coincide. Porque si no coincide no existe. 
         const getService = await Portfolio.findOneBy({ name });
 
         if (!getService) {
@@ -80,8 +66,7 @@ const createAppointment = async (req: Request, res: Response) => {
                 message: "The name of the item purchase doesn't exist",
             });
         }
-
-        //Verificar que no exista una cita en la tabla Appointment con esa fecha y ese turno para ese artista.
+        
         const existingAppointment = await Appointment.findOne({
             where: {
                 date,
@@ -136,9 +121,7 @@ const createAppointment = async (req: Request, res: Response) => {
     }
 };
 
-//Me trae todas las citas logeandome como artista
 const myCalendarAsArtist = async (req: Request, res: Response) => {
-
     try {
         const id = req.token.id;
 
@@ -162,7 +145,6 @@ const myCalendarAsArtist = async (req: Request, res: Response) => {
     }
 }
 
-//Elimina la cita por id
 const deleteAppointment = async (req: Request, res: Response) => {
     try {
         const appointmentId = req.body.id;
@@ -213,11 +195,8 @@ const deleteAppointment = async (req: Request, res: Response) => {
     }
 }
 
-// obtener todas las citas unicamente con el rol super admin 
 const getAllAppointmentsCalendar = async (req: Request, res: Response) => {
-
     try {
-
         if (typeof (req.query.skip) !== "string") {
             return res.json({
                 success: true,
@@ -256,9 +235,7 @@ const getAllAppointmentsCalendar = async (req: Request, res: Response) => {
     }
 }
 
-// obtener todas las citas unicamente con el rol super admin en detalle (incluyendo detalles)
 const getAllAppointmentsCalendarDetails = async (req: Request, res: Response) => {
-
     try {
 
         if (typeof (req.query.skip) !== "string") {
@@ -300,9 +277,7 @@ const getAllAppointmentsCalendarDetails = async (req: Request, res: Response) =>
     }
 }
 
-// Trae todos los datos necesarios del cliente que lo solicita
 const getAllMyAppointments = async (req: Request, res: Response) => {
-
     try {
         const idToken = req.token.id
 
@@ -366,7 +341,6 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
     }
 }
 
-
 const updateAppointment = async (req: Request, res: Response) => {
     try {
         const id = req.token.id;
@@ -377,15 +351,9 @@ const updateAppointment = async (req: Request, res: Response) => {
         const year = today.getFullYear();
         const month = today.getMonth() + 1;
         const day = today.getDate() + 1;
-
-        // Formatear la fecha actual
         const todayFormatDate = new Date(year, month - 1, day);
-
-        // Formatear la fecha de la cita
         const appointmentDate = new Date(date);
 
-
-        // Validar si la fecha de la cita es anterior a la actual
         if (appointmentDate < todayFormatDate) {
             console.log("2");
             return res.json({
@@ -394,7 +362,6 @@ const updateAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        // Verifica si la fecha proporcionada es válida según el formato
         if (!date || typeof date !== "string" || !dateRegex.test(date)) {
             return res.json({
                 success: true,
@@ -402,7 +369,6 @@ const updateAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        // Verifica si se ha proporcionado un turno válido ('morning' o 'afternoon').
         if (!shift || typeof shift !== "string" || (shift !== "morning" && shift !== "afternoon")) {
             return res.json({
                 success: true,
@@ -410,7 +376,6 @@ const updateAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        // Verifica si el correo electrónico proporcionado es válido según un patrón predefinido
         if (typeof email !== "string" || email.length > 100 || !emailRegex.test(email)) {
             return res.json({
                 success: true,
@@ -418,7 +383,6 @@ const updateAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        //Buscar al artista para ver si existe, si está activo, si tiene el role que corresponde y si no está cogiendo hora con él mismo. 
         const foundArtistByEmail = await User.findOne({
             where: { email },
             relations: ["role"]
@@ -431,7 +395,6 @@ const updateAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        //Buscamos el nombre del servio tattoo/piercing para ver si coincide. Porque si no coincide no existe. 
         const getService = await Portfolio.findOneBy({ name });
 
         if (!getService) {
@@ -441,7 +404,6 @@ const updateAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        //Verificar que no exista una cita en la tabla Appointment con esa fecha y ese turno para ese artista.
         const existingAppointment = await Appointment.findOne({
             where: {
                 date,
