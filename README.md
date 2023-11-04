@@ -3,11 +3,24 @@
 ## API Endpoints for User Management
 
 <details>
-<summary>1. `/register`</summary>
+<summary><h3>1. `/register`</h3></summary>
 
 - **Description**: Registers a new user (client) in the database.
 - **Access**: Public.
 - **Validations**: Checks the validity of the provided information (name, email, password, phone number) before registering the user.
+
+    - REGISTER
+
+            POST http://localhost:4000/user/register
+        body:
+        ``` js
+            {
+                "user": "newuser",
+                "email": "newuser@NewUser.com",
+                "password": "Password1!"
+            }
+        ```
+
 </details>
 
 <details>
