@@ -1,40 +1,38 @@
 <div align="center">
 <h1> ## BACKEND TATTOO & PIERCING STUDIO 🖋️ ##</h1>
-</div>
 
 **Fourth project of the Full Stack Developer Bootcamp at GeeksHubs Academy, Valencia**
 
-<div align="center">
-    <a href="https://geekshubs.com/">
+<a href="https://geekshubs.com/">
         <img src="doc/img-readme/geekhubs.png" width="50%"/>
     </a>
 </div>
 
 ---
 
-## Table of Contents
+# Table of Contents
 
-- 🚀 [Description](#description)
-- 🎯 [Objective](#objective)
-- 📉 [Database diagram](#database-diagram)
-- 👩🏽‍💻 [Stack](#stack)
-- ⚙️ [Local Installation Instructions](#local-installation-instructions)
-- 📧 [Contact](#contact)
-- 🌐 [GitHub Pages Link](#github-pages-link)
+- ### 🚀 [Description](#description)
+- ### 🎯 [Objective](#objective)
+- ### 📉 [Database diagram](#database-diagram)
+- ### 👩🏽‍💻 [Stack](#stack)
+- ### ⚙️ [Local Installation Instructions](#local-installation-instructions)
+- ### 📧 [Contact](#contact)
+- ### 🌐 [GitHub Pages Link](#github-pages-link)
 
-# Description
-#### Appointment and User Management Project for Tattoo Studio
+# 🚀 Description
+## Appointment and User Management Project for Tattoo Studio
 
 This project focuses on developing an API that enables clients of a tattoo studio to schedule appointments through a mobile application. It's important to note that while the interface is pending, the backend system is designed to manage appointment creation and user administration. The following outlines the key aspects of the project:
 
-#### User Management
+## User Management
 - **User Registration**: Allows new clients to register on the platform through a public endpoint, validating the provided information.
 - **User Login**: Facilitates existing users to log in with verified credentials to obtain an authentication token.
 - **User Profile**: Permits authenticated users to access their personal information and profile details.
 - **User Listing**: Enables superusers to access information about all registered users.
 - **Profile Update**: Provides users with the ability to update their personal information.
 
-###### Appointment Management
+## Appointment Management
 - **Appointment Creation**: Allows authenticated clients to schedule new appointments, verifying the availability of date, time, and the artist.
 - **Artist Calendar View**: Permits authenticated artists to view their scheduled appointments.
 - **Appointment Deletion**: Enables users to cancel an existing appointment using a unique identifier.
@@ -46,7 +44,7 @@ The system has been designed with a clearly defined endpoint structure to carry 
 
 ---
 
-# Objective
+# 🎯 Objective
 
 The main objective of the "Backend Tattoo & Piercing Studio" project is to provide a robust and complete backend system for managing appointments in a tattoo studio. This system aims to facilitate appointment scheduling for clients and agenda management for tattoo artists. The specific goals of the project include:
 
@@ -60,7 +58,7 @@ The main objective of the "Backend Tattoo & Piercing Studio" project is to provi
 
 ---
 
-# Database Diagram
+# 📉 Database Diagram
 The following diagram represents the structure of the database used in this project for the appointment management system in the tattoo studio:
 ![Diagram](doc/img-readme/reverse-engineer.png)
 
@@ -68,7 +66,7 @@ This diagram provides an overview of the relationship between the different tabl
 
 ---
 
-# Stack
+# 👩🏽‍💻 Stack
 <div align="center">
     <a href="https://www.typescriptlang.org/">
         <img src="doc/img-readme/stack/typescript.svg" width="8%"/>
@@ -90,7 +88,7 @@ This diagram provides an overview of the relationship between the different tabl
     </a>
 </div>
 
-# Local Installation Instructions
+# ⚙️ Local Installation Instructions
 
 To install and run the project locally, follow these steps:
 
@@ -370,8 +368,8 @@ npm install express typescript nodemon ts-node @types/express @types/node mysql2
 </details>
 
 
-<div style="text-align:center">
-    <img src="doc/img-readme/endpoints.png" width="30%"/>
+<div align="center">
+    <img src="doc/img-readme/endpoints.png" width="50%"/>
 </div>
 
 
@@ -386,7 +384,7 @@ This project is public, and contributions are welcome. If you'd like to contribu
 
 ---
 
-## Contact
+# 📧 Contact
 
 If you have any questions, comments, or suggestions, feel free to contact me at [ladronbravovlc@gmail.com](mailto:ladronbravovlc@gmail.com).
 
@@ -396,7 +394,7 @@ If you have any questions, comments, or suggestions, feel free to contact me at 
 
 ---
 
-## GitHub Pages Link
+## 🌐 GitHub Pages Link
 
 - 🐉 [BACKEND TATTOO & PIERCING STUDIO](https://ladronbx.github.io/tattoo-studio-backend-express-typeorm/) 🖋️
 
