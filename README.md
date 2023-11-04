@@ -68,26 +68,25 @@ This diagram provides an overview of the relationship between the different tabl
 
 # Stack
 <div align="center">
-<a href="https://www.npmjs.com/">
-    <img src="img-readme/stack/npm.svg"/>
-</a>
-<a href="https://expressjs.com/">
-    <img src="img-readme/stack/express.svg"/>
-</a>
-<a href="https://www.typescriptlang.org/">
-    <img src="img-readme/stack/typeScript.svg"/>
-</a>
-<a href="https://www.mysql.com/">
-    <img src="img-readme/stack/mysql.svg"/>
-</a>
-<a href="https://www.npmjs.com/package/bcrypt">
-    <img src="img-readme/stack/letsencrypt.svg"/>
-</a>
-<a href="https://jwt.io/">
-    <img src="img-readme/stack/jsonwebtokens.svg"/>
-</a>
+    <a href="https://www.typescriptlang.org/">
+        <img src="img-readme/stack/typeScript.svg" width="9%"/>
+    </a>
+    <a href="https://www.npmjs.com/">
+        <img src="img-readme/stack/npm.svg" width="9%"/>
+    </a>
+    <a href="https://expressjs.com/">
+        <img src="img-readme/stack/express.svg" width="10%"/>
+    </a>
+    <a href="https://www.mysql.com/">
+        <img src="img-readme/stack/mysql.svg" width="10%"/>
+    </a>
+    <a href="https://www.npmjs.com/package/bcrypt">
+        <img src="img-readme/stack/letsencrypt.svg" width="10%"/>
+    </a>
+    <a href="https://jwt.io/">
+        <img src="img-readme/stack/jsonwebtokens.svg" width="8%"/>
+    </a>
 </div>
-
 
 # Local Installation Instructions
 
@@ -137,10 +136,6 @@ Here is the list of dependencies used in this project:
 ```bash
 npm install express typescript nodemon ts-node @types/express @types/node mysql2 reflect-metadata typeorm bcrypt @types/bcrypt jsonwebtoken @types/jsonwebtoken
 ```
-
-These instructions will allow anyone interested in your project to install it locally and get it up and running. The dependencies can be installed using the provided command. Remember that the link to clone the repository is: https://github.com/ladronbx/tattoo-studio-backend-express-typeorm.git.
-
-
 
 ## API Endpoints for User Management
 
@@ -392,6 +387,10 @@ This project is public, and contributions are welcome. If you'd like to contribu
 ## Contact
 
 If you have any questions, comments, or suggestions, feel free to contact me at [ladronbravovlc@gmail.com](mailto:ladronbravovlc@gmail.com).
+
+- ***Bienve Ladrón***  
+<a href = "mailto:ladronbravovlc@gmail.com"><img src="https://img.shields.io/badge/Gmail-C6362C?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
+<a href="https://github.com/ladronbx" target="_blank"><img src="https://img.shields.io/badge/github-24292F?style=for-the-badge&logo=github&logoColor=green" target="_blank"></a> 
 
 ---
 
