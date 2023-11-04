@@ -1,5 +1,4 @@
 ![Diagrama](img-readme/reverse-engineer.png)
-
 ## API Endpoints for User Management
 
 <details>
@@ -231,4 +230,6 @@
 </details>
 
 
-![Endpoints](img-readme/endpoints.png)
+<div style="text-align:center">
+    <img src="img-readme/endpoints.png" width="60%/>
+</div>
