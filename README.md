@@ -231,5 +231,5 @@
 
 
 <div style="text-align:center">
-    <img src="img-readme/endpoints.png" width="60%/>
+    <img src="img-readme/endpoints.png" width="60%"/>
 </div>
