@@ -6,36 +6,48 @@ import { Appointment_portfolio } from "../models/Appointment_portfolio";
 
 //Crea una cita validando que la fecha no sea anterior a la de hoy, y que el artista esté disponible. 
 const createAppointment = async (req: Request, res: Response) => {
+
     try {
         const id = req.token.id;
         const { date, shift, email, name } = req.body;
-        // dateRegex y emailRegex definen patrones para validar la fecha y el correo electrónico
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-        // Obtiene el día actual.
         const today = new Date();
-        // Obtiene el año actual de la fecha actual, utilizando el método getFullYear() del objeto Date.
+
         const year = today.getFullYear();
-        // Obtiene el mes actual de la fecha actual. Es importante notar que el método getMonth() devuelve los meses del 0 al 11, por lo que se le suma 1 para obtener el número del mes en el rango de 1 a 12
         const month = today.getMonth() + 1;
         const day = today.getDate() + 1;
-        const todayFormatDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 
-        //Valida si la fecha para la cita es anterior a la actual
-        if (todayFormatDate > date) {
-            return {
-                isValid: false,
+        // Formatear la fecha actual
+        const todayFormatDate = new Date(year, month - 1, day);
+
+        // Formatear la fecha de la cita
+        const appointmentDate = new Date(date);
+
+
+        // Validar si la fecha de la cita es anterior a la actual
+        if (appointmentDate < todayFormatDate) {
+            console.log("2");
+            return res.json({
+                success: true,
                 message: "This day is prior to the current day, try again."
-            };
+            });
         }
 
         // Verifica si la fecha proporcionada es válida según el formato
         if (!date || typeof date !== "string" || !dateRegex.test(date)) {
-            return "Remember you must insert a date, and the date format should be YYYY-MM-DD, try again";
+            return res.json({
+                success: true,
+                message: "Remember you must insert a date, and the date format should be YYYY-MM-DD, try again"
+            });
         }
+
         // Verifica si se ha proporcionado un turno válido ('morning' o 'afternoon').
         if (!shift || typeof shift !== "string" || (shift !== "morning" && shift !== "afternoon")) {
-            return "Remember you must insert a shift, and you only can put morning or afternoon, try again";
+            return res.json({
+                success: true,
+                message: "Remember you must insert a shift, and you only can put morning or afternoon, try again"
+            });
         }
 
         // Verifica si el correo electrónico proporcionado es válido según un patrón predefinido
@@ -84,7 +96,6 @@ const createAppointment = async (req: Request, res: Response) => {
                 message: "This appointment is not available, try again",
             });
         }
-
         const createNewAppointment = await Appointment.create({
             date,
             shift,
@@ -363,7 +374,6 @@ const updateAppointment = async (req: Request, res: Response) => {
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const today = new Date();
-
         const year = today.getFullYear();
         const month = today.getMonth() + 1;
         const day = today.getDate() + 1;
@@ -374,7 +384,6 @@ const updateAppointment = async (req: Request, res: Response) => {
         // Formatear la fecha de la cita
         const appointmentDate = new Date(date);
 
-        console.log("1");
 
         // Validar si la fecha de la cita es anterior a la actual
         if (appointmentDate < todayFormatDate) {
@@ -385,8 +394,6 @@ const updateAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        console.log("3");
-
         // Verifica si la fecha proporcionada es válida según el formato
         if (!date || typeof date !== "string" || !dateRegex.test(date)) {
             return res.json({
@@ -394,15 +401,14 @@ const updateAppointment = async (req: Request, res: Response) => {
                 message: "Remember you must insert a date, and the date format should be YYYY-MM-DD, try again"
             });
         }
-        console.log("4")
+
         // Verifica si se ha proporcionado un turno válido ('morning' o 'afternoon').
         if (!shift || typeof shift !== "string" || (shift !== "morning" && shift !== "afternoon")) {
             return res.json({
                 success: true,
-                message:"Remember you must insert a shift, and you only can put morning or afternoon, try again"
+                message: "Remember you must insert a shift, and you only can put morning or afternoon, try again"
             });
         }
-        console.log("5")
 
         // Verifica si el correo electrónico proporcionado es válido según un patrón predefinido
         if (typeof email !== "string" || email.length > 100 || !emailRegex.test(email)) {
@@ -411,14 +417,12 @@ const updateAppointment = async (req: Request, res: Response) => {
                 message: 'Invalid or too long email'
             });
         }
-        console.log("6")
 
         //Buscar al artista para ver si existe, si está activo, si tiene el role que corresponde y si no está cogiendo hora con él mismo. 
         const foundArtistByEmail = await User.findOne({
             where: { email },
             relations: ["role"]
         });
-        console.log("7")
 
         if (!foundArtistByEmail || !foundArtistByEmail.is_active || foundArtistByEmail.role.role_name !== "admin" || id === foundArtistByEmail.id) {
             return res.json({
@@ -473,7 +477,7 @@ const updateAppointment = async (req: Request, res: Response) => {
 
         return res.json({
             success: true,
-            message: "Appointment created succesfully",
+            message: "Appointment updated succesfully",
             data: {
                 date,
                 shift,
@@ -490,7 +494,7 @@ const updateAppointment = async (req: Request, res: Response) => {
     } catch (error) {
         return res.json({
             success: false,
-            message: "Appointment can't be created, try again",
+            message: "Appointment can't be updated, try again",
             error
         });
     }
