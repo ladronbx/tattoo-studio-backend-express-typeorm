@@ -1,12 +1,14 @@
-![Header](img-readme/cabecera-proyecto.png)
-
----
-
-# BACKEND TATTOO & PIERCING STUDIO
-- 🐉 [BACKEND TATTOO & PIERCING STUDIO](https://ladronbx.github.io/tattoo-studio-backend-express-typeorm/) 🖋️
+<div align="center">
+<h1> ## BACKEND TATTOO & PIERCING STUDIO 🖋️ ##</h1>
+</div>
 
 **Fourth project of the Full Stack Developer Bootcamp at GeeksHubs Academy, Valencia**
 
+<div align="center">
+    <a href="https://geekshubs.com/">
+        <img src="img-readme/geekhubs.png" width="50%"/>
+    </a>
+</div>
 
 ---
 
@@ -69,22 +71,22 @@ This diagram provides an overview of the relationship between the different tabl
 # Stack
 <div align="center">
     <a href="https://www.typescriptlang.org/">
-        <img src="img-readme/stack/typeScript.svg" width="9%"/>
+        <img src="img-readme/stack/typescript.svg" width="8%"/>
     </a>
     <a href="https://www.npmjs.com/">
-        <img src="img-readme/stack/npm.svg" width="9%"/>
+        <img src="img-readme/stack/npm.svg" width="8%"/>
     </a>
     <a href="https://expressjs.com/">
-        <img src="img-readme/stack/express.svg" width="10%"/>
+        <img src="img-readme/stack/express.svg" width="8%"/>
     </a>
     <a href="https://www.mysql.com/">
         <img src="img-readme/stack/mysql.svg" width="10%"/>
     </a>
     <a href="https://www.npmjs.com/package/bcrypt">
-        <img src="img-readme/stack/letsencrypt.svg" width="10%"/>
+        <img src="img-readme/stack/letsencrypt.svg" width="7%"/>
     </a>
     <a href="https://jwt.io/">
-        <img src="img-readme/stack/jsonwebtokens.svg" width="8%"/>
+        <img src="img-readme/stack/jsonwebtokens.svg" width="7%"/>
     </a>
 </div>
 
@@ -399,4 +401,4 @@ If you have any questions, comments, or suggestions, feel free to contact me at 
 - 🐉 [BACKEND TATTOO & PIERCING STUDIO](https://ladronbx.github.io/tattoo-studio-backend-express-typeorm/) 🖋️
 
 ---
-![GeeksHubs Logo](img-readme/geekhubs.png)
+
