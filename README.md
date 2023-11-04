@@ -1,3 +1,5 @@
+![Diagrama](img-readme/reverse-engineer.png)
+
 ## API Endpoints for User Management
 
 <details>
@@ -5,14 +7,14 @@
 
 - **Description**: Registers a new user (client) in the database.
 - **Access**: Public.
-- **Validations**: Checks the validity of the provided information (name, email, password, phone number) before registering the user.
+- **Validations**: Verifies the provided information's validity (name, email, password, phone number) before registering the user.
 
     - REGISTER
 
         ```http
         POST http://localhost:4000/user/register
         ```
-        Body:
+        Payload:
         ```json
         {
             "user": "newuser",
@@ -25,17 +27,17 @@
 </details>
 
 <details>
-<summary><h3>1. /user/login</h3></summary>
+<summary><h3>2. /user/login</h3></summary>
 
-- **Description**: Logs in for an existing user.
+- **Description**: Logs in an existing user.
 - **Access**: Public.
-- **Validations**: Verifies the user's credentials and issues a JWT token if the credentials are correct.
+- **Validations**: Validates the user's credentials and issues a JWT token if the credentials are correct.
     - LOGIN
 
         ```http
         POST http://localhost:4000/user/login
         ```
-        Body:
+        Payload:
         ```json
         {
             "email": "newuser@NewUser.com",
@@ -50,7 +52,7 @@
 
 - **Description**: Retrieves data of the logged-in user.
 - **Access**: Only for authenticated users.
-- **Validations**: Verifies the JWT token to obtain the current user's profile.
+- **Validations**: Verifies the JWT token to access the current user's profile.
 
     - PROFILE
 
@@ -70,7 +72,7 @@
  - GET ALL USERS
 
     ```http
-    GET http://localhost:4000/user/profile
+    GET http://localhost:4000/user/super/get/all/users
     ```
     - Auth: `Enter the token to access the profile`
 
@@ -86,9 +88,9 @@
 - UPDATE
 
     ```http
-    POST http://localhost:4000/user/profile/update
+    PUT http://localhost:4000/user/profile/update
     ```
-    Body:
+    Payload:
     ```json
     {
         "email": "newuser@NewUser.com",
@@ -97,6 +99,7 @@
     ```
 
 </details>
+
 
 ---
 
@@ -114,7 +117,7 @@
         ```http
         POST http://localhost:4000/user/appointments/create
         ```
-        Body:
+        Payload:
         ```json
         {
             "date": "2023-12-01",
@@ -136,7 +139,7 @@
         ```http
         GET http://localhost:4000/user/appointments/my-calendar-as-artist
         ```
-        Body: (none)
+        Payload: (none)
 </details>
 
 <details>
@@ -151,7 +154,7 @@
         ```http
         DELETE http://localhost:4000/user/appointments/delete-my-appointment
         ```
-        Body:
+        Payload:
         ```json
         {
             "id": 12
@@ -171,7 +174,7 @@
         ```http
         GET http://localhost:4000/user/appointments/all-appointments-calendar?skip=5&page=1
         ```
-        Body: (none)
+        Payload: (none)
 </details>
 
 <details>
@@ -186,7 +189,7 @@
         ```http
         GET http://localhost:4000/user/appointments/all-appointments-calendar-detail?skip=5&page=1
         ```
-        Body: (none)
+        Payload: (none)
 </details>
 
 <details>
@@ -201,7 +204,7 @@
         ```http
         GET http://localhost:4000/user/appointments/get-all-my-appointments?skip=5&page=1
         ```
-        Body: (none)
+        Payload: (none)
 </details>
 
 <details>
@@ -216,7 +219,7 @@
         ```http
         PUT http://localhost:4000/user/appointments/update
         ```
-        Body:
+        Payload:
         ```json
         {
             "date": "2023-12-01",
@@ -226,3 +229,6 @@
         }
         ```
 </details>
+
+
+![Endpoints](img-readme/endpoints.png)
