@@ -399,4 +399,3 @@ If you have any questions, comments, or suggestions, feel free to contact me at 
 - 🐉 [BACKEND TATTOO & PIERCING STUDIO](https://ladronbx.github.io/tattoo-studio-backend-express-typeorm/) 🖋️
 
 ---
-

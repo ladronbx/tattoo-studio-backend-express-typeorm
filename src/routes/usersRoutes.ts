@@ -12,6 +12,6 @@ userRouter.put('/profile/update', auth, updateUser)
 userRouter.get('/super/get/all/users',auth ,isSuperAdmin ,getAllUsersBySuper)
 userRouter.delete('/super/delete/user', auth, isSuperAdmin, deleteUsersBySuper)
 userRouter.get('/artists', auth, getArtists)
-userRouter.post('/createArtist', createArtist)
+userRouter.post('/create/artist', createArtist)
 
 export {userRouter}
