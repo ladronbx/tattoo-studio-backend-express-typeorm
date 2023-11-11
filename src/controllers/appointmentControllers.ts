@@ -7,7 +7,7 @@ import { Appointment_portfolio } from "../models/Appointment_portfolio";
 const createAppointment = async (req: Request, res: Response) => {
     try {
         const id = req.token.id;
-        const { date, shift, email, name } = req.body;
+        const { date, shift, email, id: idPortfolio } = req.body;
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const today = new Date();
@@ -58,7 +58,7 @@ const createAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        const getService = await Portfolio.findOneBy({ name });
+        const getService = await Portfolio.findOneBy({ id: idPortfolio });
 
         if (!getService) {
             return res.json({
@@ -99,7 +99,7 @@ const createAppointment = async (req: Request, res: Response) => {
             email,
             artist: foundArtistByEmail.full_name,
             id: createNewAppointment.id,
-            name: getService.name,
+            service: getService.name,
             price: getService.price,
             category: getService.category,
             created_at: createNewAppointment.created_at,
