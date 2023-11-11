@@ -7,7 +7,7 @@ import { Appointment_portfolio } from "../models/Appointment_portfolio";
 const createAppointment = async (req: Request, res: Response) => {
     try {
         const id = req.token.id;
-        const { date, shift, email, id: idPortfolio } = req.body;
+        const { date, shift, email, name } = req.body;
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const today = new Date();
@@ -58,7 +58,7 @@ const createAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        const getService = await Portfolio.findOneBy({ id: idPortfolio });
+        const getService = await Portfolio.findOneBy({ name });
 
         if (!getService) {
             return res.json({
@@ -99,7 +99,7 @@ const createAppointment = async (req: Request, res: Response) => {
             email,
             artist: foundArtistByEmail.full_name,
             id: createNewAppointment.id,
-            service: getService.name,
+            name: getService.name,
             price: getService.price,
             category: getService.category,
             created_at: createNewAppointment.created_at,
@@ -126,24 +126,32 @@ const myCalendarAsArtist = async (req: Request, res: Response) => {
         const id = req.token.id;
 
         const appointmentsForShows = await Appointment.find({
-            where: { artist_id: id },
+            where: { artist: { id: id } }, // Corrected where syntax
             select: ["id", "date", "shift", "client_id", "status"],
+        });
+
+        const portfolio = await Portfolio.find({
+            select: ["image"],
         });
 
         return res.json({
             success: true,
             message: "Here are all your appointments",
-            data: appointmentsForShows
+            data: {
+                appointmentsForShows: appointmentsForShows,
+                portfolio: portfolio,
+            },
         });
 
     } catch (error) {
         return res.json({
             success: false,
-            message: "Appointments can't be getted, try again",
-            error
-        })
+            message: "Appointments can't be fetched, try again", // Corrected error message
+            error: error,
+        });
     }
-}
+};
+
 
 const deleteAppointment = async (req: Request, res: Response) => {
     try {
@@ -262,10 +270,17 @@ const getAllAppointmentsCalendarDetails = async (req: Request, res: Response) =>
             take: pageSize
         })
 
+        const portfolio = await Portfolio.find({
+            select: ["image"],
+        });
+
         return res.json({
             success: true,
             message: "Here are all your appointments",
-            data: appointmentsUser
+            data: {
+                appointmentsUser: appointmentsUser,
+                portfolio: portfolio,
+            },
         });
 
     } catch (error) {
@@ -311,15 +326,18 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
                 const { status, artist_id, client_id, appointmentPortfolios, artist, ...rest } = obj;
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
+                const imageService = obj.appointmentPortfolios.map((obj) => obj.image)
                 const getArtist = obj.artist
+
 
                 if (getArtist && (categoryPortfolio.length !== 0) && (purchase.length !== 0)) {
                     const full_name = getArtist.full_name
                     const email = getArtist.email;
                     const is_active = getArtist.is_active;
                     const name = purchase[0]
+                    const image = imageService[0]
                     const category = categoryPortfolio[0]
-                    return { full_name, email, name, category, is_active, ...rest };
+                    return { full_name, email, name, image, category, is_active, ...rest };
                 }
                 else {
                     return null
