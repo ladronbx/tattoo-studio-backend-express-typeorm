@@ -327,6 +327,7 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
                 const imageService = obj.appointmentPortfolios.map((obj) => obj.image)
+                const priceService = obj.appointmentPortfolios.map((obj) => obj.price)
                 const getArtist = obj.artist
 
 
@@ -337,7 +338,8 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
                     const name = purchase[0]
                     const image = imageService[0]
                     const category = categoryPortfolio[0]
-                    return { full_name, email, name, image, category, is_active, ...rest };
+                    const price = priceService[0]
+                    return { full_name, email, name, image, category, is_active, price, ...rest };
                 }
                 else {
                     return null
