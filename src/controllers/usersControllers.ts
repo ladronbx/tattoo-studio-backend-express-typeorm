@@ -308,7 +308,7 @@ const getArtists = async (req: Request, res: Response) => {
             where: {
                 role_id: 2
             },
-            select: ["full_name", "email", "phone_number", "photo"],
+            select: ["id","full_name", "email", "phone_number", "photo"],
             skip: skip,
             take: pageSize
         });
