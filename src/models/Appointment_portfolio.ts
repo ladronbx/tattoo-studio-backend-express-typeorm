@@ -26,5 +26,4 @@ export class Appointment_portfolio extends BaseEntity {
     @ManyToOne(() => Portfolio, (portfolio) => portfolio.appointment_portfolios)
     @JoinColumn({ name: "appointment_id" })
     portfolio!: Portfolio[];
-
 }

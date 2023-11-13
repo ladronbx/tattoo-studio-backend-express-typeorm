@@ -39,9 +39,6 @@ export class Portfolio extends BaseEntity {
     })
     portfolioAppointments!: Appointment[]
 
-
     @OneToMany(() => Appointment_portfolio, (appointment_portfolios) => appointment_portfolios.portfolio)
     appointment_portfolios!: Appointment_portfolio[];
-
-
 }

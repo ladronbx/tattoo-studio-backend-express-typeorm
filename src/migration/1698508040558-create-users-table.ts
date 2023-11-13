@@ -2,7 +2,6 @@ import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
 class CreateUsersTable1698508040558 implements MigrationInterface {
 
-
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
@@ -41,6 +40,12 @@ class CreateUsersTable1698508040558 implements MigrationInterface {
                         isNullable: false
                     },
                     {
+                        name: "photo",
+                        type: "varchar",
+                        length: "200",
+                        default: "'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png'"
+                    },
+                    {
                         name: "is_active",
                         type: "boolean",
                         default: true
@@ -61,6 +66,7 @@ class CreateUsersTable1698508040558 implements MigrationInterface {
                         default: "CURRENT_TIMESTAMP",
                         onUpdate: "CURRENT_TIMESTAMP"
                     },
+                    
                 ],
                 foreignKeys: [
                     {

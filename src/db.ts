@@ -12,12 +12,10 @@ import { CreatePortfolioTable1698945640768 } from "./migration/1698945640768-cre
 import { Appointment_portfolio } from "./models/Appointment_portfolio";
 import { CreateAppointmentPortfolioTable1698945645357 } from "./migration/1698945645357-create-appointment_portfolio-table";
 
-// const database = "mysql" | "mariadb";
-
 const AppDataSource = new DataSource({
     type: "mysql",
     host: "localhost",
-    port: 3306,
+    port: parseInt(process.env.DB_PORT as string),
     username: "root",
     password: "password",
     database: "tattoo_studio_db", 

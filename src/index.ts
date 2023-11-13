@@ -2,9 +2,11 @@ import express, { Router } from "express";
 import { AppDataSource } from "./db";
 import { userRouter } from "./routes/usersRoutes";
 import { appointmentsRouter } from "./routes/appointmentsRoutes";
+import cors from "cors";
 require('dotenv').config();
 
 const app = express();
+app.use(cors())
 const PORT = process.env.PORT || 4000;
 
 app.use(express.json());

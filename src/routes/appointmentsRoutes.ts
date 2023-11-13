@@ -4,7 +4,6 @@ import { createAppointment, deleteAppointment, myCalendarAsArtist, getAllMyAppoi
 import { isAdmin } from "../middleware/isAdmin";
 import { isSuperAdmin } from "../middleware/isSuperAdmin";
 
-
 const appointmentsRouter = Router();
 
 appointmentsRouter.post('/create',auth, createAppointment)
@@ -14,6 +13,5 @@ appointmentsRouter.get('/all-appointments-calendar', auth, isSuperAdmin, getAllA
 appointmentsRouter.get('/all-appointments-calendar-detail', auth, isSuperAdmin, getAllAppointmentsCalendarDetails)
 appointmentsRouter.get('/get-all-my-appointments',auth, getAllMyAppointments)
 appointmentsRouter.put('/update',auth, updateAppointment)
-
 
 export {appointmentsRouter}

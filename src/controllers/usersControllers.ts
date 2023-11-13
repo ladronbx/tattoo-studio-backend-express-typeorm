@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const register = async (req: Request, res: Response) => {
-
     try {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
@@ -31,11 +30,20 @@ const register = async (req: Request, res: Response) => {
             });
         }
 
-        if ((typeof body.phone_number !== "number") || (body.phone_number.length > 20)) {
+        if ((typeof body.phone_number !== "number") || (body.phone_number.toString().length > 20)) {
             return res.json({
                 success: true,
                 message: 'Invalid phone number data type or too long. Please provide a valid numeric phone number.'
             });
+        }
+
+        if (body.photo !== undefined) {
+            if ((typeof body.photo !== "string") || (body.photo.toString().length > 200)) {
+                return res.json({
+                    success: true,
+                    message: 'Invalid or too long URL'
+                });
+            }
         }
 
         const hashedPassword = await bcrypt.hash(body.password, 8)
@@ -44,7 +52,8 @@ const register = async (req: Request, res: Response) => {
             full_name: body.full_name,
             email: body.email,
             password: hashedPassword,
-            phone_number: body.phone_number
+            phone_number: body.phone_number,
+            photo: body.photo
         }).save()
 
         return res.json({
@@ -67,7 +76,6 @@ const register = async (req: Request, res: Response) => {
 }
 
 const login = async (req: Request, res: Response) => {
-
     try {
         const email = req.body.email;
         const password = req.body.password;
@@ -116,12 +124,9 @@ const login = async (req: Request, res: Response) => {
     }
 }
 
-//Muestra los datos del usuario logeado.
 const profile = async (req: Request, res: Response) => {
     try {
         const email = req.token.email;
-
-        // Busco un usuario donde el campo 'email' coincida con el correo electrónico extraído del token. 
         const userProfile = await User.findOne({
             where: { email }
         });
@@ -140,6 +145,7 @@ const profile = async (req: Request, res: Response) => {
                 full_name: userProfile?.full_name,
                 email: userProfile?.email,
                 phone_number: userProfile?.phone_number,
+                photo: userProfile?.photo
             },
         });
     } catch (error) {
@@ -151,7 +157,6 @@ const profile = async (req: Request, res: Response) => {
     }
 };
 
-//Muestra el total de usuarios con su name, email, phone number. También incluye paginación. Error 500.
 const getAllUsersBySuper = async (req: Request, res: Response) => {
     try {
         const pageSize = parseInt(req.query.pageSize as string) || 5;
@@ -161,7 +166,7 @@ const getAllUsersBySuper = async (req: Request, res: Response) => {
         const totalUsers = await User.count(); // Obtiene el total de usuarios
 
         const users = await User.find({
-            select: ["id", "email", "full_name", "phone_number", "is_active", "role_id"],
+            select: ["id", "email", "full_name", "phone_number", "photo", "is_active", "role_id"],
             skip: skip,
             take: pageSize
         });
@@ -189,9 +194,7 @@ const getAllUsersBySuper = async (req: Request, res: Response) => {
     }
 };
 
-// Modificar cualquier dato individual de tu perfil, verificando que se cumplan las validaciones correspondientes en cada caso. 
 const updateUser = async (req: Request, res: Response) => {
-
     try {
         const body = req.body
         const id = req.token.id
@@ -199,7 +202,7 @@ const updateUser = async (req: Request, res: Response) => {
         const email = req.body.email
         const password = req.body.password
         const phone = req.body.phone_number
-
+        const photo = req.body.photo
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
 
@@ -237,7 +240,15 @@ const updateUser = async (req: Request, res: Response) => {
             }
         }
 
-        // AQUÍ ME CHILLA SI NO PONGO ANY
+        if (photo !== undefined) {
+            if ((typeof body.photo !== "string") || (photo.toString().length > 200)) {
+                return res.json({
+                    success: true,
+                    message: 'Invalid or too long URL'
+                });
+            }
+        }
+
         const userToUpdate: any = {};
 
         if (name) {
@@ -253,6 +264,10 @@ const updateUser = async (req: Request, res: Response) => {
         if (phone) {
             userToUpdate.phone_number = phone;
         }
+
+        if (photo) {
+            userToUpdate.photo = photo;
+        }
         const updatedUser = await User.update(id, userToUpdate);
 
         if (updatedUser) {
@@ -262,7 +277,8 @@ const updateUser = async (req: Request, res: Response) => {
                 data: {
                     name,
                     email,
-                    phone
+                    phone,
+                    photo
                 }
             });
         } else {
@@ -281,7 +297,6 @@ const updateUser = async (req: Request, res: Response) => {
     }
 }
 
-//Muestra el total de artistas con su name, email, phone number. También incluye paginación. Error 500.
 const getArtists = async (req: Request, res: Response) => {
     try {
         const pageSize = parseInt(req.query.pageSize as string) || 5;
@@ -293,7 +308,7 @@ const getArtists = async (req: Request, res: Response) => {
             where: {
                 role_id: 2
             },
-            select: ["full_name", "email", "phone_number"],
+            select: ["full_name", "email", "phone_number", "photo"],
             skip: skip,
             take: pageSize
         });
@@ -321,12 +336,11 @@ const getArtists = async (req: Request, res: Response) => {
     }
 };
 
-//SuperUser puede crear artistas. Obligatorio rellenar todos los campos. Y el role_id se asigna automáticamente.
 const createArtist = async (req: Request, res: Response) => {
     try {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{4,12}$/;
-        const { body: { full_name, email, password, phone_number } } = req;
+        const { body: { full_name, email, password, phone_number, photo } } = req;
 
         if (!full_name || typeof full_name !== "string" || full_name.length === 0 || full_name.length > 30) {
             return res.json({
@@ -356,6 +370,15 @@ const createArtist = async (req: Request, res: Response) => {
             });
         }
 
+        if (photo !== undefined) {
+            if ((typeof photo !== "string") || (photo.toString().length > 200)) {
+                return res.json({
+                    success: true,
+                    message: 'Invalid or too long URL'
+                });
+            }
+        }
+
         const hashedPassword = await bcrypt.hash(password, 8);
 
         const newArtist = await User.create({
@@ -363,6 +386,7 @@ const createArtist = async (req: Request, res: Response) => {
             email,
             password: hashedPassword,
             phone_number,
+            photo,
             role_id: 2
         }).save();
 
@@ -373,6 +397,7 @@ const createArtist = async (req: Request, res: Response) => {
                 full_name: newArtist.full_name,
                 email: newArtist.email,
                 phone_number: newArtist.phone_number,
+                photo: newArtist.photo,
                 role_id: newArtist.role_id
             }
         });
@@ -385,9 +410,7 @@ const createArtist = async (req: Request, res: Response) => {
     }
 };
 
-//Únicamente el superuser puede deletear un user por id
 const deleteUsersBySuper = async (req: Request, res: Response) => {
-
     try {
         const deleteById = req.body.id
 
@@ -421,7 +444,6 @@ const deleteUsersBySuper = async (req: Request, res: Response) => {
             error
         })
     }
-
 }
 
 export { register, login, profile, getAllUsersBySuper, updateUser, getArtists, createArtist, deleteUsersBySuper };
