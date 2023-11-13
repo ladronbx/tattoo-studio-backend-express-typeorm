@@ -3,11 +3,13 @@ import { Appointment } from "../models/Appointment";
 import { User } from "../models/User";
 import { Portfolio } from "../models/Portfolio";
 import { Appointment_portfolio } from "../models/Appointment_portfolio";
+import { validateAvailableDate, validateDate, validateEmail, validateNumber, validateShift } from "../validations/validations";
+
 
 const createAppointment = async (req: Request, res: Response) => {
     try {
         const id = req.token.id;
-        const { date, shift, email, id: idService } = req.body;
+        const { date, shift, email, name } = req.body;
         const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         const today = new Date();
@@ -58,7 +60,7 @@ const createAppointment = async (req: Request, res: Response) => {
             });
         }
 
-        const getService = await Portfolio.findOneBy({ id: idService });
+        const getService = await Portfolio.findOneBy({ name });
 
         if (!getService) {
             return res.json({
@@ -99,7 +101,7 @@ const createAppointment = async (req: Request, res: Response) => {
             email,
             artist: foundArtistByEmail.full_name,
             id: createNewAppointment.id,
-            idService: getService.id,
+            name: getService.name,
             price: getService.price,
             category: getService.category,
             created_at: createNewAppointment.created_at,
@@ -327,7 +329,6 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
                 const imageService = obj.appointmentPortfolios.map((obj) => obj.image)
-                const priceService = obj.appointmentPortfolios.map((obj) => obj.price)
                 const getArtist = obj.artist
 
 
@@ -338,8 +339,7 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
                     const name = purchase[0]
                     const image = imageService[0]
                     const category = categoryPortfolio[0]
-                    const price = priceService[0]
-                    return { full_name, email, name, image, category, is_active, price, ...rest };
+                    return { full_name, email, name, image, category, is_active, ...rest };
                 }
                 else {
                     return null
@@ -362,124 +362,120 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
 }
 
 const updateAppointment = async (req: Request, res: Response) => {
+
     try {
-        const id = req.token.id;
-        const { date, shift, email, id: idService } = req.body;
-        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = today.getMonth() + 1;
-        const day = today.getDate() + 1;
-        const todayFormatDate = new Date(year, month - 1, day);
-        const appointmentDate = new Date(date);
+        const { id, date, shift, email, portfolioId } = req.body
+        const { id: client_id } = req.token
 
-        if (appointmentDate < todayFormatDate) {
-            console.log("2");
+        if (validateNumber(id, 7)) {
+            return res.json({ success: true, message: validateNumber(id, 7) });
+        }
+
+        if (validateNumber(portfolioId, 7)) {
+            return res.json({ success: true, message: validateNumber(portfolioId, 7) });
+        }
+
+        if (validateDate(date)) {
+            return res.json({ success: true, message: validateDate(date) });
+        }
+
+        if (validateShift(shift)) {
+            return res.json({ success: true, message: validateShift(shift) });
+        }
+
+
+        if (validateEmail(email)) {
+            return res.json({ success: true, message: validateEmail(email) });
+        }
+
+        const validationResult = await validateAvailableDate(date, email, shift);
+        if (!validationResult.isValid) {
             return res.json({
                 success: true,
-                message: "This day is prior to the current day, try again."
+                message: validationResult.message
             });
         }
 
-        if (!date || typeof date !== "string" || !dateRegex.test(date)) {
+        const findWorker_id = await User.findOneBy({
+            email
+        })
+
+        if (findWorker_id?.is_active !== true) {
             return res.json({
                 success: true,
-                message: "Remember you must insert a date, and the date format should be YYYY-MM-DD, try again"
-            });
+                message: "this artist not exist"
+            })
         }
 
-        if (!shift || typeof shift !== "string" || (shift !== "morning" && shift !== "afternoon")) {
+        const artist_id = findWorker_id?.id
+
+        const appointmentsClient = await Appointment.findBy({
+            client_id,
+        })
+
+        const appointmentsId = await appointmentsClient.map((object) =>
+            object.id
+        )
+
+        if (!appointmentsId.includes(id)) {
             return res.json({
                 success: true,
-                message: "Remember you must insert a shift, and you only can put morning or afternoon, try again"
-            });
+                message: "appointment updated not succesfully, incorrect id"
+            })
         }
 
-        if (typeof email !== "string" || email.length > 100 || !emailRegex.test(email)) {
+        const product = await Portfolio.findOneBy({
+            id:portfolioId
+        })
+
+        if (!product) {
             return res.json({
                 success: true,
-                message: 'Invalid or too long email'
-            });
-        }
-
-        const foundArtistByEmail = await User.findOne({
-            where: { email },
-            relations: ["role"]
-        });
-
-        if (!foundArtistByEmail || !foundArtistByEmail.is_active || foundArtistByEmail.role.role_name !== "admin" || id === foundArtistByEmail.id) {
-            return res.json({
-                success: true,
-                message: "Sorry, this user isn't an artist, or does not exist. And remember you can't create an appointment with yourself"
-            });
-        }
-
-        const getService = await Portfolio.findOneBy({  id: idService });
-
-        if (!getService) {
-            return res.json({
-                success: true,
-                message: "The name of the item purchase doesn't exist",
-            });
-        }
-
-        const existingAppointment = await Appointment.findOne({
-            where: {
-                date,
-                shift,
-                artist_id: foundArtistByEmail.id,
-            },
-        });
-
-        if (existingAppointment) {
-            return res.json({
-                success: true,
-                message: "This appointment is not available, try again",
-            });
+                message: "this tattoo or piercing doesn't exist",
+            })
         }
 
         await Appointment.update({
-            id: id
+            id
         }, {
             date,
             shift,
-            artist_id: foundArtistByEmail.id,
+            artist_id
         })
 
         await Appointment_portfolio.update({
             appointment_id: id
         }, {
-            portfolio_id: getService?.id
+            portfolio_id: product?.id
         })
 
-        const appointmentUpdated = await Appointment.findOneBy({
-            id: id
+        const dataAppointmentUpdated = await Appointment.findOneBy({
+            id
         })
 
         return res.json({
             success: true,
-            message: "Appointment updated succesfully",
+            message: "appointment updated succesfully",
             data: {
                 date,
                 shift,
-                Worker: foundArtistByEmail.full_name,
+                artistName: findWorker_id?.full_name,
                 email,
-                id: id,
-                idService,
-                category: getService?.category,
-                created_at: appointmentUpdated?.created_at,
-                updated_at: appointmentUpdated?.updated_at
+                id,
+                portfolioId: product?.id,
+                category: product?.category,
+                created_at: dataAppointmentUpdated?.created_at,
+                updated_at: dataAppointmentUpdated?.updated_at
             }
         })
 
     } catch (error) {
         return res.json({
             success: false,
-            message: "Appointment can't be updated, try again",
+            message: "appointment can't be updated, try again",
             error
-        });
+        })
     }
-};
+}
 
 export { createAppointment, myCalendarAsArtist, deleteAppointment, getAllMyAppointments, updateAppointment, getAllAppointmentsCalendar, getAllAppointmentsCalendarDetails }

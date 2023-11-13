@@ -38,7 +38,7 @@ const register = async (req: Request, res: Response) => {
         }
 
         if (body.photo !== undefined) {
-            if ((typeof body.photo !== "string") || (body.photo.length > 200)) {
+            if ((typeof body.photo !== "string") || (body.photo.toString().length > 200)) {
                 return res.json({
                     success: true,
                     message: 'Invalid or too long URL'
@@ -67,7 +67,7 @@ const register = async (req: Request, res: Response) => {
         })
 
     } catch (error) {
-        return res.json({
+        return res.status(500).json({
             success: false,
             message: "User registration failed. Please try again.",
             error
@@ -116,7 +116,7 @@ const login = async (req: Request, res: Response) => {
         })
 
     } catch (error) {
-        return res.json({
+        return res.status(500).json({
             success: false,
             message: "An error occurred during login.",
             error
@@ -132,7 +132,7 @@ const profile = async (req: Request, res: Response) => {
         });
 
         if (!userProfile) {
-            return res.json({
+            return res.status(404).json({
                 success: true,
                 message: "User profile not found",
             });
@@ -149,7 +149,7 @@ const profile = async (req: Request, res: Response) => {
             },
         });
     } catch (error) {
-        return res.json({
+        return res.status(500).json({
             success: false,
             message: "Unable to retrieve user profile",
             error
@@ -186,7 +186,7 @@ const getAllUsersBySuper = async (req: Request, res: Response) => {
             data: users
         });
     } catch (error) {
-        return res.json({
+        return res.status(500).json({
             success: false,
             message: "Unable to display the users. An error occurred.",
             error
@@ -308,7 +308,7 @@ const getArtists = async (req: Request, res: Response) => {
             where: {
                 role_id: 2
             },
-            select: ["id","full_name", "email", "phone_number", "photo"],
+            select: ["full_name", "email", "phone_number", "photo"],
             skip: skip,
             take: pageSize
         });
@@ -328,7 +328,7 @@ const getArtists = async (req: Request, res: Response) => {
             data: artists
         });
     } catch (error) {
-        return res.json({
+        return res.status(500).json({
             success: false,
             message: "Unable to display the artists. An error occurred.",
             error
@@ -402,7 +402,7 @@ const createArtist = async (req: Request, res: Response) => {
             }
         });
     } catch (error) {
-        return res.json({
+        return res.status(500).json({
             success: false,
             message: "Artist registration failed. Please try again.",
             error: error

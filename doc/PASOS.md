@@ -17,7 +17,7 @@
 
 ---
 
-### **3. Comando `npm install express typescript nodemon ts-node @types/express @types/node** typeorm reflect-metadata mysql2`:
+### **3. Comando `npm install express typescript nodemon ts-node @types/express @types/node typeorm reflect-metadata mysql2`:
 
 - **Este comando instalará todos estos paquetes** y sus dependencias en el proyecto actual, permitiéndote desarrollar una aplicación Node.js que utiliza Express, TypeScript, TypeORM y MySQL.
 
