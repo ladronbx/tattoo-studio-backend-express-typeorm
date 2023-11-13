@@ -205,8 +205,10 @@ const deleteAppointment = async (req: Request, res: Response) => {
     }
 }
 
+
 const getAllAppointmentsCalendar = async (req: Request, res: Response) => {
     try {
+
         if (typeof (req.query.skip) !== "string") {
             return res.json({
                 success: true,
@@ -226,20 +228,55 @@ const getAllAppointmentsCalendar = async (req: Request, res: Response) => {
         const skip = (page - 1) * pageSize
 
         const appointmentsUser = await Appointment.find({
+            relations: ["appointmentPortfolios", "client", "artist"],
             skip: skip,
             take: pageSize
         })
 
+        const appointmentsAll = await Promise.all(appointmentsUser
+            .map(async (obj) => {
+                const { artist_id, client_id, appointmentPortfolios, client, artist, ...rest } = obj;
+                const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
+                const priceproduct = obj.appointmentPortfolios.map((obj) => obj.price)
+                const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
+                const imagePortfolio = obj.appointmentPortfolios.map((obj) => obj.image)
+                const user = obj.client
+                const artistObj = obj.artist
+
+                if (user && artist) {
+                    const user_email = user.email;
+                    const user_name = user.full_name;
+                    const is_active = user.is_active;
+                    const artist_email = artistObj.email;
+                    const artist_name = artistObj.full_name;
+                    const name = purchase[0]
+                    const price = priceproduct[0]
+                    const category = categoryPortfolio[0]
+                    const image = imagePortfolio[0]
+                    return { is_active, user_email, user_name, artist_email, artist_name, name, category,price, image, ...rest, };
+                }
+                else {
+                    return null
+                }
+            }));
+
+        if (appointmentsAll.length == 0) {
+            return res.json({
+                success: true,
+                message: "This shop currently has no available appointments.",
+            });
+        }
+
         return res.json({
             success: true,
             message: "Here are all your appointments",
-            data: appointmentsUser
+            data: appointmentsAll
         });
 
     } catch (error) {
         return res.json({
             success: false,
-            message: "appointments can't be getted, try again",
+            message: "Appointments can't be getted, try again",
             error
         })
     }
