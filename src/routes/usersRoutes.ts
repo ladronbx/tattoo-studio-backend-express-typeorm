@@ -1,8 +1,7 @@
 import { Router } from "express";
-import { register, login, profile, updateUser, getArtists, createArtist, getAllUsersBySuper, deleteUsersBySuper } from "../controllers/usersControllers";
+import { register, login, profile, updateUser, getArtists, createArtist, getAllUsersBySuper, deleteUsersBySuper, getServices } from "../controllers/usersControllers";
 import { auth } from "../middleware/auth";
 import { isSuperAdmin } from "../middleware/isSuperAdmin";
-import { getServices } from "../controllers/appointmentControllers";
 
 const userRouter = Router();
 
