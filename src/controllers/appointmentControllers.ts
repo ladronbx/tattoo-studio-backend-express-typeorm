@@ -68,7 +68,7 @@ const createAppointment = async (req: Request, res: Response) => {
                 message: "The name of the item purchase doesn't exist",
             });
         }
-        
+
         const existingAppointment = await Appointment.findOne({
             where: {
                 date,
@@ -253,7 +253,7 @@ const getAllAppointmentsCalendar = async (req: Request, res: Response) => {
                     const price = priceproduct[0]
                     const category = categoryPortfolio[0]
                     const image = imagePortfolio[0]
-                    return { is_active, user_email, user_name, artist_email, artist_name, name, category,price, image, ...rest, };
+                    return { is_active, user_email, user_name, artist_email, artist_name, name, category, price, image, ...rest, };
                 }
                 else {
                     return null
@@ -462,7 +462,7 @@ const updateAppointment = async (req: Request, res: Response) => {
         }
 
         const product = await Portfolio.findOneBy({
-            id:portfolioId
+            id: portfolioId
         })
 
         if (!product) {
@@ -515,4 +515,25 @@ const updateAppointment = async (req: Request, res: Response) => {
     }
 }
 
-export { createAppointment, myCalendarAsArtist, deleteAppointment, getAllMyAppointments, updateAppointment, getAllAppointmentsCalendar, getAllAppointmentsCalendarDetails }
+const getServices = async (req: Request, res: Response) => {
+
+    try {
+
+        const services = await Portfolio.find({});
+
+        return res.json({
+            success: true,
+            message: "Here are all tattoos and piercings",
+            data: services
+        })
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "No ha llegado ningún tattoo",
+            error
+        })
+    }
+
+}
+
+export { createAppointment, myCalendarAsArtist, deleteAppointment, getAllMyAppointments, updateAppointment, getAllAppointmentsCalendar, getAllAppointmentsCalendarDetails, getServices }

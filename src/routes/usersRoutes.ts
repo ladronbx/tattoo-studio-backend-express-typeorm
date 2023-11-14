@@ -2,6 +2,7 @@ import { Router } from "express";
 import { register, login, profile, updateUser, getArtists, createArtist, getAllUsersBySuper, deleteUsersBySuper } from "../controllers/usersControllers";
 import { auth } from "../middleware/auth";
 import { isSuperAdmin } from "../middleware/isSuperAdmin";
+import { getServices } from "../controllers/appointmentControllers";
 
 const userRouter = Router();
 
@@ -13,5 +14,6 @@ userRouter.get('/super/get/all/users',auth ,isSuperAdmin ,getAllUsersBySuper)
 userRouter.delete('/super/delete/user', auth, isSuperAdmin, deleteUsersBySuper)
 userRouter.get('/artists', getArtists)
 userRouter.post('/create/artist', createArtist)
+userRouter.get('/services', getServices)
 
 export {userRouter}
