@@ -2,6 +2,7 @@ import { Request, Response } from "express-serve-static-core"
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { Portfolio } from "../models/Portfolio";
 
 const register = async (req: Request, res: Response) => {
     try {
@@ -446,4 +447,25 @@ const deleteUsersBySuper = async (req: Request, res: Response) => {
     }
 }
 
-export { register, login, profile, getAllUsersBySuper, updateUser, getArtists, createArtist, deleteUsersBySuper };
+const getServices = async (req: Request, res: Response) => {
+
+    try {
+
+        const services = await Portfolio.find({});
+
+        return res.json({
+            success: true,
+            message: "Here are all tattoos and piercings",
+            data: services
+        })
+    } catch (error) {
+        return res.json({
+            success: false,
+            message: "No ha llegado ningún tattoo",
+            error
+        })
+    }
+
+}
+
+export { register, login, profile, getAllUsersBySuper, updateUser, getArtists, createArtist, deleteUsersBySuper, getServices };

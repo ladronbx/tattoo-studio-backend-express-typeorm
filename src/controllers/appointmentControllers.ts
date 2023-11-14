@@ -515,25 +515,6 @@ const updateAppointment = async (req: Request, res: Response) => {
     }
 }
 
-const getServices = async (req: Request, res: Response) => {
 
-    try {
 
-        const services = await Portfolio.find({});
-
-        return res.json({
-            success: true,
-            message: "Here are all tattoos and piercings",
-            data: services
-        })
-    } catch (error) {
-        return res.json({
-            success: false,
-            message: "No ha llegado ningún tattoo",
-            error
-        })
-    }
-
-}
-
-export { createAppointment, myCalendarAsArtist, deleteAppointment, getAllMyAppointments, updateAppointment, getAllAppointmentsCalendar, getAllAppointmentsCalendarDetails, getServices }
+export { createAppointment, myCalendarAsArtist, deleteAppointment, getAllMyAppointments, updateAppointment, getAllAppointmentsCalendar, getAllAppointmentsCalendarDetails }
