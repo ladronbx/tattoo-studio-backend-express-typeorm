@@ -187,7 +187,7 @@ const getAllUsersBySuper = async (req: Request, res: Response) => {
             data: users
         });
     } catch (error) {
-        return res.status(500).json({
+        return res.json({
             success: false,
             message: "Unable to display the users. An error occurred.",
             error
@@ -299,43 +299,65 @@ const updateUser = async (req: Request, res: Response) => {
 }
 
 const getArtists = async (req: Request, res: Response) => {
-    try {
-        const pageSize = parseInt(req.query.pageSize as string) || 5;
-        const page = parseInt(req.query.page as string) || 1;
-        const skip = (page - 1) * pageSize;
 
-        const totalArtists = await User.count({ where: { role_id: 2 } });
-        const artists = await User.find({
+    try {
+        if (typeof (req.query.skip) !== "string") {
+            return res.json({
+                success: true,
+                message: "skip it's not string."
+            })
+        }
+
+        if (typeof (req.query.page) !== "string") {
+            return res.json({
+                success: true,
+                message: "page it's not string."
+            })
+        }
+
+        const pageSize = parseInt(req.query.skip as string) || 5
+        const page: any = parseInt(req.query.page as string) || 1
+        const skip = (page - 1) * pageSize
+
+        const profileUser = await User.find({
             where: {
                 role_id: 2
             },
-            select: ["full_name", "email", "phone_number", "photo"],
             skip: skip,
             take: pageSize
         });
 
-        if (artists.length === 0) {
+        if (profileUser.length == 0) {
             return res.json({
-                success: true,
-                message: "There are no registered artists."
-            });
+                success: false,
+                message: "there are not any registered artist",
+            })
         }
+
+        const mappingUsers = profileUser.map(users => {
+            if (users.is_active == true) {
+                return {
+                    name: users.full_name,
+                    email: users.email,
+                    phone_number: users.phone_number,
+                };
+            }
+        });
 
         return res.json({
             success: true,
-            message: "Here you can see all the artists.",
-            totalArtists,
-            currentPage: page,
-            data: artists
-        });
+            message: "here are all the artists",
+            data: mappingUsers
+        })
+
     } catch (error) {
-        return res.status(500).json({
+        return res.json({
             success: false,
-            message: "Unable to display the artists. An error occurred.",
+            message: "the artists can't be retrieved",
             error
-        });
+        })
     }
-};
+}
 
 const createArtist = async (req: Request, res: Response) => {
     try {
@@ -450,8 +472,14 @@ const deleteUsersBySuper = async (req: Request, res: Response) => {
 const getServices = async (req: Request, res: Response) => {
 
     try {
-
-        const services = await Portfolio.find({});
+        const pageSize = parseInt(req.query.skip as string) || 5
+        const page: any = parseInt(req.query.page as string) || 1
+        const skip = (page - 1) * pageSize
+        
+        const services = await Portfolio.find({
+            skip: skip,
+            take: pageSize
+        });
 
         return res.json({
             success: true,

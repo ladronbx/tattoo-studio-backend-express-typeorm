@@ -191,12 +191,16 @@ const deleteAppointment = async (req: Request, res: Response) => {
             id: appointmentId
         });
 
+        console.log("Deleted Appointment:", deletedAppointment);
+
         return res.json({
             success: true,
             message: "The appointment has been successfully deleted.",
         });
 
     } catch (error) {
+        console.error("Error deleting appointment:", error);
+
         return res.json({
             success: false,
             message: "An error occurred while trying to delete the appointment. Please try again later.",
@@ -204,7 +208,6 @@ const deleteAppointment = async (req: Request, res: Response) => {
         });
     }
 }
-
 
 const getAllAppointmentsCalendar = async (req: Request, res: Response) => {
     try {
@@ -335,20 +338,6 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
     try {
         const idToken = req.token.id
 
-        if (typeof (req.query.skip) !== "string") {
-            return res.json({
-                success: true,
-                message: "skip it's must a number."
-            })
-        }
-
-        if (typeof (req.query.page) !== "string") {
-            return res.json({
-                success: true,
-                message: "page it's must a number."
-            })
-        }
-
         const pageSize = parseInt(req.query.skip as string) || 5
         const page: any = parseInt(req.query.page as string) || 1
         const skip = (page - 1) * pageSize
@@ -366,6 +355,7 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
                 const purchase = obj.appointmentPortfolios.map((obj) => obj.name)
                 const categoryPortfolio = obj.appointmentPortfolios.map((obj) => obj.category)
                 const imageService = obj.appointmentPortfolios.map((obj) => obj.image)
+                const priceService = obj.appointmentPortfolios.map((obj) => obj.price)
                 const getArtist = obj.artist
 
 
@@ -376,7 +366,8 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
                     const name = purchase[0]
                     const image = imageService[0]
                     const category = categoryPortfolio[0]
-                    return { full_name, email, name, image, category, is_active, ...rest };
+                    const price = priceService[0]
+                    return { full_name, email, name, image, category, is_active, price, ...rest };
                 }
                 else {
                     return null
@@ -387,6 +378,7 @@ const getAllMyAppointments = async (req: Request, res: Response) => {
         return res.json({
             success: true,
             message: "Here is a list of all your appointments.",
+            currentPage: page,
             data: appointmentsUser
         });
     } catch (error) {
@@ -492,7 +484,7 @@ const updateAppointment = async (req: Request, res: Response) => {
 
         return res.json({
             success: true,
-            message: "appointment updated succesfully",
+            message: "Appointment updated succesfully",
             data: {
                 date,
                 shift,
