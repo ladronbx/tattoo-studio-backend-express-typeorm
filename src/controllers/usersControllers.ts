@@ -299,25 +299,24 @@ const updateUser = async (req: Request, res: Response) => {
 }
 
 const getArtists = async (req: Request, res: Response) => {
-
     try {
-        if (typeof (req.query.skip) !== "string") {
+        if (typeof req.query.pageSize !== "string") {
             return res.json({
-                success: true,
-                message: "skip it's not string."
-            })
+                success: false,
+                message: "pageSize is not provided or is not a string."
+            });
         }
 
-        if (typeof (req.query.page) !== "string") {
+        if (typeof req.query.page !== "string") {
             return res.json({
-                success: true,
-                message: "page it's not string."
-            })
+                success: false,
+                message: "page is not provided or is not a string."
+            });
         }
 
-        const pageSize = parseInt(req.query.skip as string) || 5
-        const page: any = parseInt(req.query.page as string) || 1
-        const skip = (page - 1) * pageSize
+        const pageSize = parseInt(req.query.pageSize as string) || 6;
+        const page: any = parseInt(req.query.page as string) || 1;
+        const skip = (page - 1) * pageSize;
 
         const profileUser = await User.find({
             where: {
@@ -327,37 +326,40 @@ const getArtists = async (req: Request, res: Response) => {
             take: pageSize
         });
 
-        if (profileUser.length == 0) {
+        if (profileUser.length === 0) {
             return res.json({
                 success: false,
-                message: "there are not any registered artist",
-            })
+                message: "There are no registered workers."
+            });
         }
 
         const mappingUsers = profileUser.map(users => {
-            if (users.is_active == true) {
+            if (users.is_active === true) {
                 return {
-                    name: users.full_name,
+                    id: users.id,
                     email: users.email,
+                    full_name: users.full_name,
                     phone_number: users.phone_number,
+                    photo: users.photo
                 };
             }
         });
 
         return res.json({
             success: true,
-            message: "here are all the artists",
+            message: "Here you have all workers.",
             data: mappingUsers
-        })
+        });
 
     } catch (error) {
         return res.json({
             success: false,
-            message: "the artists can't be retrieved",
+            message: "Workers can't be retrieved.",
             error
-        })
+        });
     }
-}
+};
+
 
 const createArtist = async (req: Request, res: Response) => {
     try {
@@ -470,12 +472,11 @@ const deleteUsersBySuper = async (req: Request, res: Response) => {
 }
 
 const getServices = async (req: Request, res: Response) => {
-
     try {
-        const pageSize = parseInt(req.query.skip as string) || 5
-        const page: any = parseInt(req.query.page as string) || 1
-        const skip = (page - 1) * pageSize
-        
+        const pageSize = parseInt(req.query.pageSize as string) || 5;
+        const page = parseInt(req.query.page as string) || 1;
+        const skip = (page - 1) * pageSize;
+
         const services = await Portfolio.find({
             skip: skip,
             take: pageSize
@@ -485,15 +486,15 @@ const getServices = async (req: Request, res: Response) => {
             success: true,
             message: "Here are all tattoos and piercings",
             data: services
-        })
+        });
     } catch (error) {
         return res.json({
             success: false,
             message: "No ha llegado ningún tattoo",
             error
-        })
+        });
     }
+};
 
-}
 
 export { register, login, profile, getAllUsersBySuper, updateUser, getArtists, createArtist, deleteUsersBySuper, getServices };
